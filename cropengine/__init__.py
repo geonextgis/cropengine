@@ -6,4 +6,4 @@ __version__ = "0.0.1"
 
 from . import cropengine
 from . import weather
-from . import conversion
+from . import conversions
