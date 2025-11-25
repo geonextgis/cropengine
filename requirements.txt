@@ -1,8 +1,8 @@
+ee
+geeagri
+geemap
 importlib
-yaml
 numpy
 pandas
-ee
-geemap
-geeagri
+yaml
 
