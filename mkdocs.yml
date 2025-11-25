@@ -82,5 +82,4 @@ nav:
     - Examples:
         - examples/intro.ipynb
     - API Reference:
-          - cropengine module: cropengine.md
-          - common module: common.md
+          - weather module: weather.md
