@@ -12,13 +12,13 @@ era5_land:
     TMAX:
       band: "temperature_2m_max"
       native_unit: "Kelvin"
-      target_unit: "Celcius"
+      target_unit: "Celsius"
       conversion: "K_to_C"
 
     TMIN:
       band: "temperature_2m_min"
       native_unit: "Kelvin"
-      target_unit: "Celcius"
+      target_unit: "Celsius"
       conversion: "K_to_C"
 
     VAP:
