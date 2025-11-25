@@ -4,5 +4,5 @@ geemap
 importlib
 numpy
 pandas
-yaml
+PyYAML
 
