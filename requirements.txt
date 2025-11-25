@@ -1,1 +1,8 @@
+ee
+geeagri
+geemap
+importlib
 numpy
+pandas
+PyYAML
+
