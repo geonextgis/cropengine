@@ -1,0 +1,55 @@
+# ============================
+# Climate Dataset Configuration
+# ============================
+
+# 1. ERA5-Land Daily Aggregated
+era5_land:
+  collection: "ECMWF/ERA5_LAND/DAILY_AGGR"
+  description: "ERA5-Land Daily Aggregated - ECMWF Climate Reanalysis"
+  default_scale: 11132
+
+  variables:
+    TMAX:
+      band: "temperature_2m_max"
+      native_unit: "Kelvin"
+      target_unit: "Celcius"
+      conversion: "K_to_C"
+
+    TMIN:
+      band: "temperature_2m_min"
+      native_unit: "Kelvin"
+      target_unit: "Celcius"
+      conversion: "K_to_C"
+
+    VAP:
+      band: "dewpoint_temperature_2m"
+      derived: true
+      native_unit: "Kelvin"
+      target_unit: "kPa"
+      conversion: "Td_to_VAP"
+
+    WIND:
+      band_1: "u_component_of_wind_10m"
+      band_2: "v_component_of_wind_10m"
+      derived: true
+      native_unit: "m/sec"
+      target_unit: "m/sec"
+      conversion: "uv_to_wind"
+
+    RAIN:
+      band: "total_precipitation_sum"
+      native_unit: "m"
+      target_unit: "mm/day"
+      conversion: "m_to_mm"
+
+    IRRAD:
+      band: "surface_solar_radiation_downwards_sum"
+      native_unit: "J/m2"
+      target_unit: "kJ/m2/day"
+      conversion: "J_to_kJ"
+
+    SNOWDEPTH:
+      band: "snow_depth"
+      native_unit: "m"
+      target_unit: "cm"
+      conversion: "m_to_cm"

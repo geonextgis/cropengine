@@ -1,0 +1,3 @@
+# weather module
+
+::: cropengine.weather
