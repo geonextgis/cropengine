@@ -1,3 +1,5 @@
+"""Module to prepare weather data"""
+
 import numpy as np
 import pandas as pd
 import ee
