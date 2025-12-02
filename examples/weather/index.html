@@ -601,6 +601,90 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../soil/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    soil module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../site/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    site module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../conversions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    conversions module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1300,6 +1384,196 @@ climdata_region = GEEWeatherDataProvider(
 </div>
 </div>
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=7">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-8">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">fetch_soilgrids_data</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
+<span class="sd">    Fetches specific SoilGrids v2.0 data for WOFOST/PCSE.</span>
+<span class="sd">    Mirrors the 'fetchSoilGrids' R function logic.</span>
+<span class="sd">    """</span>
+
+    <span class="c1"># 1. Define the Endpoint</span>
+    <span class="n">base_url</span> <span class="o">=</span> <span class="s2">"https://rest.isric.org/soilgrids/v2.0/properties/query"</span>
+
+    <span class="c1"># 2. Define the Parameters (mapping from your R snippet)</span>
+    <span class="c1"># Note: 'wv' variables = Volumetric Water Content (Standard V2.0 properties)</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"lat"</span><span class="p">:</span> <span class="n">lat</span><span class="p">,</span>
+        <span class="s2">"lon"</span><span class="p">:</span> <span class="n">lon</span><span class="p">,</span>
+        <span class="s2">"depth"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"0-5cm"</span><span class="p">,</span> <span class="s2">"5-15cm"</span><span class="p">,</span> <span class="s2">"15-30cm"</span><span class="p">,</span> <span class="s2">"30-60cm"</span><span class="p">,</span> <span class="s2">"60-100cm"</span><span class="p">],</span>
+        <span class="s2">"property"</span><span class="p">:</span> <span class="p">[</span>
+            <span class="s2">"bdod"</span><span class="p">,</span>  <span class="c1"># Bulk Density (cg/cm3)</span>
+            <span class="s2">"clay"</span><span class="p">,</span>  <span class="c1"># Clay (g/kg)</span>
+            <span class="s2">"sand"</span><span class="p">,</span>  <span class="c1"># Sand (g/kg)</span>
+            <span class="s2">"soc"</span><span class="p">,</span>  <span class="c1"># Soil Organic Carbon (dg/kg)</span>
+            <span class="s2">"wv0010"</span><span class="p">,</span>  <span class="c1"># Water Content at 10kPa (Volume %)</span>
+            <span class="s2">"wv0033"</span><span class="p">,</span>  <span class="c1"># Water Content at 33kPa (Volume %) -&gt; Field Capacity</span>
+            <span class="s2">"wv1500"</span><span class="p">,</span>  <span class="c1"># Water Content at 1500kPa (Volume %) -&gt; Wilting Point</span>
+        <span class="p">],</span>
+        <span class="s2">"value"</span><span class="p">:</span> <span class="s2">"mean"</span><span class="p">,</span>  <span class="c1"># equivalent to summary_type='mean'</span>
+    <span class="p">}</span>
+
+    <span class="c1"># 3. Make the Request</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Fetching data for </span><span class="si">{</span><span class="n">lat</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">lon</span><span class="si">}</span><span class="s2">..."</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">base_url</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Error: </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+
+    <span class="c1"># 4. Parse the complex JSON structure into a simple dictionary</span>
+    <span class="c1"># We want to average the top 3 layers (0-30cm) for the crop model</span>
+    <span class="n">target_depths</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"0-5cm"</span><span class="p">,</span> <span class="s2">"5-15cm"</span><span class="p">,</span> <span class="s2">"15-30cm"</span><span class="p">]</span>
+    <span class="n">parsed_data</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">"properties"</span><span class="p">][</span><span class="s2">"layers"</span><span class="p">]:</span>
+        <span class="n">prop_name</span> <span class="o">=</span> <span class="n">layer</span><span class="p">[</span><span class="s2">"name"</span><span class="p">]</span>
+
+        <span class="c1"># Collect values for the relevant depths</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"values"</span><span class="p">][</span><span class="s2">"mean"</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">layer</span><span class="p">[</span><span class="s2">"depths"</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">d</span><span class="p">[</span><span class="s2">"label"</span><span class="p">]</span> <span class="ow">in</span> <span class="n">target_depths</span> <span class="ow">and</span> <span class="n">d</span><span class="p">[</span><span class="s2">"values"</span><span class="p">][</span><span class="s2">"mean"</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">values</span><span class="p">:</span>
+            <span class="n">avg_value</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+            <span class="n">parsed_data</span><span class="p">[</span><span class="n">prop_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">avg_value</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">parsed_data</span><span class="p">[</span><span class="n">prop_name</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">return</span> <span class="n">parsed_data</span>
+
+
+<span class="c1"># --- USAGE ---</span>
+<span class="c1"># Example coordinates (Wageningen, NL)</span>
+<span class="n">soil_data</span> <span class="o">=</span> <span class="n">fetch_soilgrids_data</span><span class="p">(</span><span class="n">lat</span><span class="o">=</span><span class="mf">51.99747</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="mf">12.16551</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Fetched Data (Raw Units):"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">soil_data</span><span class="p">)</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-8">import requests
+
+
+def fetch_soilgrids_data(lat, lon):
+    """
+    Fetches specific SoilGrids v2.0 data for WOFOST/PCSE.
+    Mirrors the 'fetchSoilGrids' R function logic.
+    """
+
+    # 1. Define the Endpoint
+    base_url = "https://rest.isric.org/soilgrids/v2.0/properties/query"
+
+    # 2. Define the Parameters (mapping from your R snippet)
+    # Note: 'wv' variables = Volumetric Water Content (Standard V2.0 properties)
+    params = {
+        "lat": lat,
+        "lon": lon,
+        "depth": ["0-5cm", "5-15cm", "15-30cm", "30-60cm", "60-100cm"],
+        "property": [
+            "bdod",  # Bulk Density (cg/cm3)
+            "clay",  # Clay (g/kg)
+            "sand",  # Sand (g/kg)
+            "soc",  # Soil Organic Carbon (dg/kg)
+            "wv0010",  # Water Content at 10kPa (Volume %)
+            "wv0033",  # Water Content at 33kPa (Volume %) -&gt; Field Capacity
+            "wv1500",  # Water Content at 1500kPa (Volume %) -&gt; Wilting Point
+        ],
+        "value": "mean",  # equivalent to summary_type='mean'
+    }
+
+    # 3. Make the Request
+    print(f"Fetching data for {lat}, {lon}...")
+    response = requests.get(base_url, params=params)
+
+    if response.status_code != 200:
+        print(f"Error: {response.status_code}")
+        return None
+
+    data = response.json()
+
+    # 4. Parse the complex JSON structure into a simple dictionary
+    # We want to average the top 3 layers (0-30cm) for the crop model
+    target_depths = ["0-5cm", "5-15cm", "15-30cm"]
+    parsed_data = {}
+
+    for layer in data["properties"]["layers"]:
+        prop_name = layer["name"]
+
+        # Collect values for the relevant depths
+        values = [
+            d["values"]["mean"]
+            for d in layer["depths"]
+            if d["label"] in target_depths and d["values"]["mean"] is not None
+        ]
+
+        if values:
+            avg_value = sum(values) / len(values)
+            parsed_data[prop_name] = avg_value
+        else:
+            parsed_data[prop_name] = None
+
+    return parsed_data
+
+
+# --- USAGE ---
+# Example coordinates (Wageningen, NL)
+soil_data = fetch_soilgrids_data(lat=51.99747, lon=12.16551)
+print("Fetched Data (Raw Units):")
+print(soil_data)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=8">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-9">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-9"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
 </div>
 </div> <!-- jp-Notebook -->
 </div> <!-- jupyter-wrapper -->
@@ -1330,7 +1604,7 @@ climdata_region = GEEWeatherDataProvider(
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="November 25, 2025 23:22:29 UTC"><span class="timeago" datetime="2025-11-25T23:22:29+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="November 25, 2025 23:22:29 UTC">2025-11-25</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="December 2, 2025 11:27:36 UTC"><span class="timeago" datetime="2025-12-02T11:27:36+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="December 2, 2025 11:27:36 UTC">2025-12-02</span>
   </span>
 
     
