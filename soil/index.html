@@ -1335,8 +1335,7 @@ Uses cached memory if data has already been fetched for this instance.</p>
 
 <h2 id="cropengine.soil.WOFOSTSoilParameterProvider" class="doc doc-heading">
         <code>
-WOFOSTSoilParameterProvider            (<span title="dict">dict</span>)
-        </code>
+WOFOSTSoilParameterProvider        </code>
 
 
 
@@ -1377,7 +1376,7 @@ equation.</p>
 </table>
         <details class="quote">
           <summary>Source code in <code>cropengine/soil.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">WOFOSTSoilParameterProvider</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">WOFOSTSoilParameterProvider</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates soil physics and chemical parameters required for WOFOST</span>
 <span class="sd">    crop modeling using ISRIC SoilGrids data.</span>
@@ -1404,7 +1403,6 @@ equation.</p>
     <span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">soil_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">dict</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">soil_data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
