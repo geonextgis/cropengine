@@ -174,7 +174,7 @@ class IsricSoilDataProvider:
         return df
 
 
-class WOFOSTSoilParameterProvider(dict):
+class WOFOSTSoilParameterProvider:
     """
     Calculates soil physics and chemical parameters required for WOFOST
     crop modeling using ISRIC SoilGrids data.
@@ -201,7 +201,6 @@ class WOFOSTSoilParameterProvider(dict):
     }
 
     def __init__(self, soil_data, **kwargs):
-        dict.__init__(self)
 
         self.df = soil_data
         self.params = {}
