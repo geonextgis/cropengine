@@ -6,4 +6,6 @@ __version__ = "0.0.1"
 
 from . import cropengine
 from . import weather
+from . import soil
+from . import site
 from . import conversions

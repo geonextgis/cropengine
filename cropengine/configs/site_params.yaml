@@ -1,0 +1,195 @@
+wofost:
+  # ------------------------------------------------------------------------------
+  # 1. Parameter Definitions
+  # Format:
+  #   VARNAME:
+  #     default: value
+  #     range: [min, max] OR [allowed_val1, allowed_val2]
+  #     type: int | float | list
+  #     description: "Description text"
+  #     unit: "Unit string"
+  # ------------------------------------------------------------------------------
+  site_params:
+    IFUNRN:
+      default: 0
+      range: [0, 1]
+      type: int
+      description: "Indicates whether non-infiltrating fraction of rain is a function of storm size (1) or not (0)."
+      unit: "-"
+
+    NOTINF:
+      default: 0.0
+      range: [0.0, 1.0]
+      type: float
+      description: "Maximum fraction of rain not-infiltrating into the soil."
+      unit: "-"
+
+    SSMAX:
+      default: 0.0
+      range: [0.0, 100.0]
+      type: float
+      description: "Maximum depth of water that can be stored on the soil surface."
+      unit: "cm"
+
+    SSI:
+      default: 0.0
+      range: [0.0, 100.0]
+      type: float
+      description: "Initial depth of water stored on the surface."
+      unit: "cm"
+
+    WAV:
+      default: null  # Must be provided by user
+      range: [0.0, 100.0]
+      type: float
+      description: "Initial amount of water in total soil profile."
+      unit: "cm"
+
+    SMLIM:
+      default: 0.4
+      range: [0.0, 1.0]
+      type: float
+      description: "Initial maximum moisture content in initial rooting depth zone."
+      unit: "-"
+
+    CO2:
+      default: null
+      range: [300.0, 1400.0]
+      type: float
+      description: "Atmospheric CO2 concentration."
+      unit: "ppm"
+
+    BG_N_SUPPLY:
+      default: 0.0
+      range: [0.0, 0.1]
+      type: float
+      description: "Background N supply through atmospheric deposition."
+      unit: "kg/ha/day"
+
+    NSOILBASE:
+      default: 0.0
+      range: [0.0, 100.0]
+      type: float
+      description: "Base N amount available in the soil (leftover from previous cycle)."
+      unit: "kg/ha"
+
+    NSOILBASE_FR:
+      default: 0.025
+      range: [0.0, 100.0]
+      type: float
+      description: "Daily fraction of soil N coming available through mineralization."
+      unit: "-"
+
+    NAVAILI:
+      default: null
+      range: [0.0, 250.0]
+      type: float
+      description: "Amount of N available in the pool at initialization of the system."
+      unit: "kg/ha"
+
+    A0SOM:
+      default: 24.0
+      range: [5.0, 40.0]
+      type: float
+      description: "Initial age of organic material."
+      unit: "year"
+
+    CNRatioBio:
+      default: 9.0
+      range: [5.0, 20.0]
+      type: float
+      description: "C:N ratio of microbial biomass."
+      unit: "kg C kg-1 N"
+
+    FASDIS:
+      default: 0.5
+      range: [0.0, 0.6]
+      type: float
+      description: "Assimilation to dissimilation rate ratio."
+      unit: "-"
+
+    KDENIT_REF:
+      default: 0.06
+      range: [0.0, 0.1]
+      type: float
+      description: "Reference first order rate of denitrification."
+      unit: "d-1"
+
+    KNIT_REF:
+      default: 1.0
+      range: [0.9, 1.0]
+      type: float
+      description: "Reference first order rate of nitrification."
+      unit: "d-1"
+
+    KSORP:
+      default: 0.0005
+      range: [0.0001, 0.001]
+      type: float
+      description: "Sorption coefficient."
+      unit: "m3 soil kg-1 soil"
+
+    MRCDIS:
+      default: 0.001
+      range: [0.0001, 0.01]
+      type: float
+      description: "Michaelis-Menten constant of relationship organic C-dissimilation rate and response factor denitrification rate."
+      unit: "kg C m-2 d-1"
+
+    NH4ConcR:
+      default: 0.0
+      range: [0.0, 5.0]
+      type: float
+      description: "NH4-N concentration in rain water."
+      unit: "mg NH4+-N L-1 water"
+
+    NO3ConcR:
+      default: 0.0
+      range: [0.0, 20.0]
+      type: float
+      description: "NO3-N concentration in rain water."
+      unit: "mg NO3--N L-1 water"
+
+    NH4I:
+      default: null
+      range: [0.0, 300.0]
+      type: list
+      description: "Initial amount of NH4+ per soil layer. Should match number of soil layers."
+      unit: "kg NH4+ ha-1"
+
+    NO3I:
+      default: null
+      range: [0.0, 500.0]
+      type: list
+      description: "Initial amount of NO3-N per soil layer. Should match number of soil layers."
+      unit: "kg NO3-N ha-1"
+
+    WFPS_CRIT:
+      default: 0.8
+      range: [0.5, 0.99]
+      type: float
+      description: "Critical fraction water filled soil pores."
+      unit: "m3 water m-3 pores"
+
+
+  # ------------------------------------------------------------------------------
+  # 2. Profiles (Model Versions)
+  # Defines which parameters are valid for which model version, and which
+  # are strictly required (must be passed by user).
+  # ------------------------------------------------------------------------------
+  profiles:
+    WOFOST72:
+      parameters: [IFUNRN, NOTINF, SSI, SSMAX, WAV, SMLIM]
+      required: [WAV]
+
+    WOFOST73:
+      parameters: [IFUNRN, NOTINF, SSI, SSMAX, WAV, SMLIM, CO2]
+      required: [WAV, CO2]
+
+    WOFOST81_Classic:
+      parameters: [IFUNRN, NOTINF, SSI, SSMAX, WAV, SMLIM, CO2, BG_N_SUPPLY, NSOILBASE, NSOILBASE_FR, NAVAILI]
+      required: [WAV, CO2, NAVAILI]
+
+    WOFOST81_SNOMIN:
+      parameters: [IFUNRN, NOTINF, SSI, SSMAX, WAV, SMLIM, CO2, A0SOM, CNRatioBio, FASDIS, KDENIT_REF, KNIT_REF, KSORP, MRCDIS, NH4ConcR, NO3ConcR, NH4I, NO3I, WFPS_CRIT]
+      required: [WAV, CO2, NH4I, NO3I]

@@ -1,0 +1,173 @@
+wofost:
+  soil_params:
+    # Parameters for the 'Classic' Waterbalance (WaterbalanceFD)
+    WaterbalanceFD:
+      SMFCF:
+        description: Field capacity of the soil
+        unit: "-"
+      SMO:
+        description: Porosity of the soil
+        unit: "-"
+      SMW:
+        description: Wilting point of the soil
+        unit: "-"
+      CRAIRC:
+        description: Soil critical air content (waterlogging)
+        unit: "-"
+      SOPE:
+        description: Maximum percolation rate root zone
+        unit: "cm/day"
+      KSUB:
+        description: Maximum percolation rate subsoil
+        unit: "cm/day"
+      RDMSOL:
+        description: Maximum soil rootable depth
+        unit: "cm"
+      IFUNRN:
+        description: Indicates whether non-infiltrating fraction of rain is a function of storm size (1) or not (0)
+        unit: "-"
+      SSMAX:
+        description: Maximum surface storage
+        unit: "cm"
+      SSI:
+        description: Initial surface storage
+        unit: "cm"
+      WAV:
+        description: Initial amount of water in total soil profile
+        unit: "cm"
+      NOTINF:
+        description: Maximum fraction of rain not-infiltrating into the soil
+        unit: "-"
+      SMLIM:
+        description: Initial maximum moisture content in initial rooting depth zone
+        unit: "-"
+
+    # Parameters for the Multi-Layer Waterbalance
+    WaterBalanceLayered:
+      # General Profile Parameters
+      NOTINF:
+        description: Maximum fraction of rain not-infiltrating into the soil
+        unit: "-"
+      IFUNRN:
+        description: Indicates whether non-infiltrating fraction of rain is a function of storm size (1) or not (0)
+        unit: "-"
+      SSI:
+        description: Initial surface storage
+        unit: "cm"
+      SSMAX:
+        description: Maximum surface storage
+        unit: "cm"
+      SMLIM:
+        description: Maximum soil moisture content of top soil layer
+        unit: "cm3/cm3"
+      WAV:
+        description: Initial amount of water in the soil
+        unit: "cm"
+      
+      # Layer Specific Parameters (Defined per soil layer)
+      SoilLayer:
+        SMfromPF:
+          description: Table function describing the soil moisture content as a function of pF
+          unit: "m3 water m-3 soil"
+        CONDfromPF:
+          description: Table function of the 10-base logarithm of the unsaturated hydraulic conductivity as a function of pF
+          unit: "log10(cm water d-1)"
+        Thickness:
+          description: Layer thickness
+          unit: "cm"
+        FSOMI:
+          description: Initial fraction of soil organic matter in soil
+          unit: "kg OM kg-1 soil"
+        CNRatioSOMI:
+          description: Initial C:N ratio of soil organic matter
+          unit: "kg C kg-1 N"
+        RHOD:
+          description: Bulk density of the soil
+          unit: "g soil cm-3 soil"
+        Soil_pH:
+          description: pH of the soil layer
+          unit: "-"
+        CRAIRC:
+          description: Critical air content for aeration for root system
+          unit: "m3 air m-3 soil"
+
+    # Parameters for Snow Accumulation (SnowMAUS)
+    SnowMAUS:
+      TMINACCU1:
+        description: Upper critical minimum temperature for snow accumulation
+        unit: "°C"
+      TMINACCU2:
+        description: Lower critical minimum temperature for snow accumulation
+        unit: "°C"
+      TMINCRIT:
+        description: Critical minimum temperature for snow melt
+        unit: "°C"
+      TMAXCRIT:
+        description: Critical maximum temperature for snow melt
+        unit: "°C"
+      RMELT:
+        description: Melting rate per day per degree Celsius above the critical minimum temperature
+        unit: "cm/°C/day"
+      SCTHRESHOLD:
+        description: Snow water equivalent above which the sublimation is taken into account
+        unit: "cm"
+      SNOWDENSITY:
+        description: Density of snow
+        unit: "cm/cm"
+      SWEDEPTHI:
+        description: Initial depth of layer of water present as snow on the soil surface
+        unit: "cm"
+
+    # Parameters for Simple Soil Nitrogen Dynamics
+    N_Soil_Dynamics:
+      NSOILBASE:
+        description: Base soil supply of N available through mineralisation
+        unit: "kg/ha"
+      NSOILBASE_FR:
+        description: Fraction of base soil N that comes available every day
+        unit: "fraction/day"
+      NAVAILI:
+        description: Initial N available in the N pool
+        unit: "kg/ha"
+      BG_N_SUPPLY:
+        description: Background supply of N through atmospheric deposition
+        unit: "kg/ha/day"
+
+    # Parameters for SNOMIN (Soil Nitrogen module for Mineral and Inorganic Nitrogen)
+    SNOMIN:
+      A0SOM:
+        description: Initial age of soil organic material
+        unit: "year"
+      CNRatioBio:
+        description: C:N ratio of microbial biomass
+        unit: "kg C kg-1 N"
+      FASDIS:
+        description: Fraction of assimilation to dissimilation
+        unit: "-"
+      KDENIT_REF:
+        description: Reference first order denitrification rate constant
+        unit: "d-1"
+      KNIT_REF:
+        description: Reference first order nitrification rate constant
+        unit: "d-1"
+      KSORP:
+        description: Sorption coefficient ammonium
+        unit: "m3 water kg-1 soil"
+      MRCDIS:
+        description: Michaelis Menten constant for response factor denitrification to soil respiration
+        unit: "kg C m-2 d-1"
+      NO3ConcR:
+        description: NO3-N concentration in rain water
+        unit: "mg NO3-N L-1 water"
+      NH4ConcR:
+        description: NH4-N concentration in rain water
+        unit: "mg NH4+-N L-1 water"
+      NO3I:
+        description: Initial amount of NO3-N
+        unit: "kg NO3-N ha-1"
+      NH4I:
+        description: Initial amount of NH4-N
+        unit: "kg NH4+-N ha-1"
+      WFPS_CRIT:
+        description: Critical water filled pore space fraction
+        unit: "m3 water m-3 pore"
