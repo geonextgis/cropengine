@@ -63,7 +63,7 @@ wofost:
       WAV:
         description: Initial amount of water in the soil
         unit: "cm"
-      
+
       # Layer Specific Parameters (Defined per soil layer)
       SoilLayer:
         SMfromPF:
