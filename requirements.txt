@@ -4,5 +4,7 @@ geemap
 importlib
 numpy
 pandas
+pedon
 PyYAML
+scipy
 

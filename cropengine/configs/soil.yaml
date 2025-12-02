@@ -1,0 +1,36 @@
+# ============================
+# Soil Dataset Configuration
+# ============================
+
+isric_rest_api:
+  api:
+    base_url: "https://rest.isric.org/soilgrids/v2.0/properties/query"
+  options:
+    properties:
+      - bdod
+      - cec
+      - cfvo
+      - clay
+      - nitrogen
+      - ocd
+      - ocs
+      - phh2o
+      - sand
+      - silt
+      - soc
+      - wv0010
+      - wv0033
+      - wv1500
+    depths:
+      - 0-5cm
+      - 5-15cm
+      - 15-30cm
+      - 30-60cm
+      - 60-100cm
+      - 100-200cm
+    values:
+      - Q0.5
+      - Q0.05
+      - Q0.95
+      - mean
+      - uncertainty
