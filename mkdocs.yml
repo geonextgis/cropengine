@@ -83,3 +83,6 @@ nav:
         - examples/intro.ipynb
     - API Reference:
           - weather module: weather.md
+          - soil module: soil.md
+          - site module: site.md
+          - conversions module: conversions.md
