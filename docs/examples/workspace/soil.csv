@@ -1,0 +1,66 @@
+latitude,longitude,property,depth,metric,value,unit,transformed_value,transformed_unit
+52.53,14.12,bdod,0-5cm,Q0.05,80,cg/cm³,0.8,kg/dm³
+52.53,14.12,bdod,0-5cm,Q0.5,140,cg/cm³,1.4,kg/dm³
+52.53,14.12,bdod,0-5cm,Q0.95,176,cg/cm³,1.76,kg/dm³
+52.53,14.12,bdod,0-5cm,mean,138,cg/cm³,1.38,kg/dm³
+52.53,14.12,bdod,0-5cm,uncertainty,7,cg/cm³,0.07,kg/dm³
+52.53,14.12,cec,0-5cm,Q0.05,37,mmol(c)/kg,3.7,cmol(c)/kg
+52.53,14.12,cec,0-5cm,Q0.5,216,mmol(c)/kg,21.6,cmol(c)/kg
+52.53,14.12,cec,0-5cm,Q0.95,649,mmol(c)/kg,64.9,cmol(c)/kg
+52.53,14.12,cec,0-5cm,mean,282,mmol(c)/kg,28.2,cmol(c)/kg
+52.53,14.12,cec,0-5cm,uncertainty,28,mmol(c)/kg,2.8,cmol(c)/kg
+52.53,14.12,cfvo,0-5cm,Q0.05,0,cm³/dm³,0.0,cm³/100cm³
+52.53,14.12,cfvo,0-5cm,Q0.5,55,cm³/dm³,5.5,cm³/100cm³
+52.53,14.12,cfvo,0-5cm,Q0.95,130,cm³/dm³,13.0,cm³/100cm³
+52.53,14.12,cfvo,0-5cm,mean,57,cm³/dm³,5.7,cm³/100cm³
+52.53,14.12,cfvo,0-5cm,uncertainty,24,cm³/dm³,2.4,cm³/100cm³
+52.53,14.12,clay,0-5cm,Q0.05,15,g/kg,1.5,%
+52.53,14.12,clay,0-5cm,Q0.5,43,g/kg,4.3,%
+52.53,14.12,clay,0-5cm,Q0.95,465,g/kg,46.5,%
+52.53,14.12,clay,0-5cm,mean,97,g/kg,9.7,%
+52.53,14.12,clay,0-5cm,uncertainty,105,g/kg,10.5,%
+52.53,14.12,nitrogen,0-5cm,Q0.05,50,cg/kg,0.5,g/kg
+52.53,14.12,nitrogen,0-5cm,Q0.5,300,cg/kg,3.0,g/kg
+52.53,14.12,nitrogen,0-5cm,Q0.95,2500,cg/kg,25.0,g/kg
+52.53,14.12,nitrogen,0-5cm,mean,649,cg/kg,6.49,g/kg
+52.53,14.12,nitrogen,0-5cm,uncertainty,82,cg/kg,0.82,g/kg
+52.53,14.12,ocd,0-5cm,Q0.05,88,dg/dm³,8.8,hg/m³
+52.53,14.12,ocd,0-5cm,Q0.5,351,dg/dm³,35.1,hg/m³
+52.53,14.12,ocd,0-5cm,Q0.95,1082,dg/dm³,108.2,hg/m³
+52.53,14.12,ocd,0-5cm,mean,377,dg/dm³,37.7,hg/m³
+52.53,14.12,ocd,0-5cm,uncertainty,28,dg/dm³,2.8,hg/m³
+52.53,14.12,phh2o,0-5cm,Q0.05,42,pH*10,4.2,-
+52.53,14.12,phh2o,0-5cm,Q0.5,66,pH*10,6.6,-
+52.53,14.12,phh2o,0-5cm,Q0.95,79,pH*10,7.9,-
+52.53,14.12,phh2o,0-5cm,mean,63,pH*10,6.3,-
+52.53,14.12,phh2o,0-5cm,uncertainty,6,pH*10,0.6,-
+52.53,14.12,sand,0-5cm,Q0.05,414,g/kg,41.4,%
+52.53,14.12,sand,0-5cm,Q0.5,786,g/kg,78.6,%
+52.53,14.12,sand,0-5cm,Q0.95,908,g/kg,90.8,%
+52.53,14.12,sand,0-5cm,mean,757,g/kg,75.7,%
+52.53,14.12,sand,0-5cm,uncertainty,6,g/kg,0.6,%
+52.53,14.12,silt,0-5cm,Q0.05,34,g/kg,3.4,%
+52.53,14.12,silt,0-5cm,Q0.5,114,g/kg,11.4,%
+52.53,14.12,silt,0-5cm,Q0.95,316,g/kg,31.6,%
+52.53,14.12,silt,0-5cm,mean,145,g/kg,14.5,%
+52.53,14.12,silt,0-5cm,uncertainty,25,g/kg,2.5,%
+52.53,14.12,soc,0-5cm,Q0.05,61,dg/kg,6.1,g/kg
+52.53,14.12,soc,0-5cm,Q0.5,251,dg/kg,25.1,g/kg
+52.53,14.12,soc,0-5cm,Q0.95,2455,dg/kg,245.5,g/kg
+52.53,14.12,soc,0-5cm,mean,533,dg/kg,53.3,g/kg
+52.53,14.12,soc,0-5cm,uncertainty,95,dg/kg,9.5,g/kg
+52.53,14.12,wv0010,0-5cm,Q0.05,276,(10-2 cm³/cm³)*10,27.6,10-2 cm³/cm³
+52.53,14.12,wv0010,0-5cm,Q0.5,492,(10-2 cm³/cm³)*10,49.2,10-2 cm³/cm³
+52.53,14.12,wv0010,0-5cm,Q0.95,706,(10-2 cm³/cm³)*10,70.6,10-2 cm³/cm³
+52.53,14.12,wv0010,0-5cm,mean,500,(10-2 cm³/cm³)*10,50.0,10-2 cm³/cm³
+52.53,14.12,wv0010,0-5cm,uncertainty,9,(10-2 cm³/cm³)*10,0.9,10-2 cm³/cm³
+52.53,14.12,wv0033,0-5cm,Q0.05,212,(10-2 cm³/cm³)*10,21.2,10-2 cm³/cm³
+52.53,14.12,wv0033,0-5cm,Q0.5,371,(10-2 cm³/cm³)*10,37.1,10-2 cm³/cm³
+52.53,14.12,wv0033,0-5cm,Q0.95,515,(10-2 cm³/cm³)*10,51.5,10-2 cm³/cm³
+52.53,14.12,wv0033,0-5cm,mean,370,(10-2 cm³/cm³)*10,37.0,10-2 cm³/cm³
+52.53,14.12,wv0033,0-5cm,uncertainty,8,(10-2 cm³/cm³)*10,0.8,10-2 cm³/cm³
+52.53,14.12,wv1500,0-5cm,Q0.05,30,(10-2 cm³/cm³)*10,3.0,10-2 cm³/cm³
+52.53,14.12,wv1500,0-5cm,Q0.5,51,(10-2 cm³/cm³)*10,5.1,10-2 cm³/cm³
+52.53,14.12,wv1500,0-5cm,Q0.95,138,(10-2 cm³/cm³)*10,13.8,10-2 cm³/cm³
+52.53,14.12,wv1500,0-5cm,mean,68,(10-2 cm³/cm³)*10,6.8,10-2 cm³/cm³
+52.53,14.12,wv1500,0-5cm,uncertainty,21,(10-2 cm³/cm³)*10,2.1,10-2 cm³/cm³

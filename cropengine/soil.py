@@ -10,7 +10,6 @@ import os
 import importlib.resources as pkg_resources
 from . import configs
 
-
 class IsricSoilDataProvider:
     """
     Initialize the ISRIC Soil Data Provider.
@@ -95,6 +94,7 @@ class IsricSoilDataProvider:
         try:
             response = requests.get(self.base_url, params=self.query)
             response.raise_for_status()
+            print(response)
             return response.json()
         except Exception as e:
             print(f"Error fetching data: {e}")
@@ -167,7 +167,7 @@ class IsricSoilDataProvider:
         if self.filepath and not df.empty:
             try:
                 df.to_csv(self.filepath, index=False)
-                print(f"Data saved to {self.filepath}")
+                print(f"File saved successfully to {self.filepath}")
             except Exception as e:
                 print(f"Failed to save file: {e}")
 
@@ -242,7 +242,24 @@ class WOFOSTSoilParameterProvider:
         h = np.maximum(h, 0.0)
         m = 1 - (1 / n)
         return theta_r + (theta_s - theta_r) / ((1 + (alpha * h) ** n) ** m)
-
+    
+    def _update_param_metadata(self, calc_params):
+        """
+        Update the soil parameters metadata.
+        """
+        param_metadata = []
+        for param, info in self.param_metadata.items():
+            param_dict = {'parameter': param}
+            param_dict.update(info)
+            if param in calc_params.keys():
+                param_dict['value'] = calc_params[param]
+            else:
+                param_dict['value'] = None
+                
+            param_metadata.append(param_dict)
+                
+        return param_metadata
+        
     def get_params(self):
         """
         Calculates parameters, fits curves, applies overrides, and returns dictionary.
@@ -344,6 +361,9 @@ class WOFOSTSoilParameterProvider:
         # 7. Apply Validated Overrides
         if self.overrides:
             self.params.update(self.overrides)
+            
+        # Update the parameters metadata
+        self.param_metadata = self._update_param_metadata(self.params)
 
         return self.params
 

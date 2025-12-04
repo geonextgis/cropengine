@@ -11,98 +11,101 @@ class SiteParameterError(Exception):
 
     pass
 
-class WOFOSTSiteParametersProvider(dict):
+class WOFOSTSiteParametersProvider:
     """
     A unified data provider for WOFOST site-specific parameters.
-    
+
     Args:
-        profile (str): The name of the WOFOST model version to use.
-        (e.g., 'WOFOST72', 'WOFOST73', 'WOFOST81_SNOMIN').
+        model (str): The name of the WOFOST model version to use.
         **kwargs: Site parameters provided as keyword arguments.
-        (e.g., WAV=10.0, CO2=400, NH4I=[...]).
-        
-    Attributes:
-        valid_param_names (set): A set of parameter names allowed for the selected profile.
-        required_params (set): A set of parameter names that must be provided by the user.
-        param_metadata (dict): Metadata (range, type, default) for the valid parameters.
-        
-    Raises:
-        SiteParameterError: If the profile is unknown, if required parameters
-                            are missing, or if provided parameters fail validation
-                            (incorrect type, out of range, or unknown key).
     """
 
-    def __init__(self, profile, **kwargs):
-        dict.__init__(self)
+    def __init__(self, model, **kwargs):
+        self.model = model
+        self.raw_kwargs = kwargs
+        self.param_metadata = [] 
+        self.required_params = set()
+        self.valid_param_names = set()
 
-        # Load configuration using pkg_resources (modern approach)
-        # Assumes 'configs' is a python package containing 'site_params.yaml'
-        with pkg_resources.files(configs).joinpath("site_params.yaml").open("r") as f:
-            full_config = yaml.safe_load(f)
+        # 1. Load configuration
+        try:
+            with pkg_resources.files(configs).joinpath("site_params.yaml").open("r") as f:
+                self.full_config = yaml.safe_load(f)
+        except Exception as e:
+            raise RuntimeError(f"Failed to load site_params.yaml: {e}")
 
-        config = full_config["wofost"]
+        config = self.full_config["wofost"]
 
-        # Validate Profile
-        if profile not in config["profiles"]:
+        # 2. Validate Model and Prepare Metadata
+        if self.model in config["model_mapping"]:
+            
+            profile_name = config["model_mapping"][self.model]
+            profile_def = config['profiles'][profile_name]
+            
+            self.valid_param_names = set(profile_def["parameters"])
+            self.required_params = set(profile_def.get("required", []))
+            
+            all_param_defs = config["site_params"]
+            
+            # Build the Metadata List
+            for param in self.valid_param_names:
+                if param in all_param_defs:
+                    meta = {'parameter': param, 'required': (param in self.required_params)}
+                    meta.update(all_param_defs[param].copy())
+                    self.param_metadata.append(meta)
+        else:
+            pass
+
+    def get_params(self):
+        """
+        Validates inputs against the prepared metadata, applies defaults, 
+        and returns the final parameter dictionary.
+        """
+        # 1. Re-validate Model Profile
+        if not self.param_metadata:
+            valid_models = list(self.full_config["wofost"]['model_mapping'].keys())
             raise SiteParameterError(
-                f"Unknown profile '{profile}'. Available profiles: {list(config['profiles'].keys())}"
+                f"Unknown or unconfigured model '{self.model}'. Available models: {valid_models}"
             )
 
-        # Load Profile Settings
-        profile_def = config["profiles"][profile]
-        self.valid_param_names = set(profile_def["parameters"])
-        self.required_params = set(profile_def.get("required", []))
-        
-        all_param_defs = config["site_params"]
-        self.param_metadata = {
-            param: all_param_defs[param] for param in self.valid_param_names
-        }
+        validated_params = {}
 
-        # 1. Process and Validate Parameters
-        for par_name in self.valid_param_names:
-            par_def = all_param_defs[par_name]
-
+        # 2. Process Parameters (Iterating over the LIST now)
+        for meta in self.param_metadata:
+            par_name = meta['parameter']
+            
             # Determine value: use provided kwarg or fall back to default
-            if par_name in kwargs:
-                value = kwargs.pop(par_name)
+            if par_name in self.raw_kwargs:
+                value = self.raw_kwargs[par_name]
             else:
-                if par_name in self.required_params:
+                if meta['required']:
                     raise SiteParameterError(
-                        f"Value for parameter '{par_name}' is required for profile '{profile}'!"
+                        f"Value for parameter '{par_name}' is required for profile '{self.model}'!"
                     )
-                value = par_def["default"]
+                value = meta["default"]
 
             # Convert types and check valid ranges
             if value is not None:
-                value = self._convert_and_validate(par_name, value, par_def)
+                value = self._convert_and_validate(par_name, value, meta)
 
-            # Store validated value in the dictionary
-            self[par_name] = value
+            validated_params[par_name] = value
 
-        # 2. Check for Unknown Parameters
-        # Any keys remaining in kwargs are not defined in the profile configuration
-        if kwargs:
-            msg = f"Unknown parameters provided for profile '{profile}': {list(kwargs.keys())}"
-            raise SiteParameterError(msg)
+        # 3. Check for Unknown Parameters provided by user
+        unknown_keys = [k for k in self.raw_kwargs.keys() if k not in self.valid_param_names]
+        if unknown_keys:
+            raise SiteParameterError(
+                f"Unknown parameters provided for profile '{self.model}': {unknown_keys}"
+            )
+
+        return validated_params
 
     def _convert_and_validate(self, name, value, definition):
         """
         Internal helper to cast types and validate ranges.
-
-        Args:
-            name (str): The name of the parameter.
-            value (any): The value to validate.
-            definition (dict): The metadata dictionary containing 'type' and 'range'.
-
-        Returns:
-            The value cast to the correct type (int, float, list).
-
-        Raises:
-            SiteParameterError: If type casting fails or value is out of bounds.
         """
         target_type_str = definition["type"]
 
-        # 1. Type Casting
+        # Type Casting
         try:
             if target_type_str == "int":
                 value = int(value)
@@ -110,17 +113,19 @@ class WOFOSTSiteParametersProvider(dict):
                 value = float(value)
             elif target_type_str == "list":
                 if not isinstance(value, list):
-                    raise ValueError
+                    if isinstance(value, str) and "," in value:
+                         value = [float(x.strip()) for x in value.split(",")]
+                    else:
+                        raise ValueError
         except (ValueError, TypeError):
             raise SiteParameterError(
                 f"Parameter '{name}' must be of type {target_type_str}, got {type(value)}"
             )
 
-        # 2. Range Checking
+        # Range Checking
         valid_range = definition["range"]
 
         if target_type_str == "list":
-            # For lists, validate every element against the range
             min_val, max_val = valid_range
             if not all(min_val <= x <= max_val for x in value):
                 raise SiteParameterError(
@@ -128,12 +133,10 @@ class WOFOSTSiteParametersProvider(dict):
                 )
 
         elif target_type_str == "int" and valid_range == [0, 1]:
-            # Specific handling for binary flags (0 or 1)
             if value not in [0, 1]:
                 raise SiteParameterError(f"Parameter '{name}' must be 0 or 1.")
 
         else:
-            # Standard numeric range check [min, max]
             min_val, max_val = valid_range
             if not (min_val <= value <= max_val):
                 raise SiteParameterError(

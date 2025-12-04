@@ -193,3 +193,24 @@ wofost:
     WOFOST81_SNOMIN:
       parameters: [IFUNRN, NOTINF, SSI, SSMAX, WAV, SMLIM, CO2, A0SOM, CNRatioBio, FASDIS, KDENIT_REF, KNIT_REF, KSORP, MRCDIS, NH4ConcR, NO3ConcR, NH4I, NO3I, WFPS_CRIT]
       required: [WAV, CO2, NH4I, NO3I]
+
+  # ------------------------------------------------------------------------------
+  # 3. Model ID Mapping
+  # Maps specific model IDs to the profiles defined above.
+  # ------------------------------------------------------------------------------
+  model_mapping:
+    Wofost72_Pheno: WOFOST72
+    Wofost72_PP: WOFOST72
+    Wofost72_WLP_CWB: WOFOST72
+    
+    Wofost73_PP: WOFOST73
+    Wofost73_WLP_CWB: WOFOST73
+    Wofost73_WLP_MLWB: WOFOST73
+    
+    Wofost81_PP: WOFOST81_Classic
+    Wofost81_WLP_CWB: WOFOST81_Classic
+    Wofost81_WLP_MLWB: WOFOST81_Classic
+    Wofost81_NWLP_CWB_CNB: WOFOST81_Classic
+    Wofost81_NWLP_MLWB_CNB: WOFOST81_Classic
+    
+    Wofost81_NWLP_MLWB_SNOMIN: WOFOST81_SNOMIN
