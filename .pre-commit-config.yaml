@@ -4,6 +4,7 @@ repos:
       hooks:
           - id: check-toml
           - id: check-yaml
+            exclude: ^cropengine/configs/
           - id: end-of-file-fixer
             types: [python]
           - id: trailing-whitespace
