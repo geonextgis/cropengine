@@ -7,4 +7,5 @@ pandas
 pedon
 PyYAML
 scipy
+pcse
 
