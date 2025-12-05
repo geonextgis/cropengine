@@ -737,6 +737,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="WOFOSTSiteParametersProvider">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cropengine.site.WOFOSTSiteParametersProvider.get_params" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_params()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
     </ul>
@@ -763,6 +780,90 @@
     
   
     conversions module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../models/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    models module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../crop/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    crop module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../agromanagement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    agromanagement module
   
 
     
@@ -839,6 +940,23 @@
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="WOFOSTSiteParametersProvider">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cropengine.site.WOFOSTSiteParametersProvider.get_params" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_params()
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -924,8 +1042,7 @@ SiteParameterError            (<span title="Exception">Exception</span>)
 
 <h2 id="cropengine.site.WOFOSTSiteParametersProvider" class="doc doc-heading">
         <code>
-WOFOSTSiteParametersProvider            (<span title="dict">dict</span>)
-        </code>
+WOFOSTSiteParametersProvider        </code>
 
 
 
@@ -947,7 +1064,7 @@ WOFOSTSiteParametersProvider            (<span title="dict">dict</span>)
   </thead>
   <tbody>
       <tr>
-        <td><code>profile</code></td>
+        <td><code>model</code></td>
         <td><code>str</code></td>
         <td><p>The name of the WOFOST model version to use.</p></td>
         <td><em>required</em></td>
@@ -960,144 +1077,110 @@ WOFOSTSiteParametersProvider            (<span title="dict">dict</span>)
       </tr>
   </tbody>
 </table>
-<p><strong>Attributes:</strong></p>
-<table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Type</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td><code>valid_param_names</code></td>
-        <td><code>set</code></td>
-        <td><p>A set of parameter names allowed for the selected profile.</p></td>
-      </tr>
-      <tr>
-        <td><code>required_params</code></td>
-        <td><code>set</code></td>
-        <td><p>A set of parameter names that must be provided by the user.</p></td>
-      </tr>
-      <tr>
-        <td><code>param_metadata</code></td>
-        <td><code>dict</code></td>
-        <td><p>Metadata (range, type, default) for the valid parameters.</p></td>
-      </tr>
-  </tbody>
-</table>
-<p><strong>Exceptions:</strong></p>
-<table>
-  <thead>
-    <tr>
-      <th>Type</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-      <tr>
-        <td><code>SiteParameterError</code></td>
-        <td><p>If the profile is unknown, if required parameters
-                are missing, or if provided parameters fail validation
-                (incorrect type, out of range, or unknown key).</p></td>
-      </tr>
-  </tbody>
-</table>
         <details class="quote">
           <summary>Source code in <code>cropengine/site.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">WOFOSTSiteParametersProvider</span><span class="p">(</span><span class="nb">dict</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">WOFOSTSiteParametersProvider</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A unified data provider for WOFOST site-specific parameters.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        profile (str): The name of the WOFOST model version to use.</span>
-<span class="sd">        (e.g., &#39;WOFOST72&#39;, &#39;WOFOST73&#39;, &#39;WOFOST81_SNOMIN&#39;).</span>
+<span class="sd">        model (str): The name of the WOFOST model version to use.</span>
 <span class="sd">        **kwargs: Site parameters provided as keyword arguments.</span>
-<span class="sd">        (e.g., WAV=10.0, CO2=400, NH4I=[...]).</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        valid_param_names (set): A set of parameter names allowed for the selected profile.</span>
-<span class="sd">        required_params (set): A set of parameter names that must be provided by the user.</span>
-<span class="sd">        param_metadata (dict): Metadata (range, type, default) for the valid parameters.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        SiteParameterError: If the profile is unknown, if required parameters</span>
-<span class="sd">                            are missing, or if provided parameters fail validation</span>
-<span class="sd">                            (incorrect type, out of range, or unknown key).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">profile</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="nb">dict</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">required_params</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
 
-        <span class="c1"># Load configuration using pkg_resources (modern approach)</span>
-        <span class="c1"># Assumes &#39;configs&#39; is a python package containing &#39;site_params.yaml&#39;</span>
-        <span class="k">with</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;site_params.yaml&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-            <span class="n">full_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="c1"># 1. Load configuration</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">with</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="n">configs</span><span class="p">)</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;site_params.yaml&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+                <span class="s2">&quot;r&quot;</span>
+            <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">full_config</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">safe_load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to load site_params.yaml: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="n">config</span> <span class="o">=</span> <span class="n">full_config</span><span class="p">[</span><span class="s2">&quot;wofost&quot;</span><span class="p">]</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">full_config</span><span class="p">[</span><span class="s2">&quot;wofost&quot;</span><span class="p">]</span>
 
-        <span class="c1"># Validate Profile</span>
-        <span class="k">if</span> <span class="n">profile</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;profiles&quot;</span><span class="p">]:</span>
+        <span class="c1"># 2. Validate Model and Prepare Metadata</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="ow">in</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;model_mapping&quot;</span><span class="p">]:</span>
+
+            <span class="n">profile_name</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;model_mapping&quot;</span><span class="p">][</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">]</span>
+            <span class="n">profile_def</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;profiles&quot;</span><span class="p">][</span><span class="n">profile_name</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">profile_def</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">required_params</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">profile_def</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;required&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+
+            <span class="n">all_param_defs</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;site_params&quot;</span><span class="p">]</span>
+
+            <span class="c1"># Build the Metadata List</span>
+            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">all_param_defs</span><span class="p">:</span>
+                    <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span>
+                        <span class="s2">&quot;parameter&quot;</span><span class="p">:</span> <span class="n">param</span><span class="p">,</span>
+                        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_params</span><span class="p">),</span>
+                    <span class="p">}</span>
+                    <span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">all_param_defs</span><span class="p">[</span><span class="n">param</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Validates inputs against the prepared metadata, applies defaults,</span>
+<span class="sd">        and returns the final parameter dictionary.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># 1. Re-validate Model Profile</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="p">:</span>
+            <span class="n">valid_models</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">full_config</span><span class="p">[</span><span class="s2">&quot;wofost&quot;</span><span class="p">][</span><span class="s2">&quot;model_mapping&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
             <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Unknown profile &#39;</span><span class="si">{</span><span class="n">profile</span><span class="si">}</span><span class="s2">&#39;. Available profiles: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s1">&#39;profiles&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Unknown or unconfigured model &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;. Available models: </span><span class="si">{</span><span class="n">valid_models</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
-        <span class="c1"># Load Profile Settings</span>
-        <span class="n">profile_def</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;profiles&quot;</span><span class="p">][</span><span class="n">profile</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">profile_def</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">required_params</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">profile_def</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;required&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+        <span class="n">validated_params</span> <span class="o">=</span> <span class="p">{}</span>
 
-        <span class="n">all_param_defs</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;site_params&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">param</span><span class="p">:</span> <span class="n">all_param_defs</span><span class="p">[</span><span class="n">param</span><span class="p">]</span> <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span>
-        <span class="p">}</span>
-
-        <span class="c1"># 1. Process and Validate Parameters</span>
-        <span class="k">for</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span><span class="p">:</span>
-            <span class="n">par_def</span> <span class="o">=</span> <span class="n">all_param_defs</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span>
+        <span class="c1"># 2. Process Parameters (Iterating over the LIST now)</span>
+        <span class="k">for</span> <span class="n">meta</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="p">:</span>
+            <span class="n">par_name</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;parameter&quot;</span><span class="p">]</span>
 
             <span class="c1"># Determine value: use provided kwarg or fall back to default</span>
-            <span class="k">if</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">par_name</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_params</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;required&quot;</span><span class="p">]:</span>
                     <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Value for parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; is required for profile &#39;</span><span class="si">{</span><span class="n">profile</span><span class="si">}</span><span class="s2">&#39;!&quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;Value for parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; is required for profile &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;!&quot;</span>
                     <span class="p">)</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">par_def</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
 
             <span class="c1"># Convert types and check valid ranges</span>
             <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_and_validate</span><span class="p">(</span><span class="n">par_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">par_def</span><span class="p">)</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_and_validate</span><span class="p">(</span><span class="n">par_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
 
-            <span class="c1"># Store validated value in the dictionary</span>
-            <span class="bp">self</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="n">validated_params</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-        <span class="c1"># 2. Check for Unknown Parameters</span>
-        <span class="c1"># Any keys remaining in kwargs are not defined in the profile configuration</span>
-        <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Unknown parameters provided for profile &#39;</span><span class="si">{</span><span class="n">profile</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="c1"># 3. Check for Unknown Parameters provided by user</span>
+        <span class="n">unknown_keys</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="n">unknown_keys</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Unknown parameters provided for profile &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">unknown_keys</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">validated_params</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_convert_and_validate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">definition</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Internal helper to cast types and validate ranges.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            name (str): The name of the parameter.</span>
-<span class="sd">            value (any): The value to validate.</span>
-<span class="sd">            definition (dict): The metadata dictionary containing &#39;type&#39; and &#39;range&#39;.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            The value cast to the correct type (int, float, list).</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            SiteParameterError: If type casting fails or value is out of bounds.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">target_type_str</span> <span class="o">=</span> <span class="n">definition</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
 
-        <span class="c1"># 1. Type Casting</span>
+        <span class="c1"># Type Casting</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">target_type_str</span> <span class="o">==</span> <span class="s2">&quot;int&quot;</span><span class="p">:</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
@@ -1105,17 +1188,19 @@ WOFOSTSiteParametersProvider            (<span title="dict">dict</span>)
                 <span class="n">value</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
             <span class="k">elif</span> <span class="n">target_type_str</span> <span class="o">==</span> <span class="s2">&quot;list&quot;</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;,&quot;</span> <span class="ow">in</span> <span class="n">value</span><span class="p">:</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;,&quot;</span><span class="p">)]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span>
         <span class="k">except</span> <span class="p">(</span><span class="ne">ValueError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
             <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
                 <span class="sa">f</span><span class="s2">&quot;Parameter &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; must be of type </span><span class="si">{</span><span class="n">target_type_str</span><span class="si">}</span><span class="s2">, got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">value</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
-        <span class="c1"># 2. Range Checking</span>
+        <span class="c1"># Range Checking</span>
         <span class="n">valid_range</span> <span class="o">=</span> <span class="n">definition</span><span class="p">[</span><span class="s2">&quot;range&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">target_type_str</span> <span class="o">==</span> <span class="s2">&quot;list&quot;</span><span class="p">:</span>
-            <span class="c1"># For lists, validate every element against the range</span>
             <span class="n">min_val</span><span class="p">,</span> <span class="n">max_val</span> <span class="o">=</span> <span class="n">valid_range</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">(</span><span class="n">min_val</span> <span class="o">&lt;=</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">max_val</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">value</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
@@ -1123,12 +1208,10 @@ WOFOSTSiteParametersProvider            (<span title="dict">dict</span>)
                 <span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">target_type_str</span> <span class="o">==</span> <span class="s2">&quot;int&quot;</span> <span class="ow">and</span> <span class="n">valid_range</span> <span class="o">==</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
-            <span class="c1"># Specific handling for binary flags (0 or 1)</span>
             <span class="k">if</span> <span class="n">value</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]:</span>
                 <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Parameter &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; must be 0 or 1.&quot;</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># Standard numeric range check [min, max]</span>
             <span class="n">min_val</span><span class="p">,</span> <span class="n">max_val</span> <span class="o">=</span> <span class="n">valid_range</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">min_val</span> <span class="o">&lt;=</span> <span class="n">value</span> <span class="o">&lt;=</span> <span class="n">max_val</span><span class="p">):</span>
                 <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
@@ -1149,6 +1232,75 @@ WOFOSTSiteParametersProvider            (<span title="dict">dict</span>)
 
 
 
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="cropengine.site.WOFOSTSiteParametersProvider.get_params" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_params</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></code>
+
+
+<a href="#cropengine.site.WOFOSTSiteParametersProvider.get_params" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Validates inputs against the prepared metadata, applies defaults,
+and returns the final parameter dictionary.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>cropengine/site.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Validates inputs against the prepared metadata, applies defaults,</span>
+<span class="sd">    and returns the final parameter dictionary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># 1. Re-validate Model Profile</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="p">:</span>
+        <span class="n">valid_models</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">full_config</span><span class="p">[</span><span class="s2">&quot;wofost&quot;</span><span class="p">][</span><span class="s2">&quot;model_mapping&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Unknown or unconfigured model &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;. Available models: </span><span class="si">{</span><span class="n">valid_models</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">validated_params</span> <span class="o">=</span> <span class="p">{}</span>
+
+    <span class="c1"># 2. Process Parameters (Iterating over the LIST now)</span>
+    <span class="k">for</span> <span class="n">meta</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="p">:</span>
+        <span class="n">par_name</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;parameter&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Determine value: use provided kwarg or fall back to default</span>
+        <span class="k">if</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;required&quot;</span><span class="p">]:</span>
+                <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Value for parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; is required for profile &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;!&quot;</span>
+                <span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
+
+        <span class="c1"># Convert types and check valid ranges</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_and_validate</span><span class="p">(</span><span class="n">par_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+
+        <span class="n">validated_params</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+    <span class="c1"># 3. Check for Unknown Parameters provided by user</span>
+    <span class="n">unknown_keys</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span>
+    <span class="p">]</span>
+    <span class="k">if</span> <span class="n">unknown_keys</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Unknown parameters provided for profile &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">unknown_keys</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">validated_params</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
 
 
 
