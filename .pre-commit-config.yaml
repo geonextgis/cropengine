@@ -4,6 +4,7 @@ repos:
       hooks:
           - id: check-toml
           - id: check-yaml
+            exclude: ^cropengine/configs/
           - id: end-of-file-fixer
             types: [python]
           - id: trailing-whitespace
@@ -23,7 +24,7 @@ repos:
             args:
                 [
                     "--ignore-words-list=aci,acount,acounts,fallow,ges,hart,hist,nd,ned,ois,wqs,watermask,tre,mape",
-                    "--skip=*.csv,*.geojson,*.json,*.yml*.js,*.html,*cff,*.pdf*,*.bib",
+                    "--skip=*.csv,*.geojson,*.json, *.yaml, *.yml*.js,*.html,*cff,*.pdf*,*.bib",
                 ]
 
     - repo: https://github.com/kynan/nbstripout

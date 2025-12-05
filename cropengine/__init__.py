@@ -9,3 +9,6 @@ from . import weather
 from . import soil
 from . import site
 from . import conversions
+from . import models
+from . import crop
+from . import agromanagement

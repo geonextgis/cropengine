@@ -86,3 +86,6 @@ nav:
           - soil module: soil.md
           - site module: site.md
           - conversions module: conversions.md
+          - models module: models.md
+          - crop module: crop.md
+          - agromanagement module: agromanagement.md

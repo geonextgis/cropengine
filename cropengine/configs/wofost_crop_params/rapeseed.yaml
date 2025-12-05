@@ -14,7 +14,7 @@
 # Changes:
 # - TSUMEM recomputed as ~180 C.d based on data from:
 #   https://acsess.onlinelibrary.wiley.com/doi/full/10.2135/cropsci2019.03.0160
-#   
+#
 Version: 1.0.0
 Metadata: &meta
     Creator: Allard de Wit
