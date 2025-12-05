@@ -1,0 +1,63 @@
+wofost:
+  TimedEvents:
+    irrigate:
+      name: Standard Irrigation
+      comment: "Application of water to the soil."
+      events_table:
+        amount: "Amount of irrigation water applied [cm]"
+        efficiency: "Application efficiency [0-1 fraction]"
+
+    apply_n:
+      name: Mineral N Fertilizer
+      comment: "Application of inorganic Nitrogen."
+      events_table:
+        N_amount: "Amount of N applied [kg N/ha]"
+        N_recovery: "Recovery fraction of the fertilizer [0-1 fraction]"
+
+    apply_n_snomin:
+      name: SNOMIN Organic Amendment
+      comment: "Application of organic matter for SNOMIN model."
+      events_table:
+        amount: "Total amount of material [kg material/ha]"
+        application_depth: "Depth of application [cm]"
+        cnratio: "C:N ratio of organic matter [kg C / kg N]"
+        initial_age: "Initial apparent age of organic matter [years]"
+        f_NH4N: "Fraction of NH4-N in material [kg NH4-N / kg material]"
+        f_NO3N: "Fraction of NO3-N in material [kg NO3-N / kg material]"
+        f_orgmat: "Fraction of organic matter in amendment [kg OM / kg material]"
+
+    mowing:
+      name: Grass Mowing
+      comment: "Reduces living leaf weight (LINGRA models)."
+      events_table:
+        biomass_remaining: "Biomass remaining after mowing [kg/ha]"
+
+  StateEvents:
+    irrigate:
+      name: State-Triggered Irrigation
+      comment: "Irrigation triggered by soil moisture (SM) or other states."
+      required_logic:
+        event_state: "Variable to monitor (e.g., 'SM')"
+        zero_condition: "Trigger direction ('falling', 'rising', 'either')"
+      events_table:
+        amount: "Amount of irrigation water applied [cm]"
+        efficiency: "Application efficiency [0-1 fraction]"
+
+    apply_n:
+      name: State-Triggered N Application
+      comment: "Fertilization triggered by crop development (DVS) or other states."
+      required_logic:
+        event_state: "Variable to monitor (e.g., 'DVS', 'LAI')"
+        zero_condition: "Trigger direction ('falling', 'rising', 'either')"
+      events_table:
+        N_amount: "Amount of N applied [kg N/ha]"
+        N_recovery: "Recovery fraction of the fertilizer [0-1 fraction]"
+
+    mowing:
+      name: State-Triggered Mowing
+      comment: "Mowing triggered by biomass limits (TAGP)."
+      required_logic:
+        event_state: "Variable to monitor (e.g., 'TAGP')"
+        zero_condition: "Trigger direction ('falling', 'rising', 'either')"
+      events_table:
+        biomass_remaining: "Biomass remaining after mowing [kg/ha]"

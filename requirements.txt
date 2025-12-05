@@ -4,6 +4,7 @@ geemap
 importlib
 numpy
 pandas
+pcse
 pedon
 PyYAML
 scipy

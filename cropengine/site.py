@@ -11,6 +11,7 @@ class SiteParameterError(Exception):
 
     pass
 
+
 class WOFOSTSiteParametersProvider:
     """
     A unified data provider for WOFOST site-specific parameters.
@@ -23,13 +24,15 @@ class WOFOSTSiteParametersProvider:
     def __init__(self, model, **kwargs):
         self.model = model
         self.raw_kwargs = kwargs
-        self.param_metadata = [] 
+        self.param_metadata = []
         self.required_params = set()
         self.valid_param_names = set()
 
         # 1. Load configuration
         try:
-            with pkg_resources.files(configs).joinpath("site_params.yaml").open("r") as f:
+            with pkg_resources.files(configs).joinpath("site_params.yaml").open(
+                "r"
+            ) as f:
                 self.full_config = yaml.safe_load(f)
         except Exception as e:
             raise RuntimeError(f"Failed to load site_params.yaml: {e}")
@@ -38,19 +41,22 @@ class WOFOSTSiteParametersProvider:
 
         # 2. Validate Model and Prepare Metadata
         if self.model in config["model_mapping"]:
-            
+
             profile_name = config["model_mapping"][self.model]
-            profile_def = config['profiles'][profile_name]
-            
+            profile_def = config["profiles"][profile_name]
+
             self.valid_param_names = set(profile_def["parameters"])
             self.required_params = set(profile_def.get("required", []))
-            
+
             all_param_defs = config["site_params"]
-            
+
             # Build the Metadata List
             for param in self.valid_param_names:
                 if param in all_param_defs:
-                    meta = {'parameter': param, 'required': (param in self.required_params)}
+                    meta = {
+                        "parameter": param,
+                        "required": (param in self.required_params),
+                    }
                     meta.update(all_param_defs[param].copy())
                     self.param_metadata.append(meta)
         else:
@@ -58,12 +64,12 @@ class WOFOSTSiteParametersProvider:
 
     def get_params(self):
         """
-        Validates inputs against the prepared metadata, applies defaults, 
+        Validates inputs against the prepared metadata, applies defaults,
         and returns the final parameter dictionary.
         """
         # 1. Re-validate Model Profile
         if not self.param_metadata:
-            valid_models = list(self.full_config["wofost"]['model_mapping'].keys())
+            valid_models = list(self.full_config["wofost"]["model_mapping"].keys())
             raise SiteParameterError(
                 f"Unknown or unconfigured model '{self.model}'. Available models: {valid_models}"
             )
@@ -72,13 +78,13 @@ class WOFOSTSiteParametersProvider:
 
         # 2. Process Parameters (Iterating over the LIST now)
         for meta in self.param_metadata:
-            par_name = meta['parameter']
-            
+            par_name = meta["parameter"]
+
             # Determine value: use provided kwarg or fall back to default
             if par_name in self.raw_kwargs:
                 value = self.raw_kwargs[par_name]
             else:
-                if meta['required']:
+                if meta["required"]:
                     raise SiteParameterError(
                         f"Value for parameter '{par_name}' is required for profile '{self.model}'!"
                     )
@@ -91,7 +97,9 @@ class WOFOSTSiteParametersProvider:
             validated_params[par_name] = value
 
         # 3. Check for Unknown Parameters provided by user
-        unknown_keys = [k for k in self.raw_kwargs.keys() if k not in self.valid_param_names]
+        unknown_keys = [
+            k for k in self.raw_kwargs.keys() if k not in self.valid_param_names
+        ]
         if unknown_keys:
             raise SiteParameterError(
                 f"Unknown parameters provided for profile '{self.model}': {unknown_keys}"
@@ -114,7 +122,7 @@ class WOFOSTSiteParametersProvider:
             elif target_type_str == "list":
                 if not isinstance(value, list):
                     if isinstance(value, str) and "," in value:
-                         value = [float(x.strip()) for x in value.split(",")]
+                        value = [float(x.strip()) for x in value.split(",")]
                     else:
                         raise ValueError
         except (ValueError, TypeError):
