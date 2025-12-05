@@ -5,7 +5,7 @@ wofost:
       SMFCF:
         description: Field capacity of the soil
         unit: "-"
-      SMO:
+      SM0:
         description: Porosity of the soil
         unit: "-"
       SMW:

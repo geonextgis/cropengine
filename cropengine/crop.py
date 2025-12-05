@@ -6,7 +6,16 @@ import importlib.resources as pkg_resources
 from .configs import wofost_crop_params
 
 class WOFOSTCropParametersProvider(YAMLCropDataProvider):
-    def __init__(self, crop_name, variety_name):
+    """
+    A data provider for WOFOST crop parameters. This class extends the standard YAMLCropDataProvider to automatically 
+    locate and load crop-specific parameter files.
+
+    Args:
+        crop_name (str): The name of the crop (e.g., 'wheat', 'maize').
+        variety_name (str): The specific variety of the crop (e.g., 'Winter_wheat_101').
+    """
+
+    def __init__(self, crop_name: str, variety_name: str):
         # 1. Get the directory path directly from the module
         config_path = list(wofost_crop_params.__path__)[0]
         
@@ -19,7 +28,10 @@ class WOFOSTCropParametersProvider(YAMLCropDataProvider):
         self.variety_name = variety_name
         self.param_metadata = self._get_param_metadata()
         
-    def _get_param_metadata(self):
+    def _get_param_metadata(self) -> list[dict]:
+        """
+        Retrieves metadata for the current crop variety from the YAML configuration.
+        """
         with pkg_resources.files(wofost_crop_params).joinpath(f"{self.crop_name}.yaml").open("r") as f:
             crop_config = yaml.safe_load(f)
             crop_variety_config = crop_config['CropParameters']['Varieties'][self.variety_name]
@@ -34,13 +46,22 @@ class WOFOSTCropParametersProvider(YAMLCropDataProvider):
                         'default': info[0]
                     }
                     param_metadata.append(param_dict)
-                except:
+                except (IndexError, TypeError, KeyError):
                     continue
             
             return param_metadata
         
     
-def get_available_crops(model):
+def get_available_crops(model: str) -> list[str]:
+    """
+    Retrieves a list of supported crops for a specific model type.
+
+    Args:
+        model (str): The name of the simulation model (e.g., "Wofost72_PP").
+
+    Returns:
+        list[str]: A list of available crop names.
+    """
     if model.startswith("Wofost"):
         with pkg_resources.files(wofost_crop_params).joinpath("crops.yaml").open("r") as f:
             available_crops = yaml.safe_load(f)['available_crops']
@@ -49,8 +70,20 @@ def get_available_crops(model):
     
     else:
         return []
-    
-def get_available_crop_varieties(model, crop):
+
+
+def get_available_crop_varieties(model: str, crop: str) -> dict | None:
+    """
+    Retrieves available varieties and their metadata for a specific crop.
+
+    Args:
+        model (str): The name of the simulation model.
+        crop (str): The name of the crop (e.g., 'wheat').
+
+    Returns:
+        dict | None: A dictionary where keys are variety identifiers and values 
+        are metadata strings (descriptions). Returns None if the model is not supported.
+    """
     if model.startswith("Wofost"):
         with pkg_resources.files(wofost_crop_params).joinpath(f"{crop}.yaml").open("r") as f:
             crop_config = yaml.safe_load(f)
@@ -59,6 +92,7 @@ def get_available_crop_varieties(model, crop):
             crop_varieties = {}
             
             for v in all_crop_varieties:
+                # Extract the descriptive metadata for the variety
                 meta = crop_config['CropParameters']['Varieties'][v]['Metadata']
                 crop_varieties[v] = meta
                 
@@ -66,5 +100,3 @@ def get_available_crop_varieties(model, crop):
 
     else:
         return None
-            
-    

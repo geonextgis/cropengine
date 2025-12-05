@@ -149,10 +149,8 @@ class IsricSoilDataProvider:
                             "property": prop_name,
                             "depth": depth_range,
                             "metric": metric,
-                            # Raw Data (Integer from API)
                             "value": raw_val,
                             "unit": mapped_unit,
-                            # Transformed Data (Scientific Float)
                             "transformed_value": converted_val,
                             "transformed_unit": target_unit,
                         }

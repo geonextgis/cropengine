@@ -1,0 +1,38 @@
+AgroManagement:
+- 2006-01-01:
+    CropCalendar:
+      crop_name: sugarbeet
+      variety_name: Sugarbeet_601
+      crop_start_date: 2006-04-05
+      crop_start_type: emergence
+      crop_end_date: 2006-10-20
+      crop_end_type: harvest
+      max_duration: 300
+    TimedEvents:
+    - event_signal: irrigate
+      name: Standard Irrigation
+      comment: Application of water to the soil.
+      events_table:
+      - 2006-05-25:
+          amount: 3.0
+          efficiency: 0.7
+      - 2006-06-30:
+          amount: 2.5
+          efficiency: 0.7
+    StateEvents:
+    - event_signal: apply_n
+      event_state: DVS
+      zero_condition: rising
+      name: State-Triggered N Application
+      comment: Fertilization triggered by crop development (DVS) or other states.
+      events_table:
+      - 0.3:
+          N_amount: 40
+          N_recovery: 0.7
+      - 0.6:
+          N_amount: 60
+          N_recovery: 0.7
+      - 1.12:
+          N_amount: 40
+          N_recovery: 0.7
+- 2007-01-01: null

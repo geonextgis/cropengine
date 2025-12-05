@@ -5,7 +5,6 @@ import yaml
 import importlib.resources as pkg_resources
 from . import configs
 
-
 class SiteParameterError(Exception):
     """Custom exception for site parameter validation errors."""
 
