@@ -6,6 +6,7 @@ import importlib.resources as pkg_resources
 from . import configs
 import warnings
 
+
 class SiteParameterError(Exception):
     """Custom exception for site parameter validation errors."""
 
@@ -20,12 +21,13 @@ class WOFOSTSiteParametersProvider:
         model (str): The name of the WOFOST model version to use.
         **kwargs: Site parameters provided as keyword arguments.
     """
+
     EMERGENCY_DEFAULTS = {
-        "WAV": 10.0,         
-        "CO2": 360.0,       
-        "NAVAILI": 0.0,      
-        "NH4I": [0.05],      
-        "NO3I": [0.05] 
+        "WAV": 10.0,
+        "CO2": 360.0,
+        "NAVAILI": 0.0,
+        "NH4I": [0.05],
+        "NO3I": [0.05],
     }
 
     def __init__(self, model, **kwargs):
@@ -90,8 +92,8 @@ class WOFOSTSiteParametersProvider:
             if par_name in self.raw_kwargs:
                 value = self.raw_kwargs[par_name]
             else:
-                value = meta['default']
-                
+                value = meta["default"]
+
                 if value is None:
                     if par_name in self.EMERGENCY_DEFAULTS:
                         value = self.EMERGENCY_DEFAULTS[par_name]
@@ -99,18 +101,18 @@ class WOFOSTSiteParametersProvider:
                             f"[SiteParams] Parameter '{par_name}' was missing and has no YAML default. "
                             f"Using fallback value: {value}"
                         )
-  
+
                 if is_required:
                     warnings.warn(
                         f"[SiteParams] Required parameter '{par_name}' was not provided. "
                         f"Using default value: {value}"
                     )
-                
+
             # Convert types and check valid ranges
             if value is not None:
                 value = self._convert_and_validate(par_name, value, meta)
-                
-            meta['value'] = value
+
+            meta["value"] = value
             validated_params[par_name] = value
 
         # 3. Check for Unknown Parameters provided by user

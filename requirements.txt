@@ -2,11 +2,11 @@ earthengine-api>=1.7
 geeagri>1.0.0
 geemap
 importlib
+matplotlib
 numpy
 pandas
-matplotlib
-seaborn
 pcse
 pedon
 PyYAML
 scipy
+seaborn
