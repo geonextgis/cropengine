@@ -1,0 +1,47 @@
+parameter,description,unit,value
+A0SOM,Initial age of soil organic material,year,
+BG_N_SUPPLY,Background supply of N through atmospheric deposition,kg/ha/day,
+CNRatioBio,C:N ratio of microbial biomass,kg C kg-1 N,
+CNRatioSOMI,Initial C:N ratio of soil organic matter,kg C kg-1 N,0.75
+CONDfromPF,Table function of the 10-base logarithm of the unsaturated hydraulic conductivity as a function of pF,log10(cm water d-1),
+CRAIRC,Critical air content for aeration for root system,m3 air m-3 soil,0.06
+FASDIS,Fraction of assimilation to dissimilation,-,
+FSOMI,Initial fraction of soil organic matter in soil,kg OM kg-1 soil,0.0834
+IFUNRN,Indicates whether non-infiltrating fraction of rain is a function of storm size (1) or not (0),-,
+IVINF,Infiltration limiter,-,
+K0,Hydraulic conductivity of saturated soil,cm/day,46.98
+KDENIT_REF,Reference first order denitrification rate constant,d-1,
+KNIT_REF,Reference first order nitrification rate constant,d-1,
+KSORP,Sorption coefficient ammonium,m3 water kg-1 soil,
+KSUB,Maximum percolation rate subsoil,cm/day,46.98
+MRCDIS,Michaelis Menten constant for response factor denitrification to soil respiration,kg C m-2 d-1,
+NAVAILI,Initial N available in the N pool,kg/ha,
+NH4ConcR,NH4-N concentration in rain water,mg NH4+-N L-1 water,
+NH4I,Initial amount of NH4-N,kg NH4+-N ha-1,
+NO3ConcR,NO3-N concentration in rain water,mg NO3-N L-1 water,
+NO3I,Initial amount of NO3-N,kg NO3-N ha-1,
+NOTINF,Maximum fraction of rain not-infiltrating into the soil,-,
+NSOILBASE,Base soil supply of N available through mineralisation,kg/ha,
+NSOILBASE_FR,Fraction of base soil N that comes available every day,fraction/day,
+RDMSOL,Maximum soil rootable depth,cm,120.0
+RHOD,Bulk density of the soil,g soil cm-3 soil,1.37
+RMELT,Melting rate per day per degree Celsius above the critical minimum temperature,cm/°C/day,
+SCTHRESHOLD,Snow water equivalent above which the sublimation is taken into account,cm,
+SM0,Porosity of the soil,-,0.483
+SMFCF,Field capacity of the soil,-,0.3
+SMLIM,Maximum soil moisture content of top soil layer,cm3/cm3,
+SMW,Wilting point of the soil,-,0.1
+SMfromPF,Table function describing the soil moisture content as a function of pF,m3 water m-3 soil,
+SNOWDENSITY,Density of snow,cm/cm,
+SOPE,Maximum percolation rate root zone,cm/day,46.98
+SSI,Initial surface storage,cm,
+SSMAX,Maximum surface storage,cm,
+SWEDEPTHI,Initial depth of layer of water present as snow on the soil surface,cm,
+Soil_pH,pH of the soil layer,-,6.3
+TMAXCRIT,Critical maximum temperature for snow melt,°C,
+TMINACCU1,Upper critical minimum temperature for snow accumulation,°C,
+TMINACCU2,Lower critical minimum temperature for snow accumulation,°C,
+TMINCRIT,Critical minimum temperature for snow melt,°C,
+Thickness,Layer thickness,cm,5.0
+WAV,Initial amount of water in the soil,cm,
+WFPS_CRIT,Critical water filled pore space fraction,m3 water m-3 pore,

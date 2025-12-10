@@ -80,8 +80,9 @@ nav:
     - Changelog: changelog.md
     - Report Issues: https://github.com/geonextgis/cropengine/issues
     - Examples:
-        - examples/intro.ipynb
+        - examples/dashboard.ipynb
     - API Reference:
+          - cropengine module: cropengine.md
           - weather module: weather.md
           - soil module: soil.md
           - site module: site.md
