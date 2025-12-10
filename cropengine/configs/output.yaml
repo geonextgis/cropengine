@@ -1,0 +1,351 @@
+wofost:
+  # ------------------------------------------------------------------------------
+  # 1. Output Parameter Definitions
+  # Defines all potential output variables across all production levels.
+  # ------------------------------------------------------------------------------
+  output_params:
+    # --- Phenology (All Profiles) ---
+    DVS:
+      description: "Development stage (0=emergence, 1=anthesis, 2=maturity)"
+      unit: "-"
+      type: float
+    TSUM:
+      description: "Temperature sum"
+      unit: "degree days"
+      type: float
+    STAGE:
+      description: "Current phenological stage (e.g., emerging, vegetative, reproductive) [cite: 2420]"
+      unit: "-"
+      type: string
+    DOA:
+      description: "Day of Anthesis"
+      unit: "date"
+      type: date
+    DOM:
+      description: "Day of Maturity"
+      unit: "date"
+      type: date
+    DOH:
+      description: "Day of Harvest"
+      unit: "date"
+      type: date
+    DOS:
+      description: "Day of Sowing"
+      unit: "date"
+      type: date
+    DOE:
+      description: "Day of Emergence"
+      unit: "date"
+      type: date
+
+    # --- Biomass & Production (All Profiles) ---
+    TAGP:
+      description: "Total Above-Ground Production (biomass)"
+      unit: "kg ha-1"
+      type: float
+    TWSO:
+      description: "Total Weight of Storage Organs (Yield)"
+      unit: "kg ha-1"
+      type: float
+    TWLV:
+      description: "Total Weight of Leaves (living + dead)"
+      unit: "kg ha-1"
+      type: float
+    WLV:
+      description: "Weight of Living Leaves"
+      unit: "kg ha-1"
+      type: float
+    DWLV:
+      description: "Weight of Dead Leaves"
+      unit: "kg ha-1"
+      type: float
+    TWST:
+      description: "Total Weight of Stems (living + dead)"
+      unit: "kg ha-1"
+      type: float
+    WST:
+      description: "Weight of Living Stems"
+      unit: "kg ha-1"
+      type: float
+    DWST:
+      description: "Weight of Dead Stems"
+      unit: "kg ha-1"
+      type: float
+    TWRT:
+      description: "Total Weight of Roots (living + dead)"
+      unit: "kg ha-1"
+      type: float
+    WRT:
+      description: "Weight of Living Roots"
+      unit: "kg ha-1"
+      type: float
+    DWRT:
+      description: "Weight of Dead Roots"
+      unit: "kg ha-1"
+      type: float
+
+    # --- Canopy & Light (All Profiles) ---
+    LAI:
+      description: "Leaf Area Index"
+      unit: "ha ha-1"
+      type: float
+    LAIMAX:
+      description: "Maximum LAI reached during growth cycle"
+      unit: "ha ha-1"
+      type: float
+    SAI:
+      description: "Stem Area Index"
+      unit: "ha ha-1"
+      type: float
+    PAI:
+      description: "Pod Area Index"
+      unit: "ha ha-1"
+      type: float
+    SLA:
+      description: "Specific Leaf Area"
+      unit: "ha kg-1"
+      type: float
+
+    # --- Water Balance (WLP & NWLP Profiles Only) ---
+    SM:
+      description: "Volumetric moisture content in root zone"
+      unit: "cm3 cm-3"
+      type: float
+    RD:
+      description: "Current rooting depth"
+      unit: "cm"
+      type: float
+    TRA:
+      description: "Actual crop transpiration rate"
+      unit: "cm day-1"
+      type: float
+    TRAMX:
+      description: "Maximum (potential) transpiration rate"
+      unit: "cm day-1"
+      type: float
+    EVSMX:
+      description: "Maximum evaporation rate from wet soil surface "
+      unit: "cm day-1"
+      type: float
+    EVWMX:
+      description: "Maximum evaporation rate from open water surface"
+      unit: "cm day-1"
+      type: float
+    WLOW:
+      description: "Amount of water in subsoil (between root zone and max root depth)"
+      unit: "cm"
+      type: float
+    WWLOW:
+      description: "Total amount of water in the soil profile"
+      unit: "cm"
+      type: float
+    IDWST:
+      description: "Number of days with water stress"
+      unit: "-"
+      type: int
+    IDOST:
+      description: "Number of days with oxygen stress"
+      unit: "-"
+      type: int
+    RFWS:
+      description: "Reduction factor for water stress"
+      unit: "-"
+      type: float
+    RFOS:
+      description: "Reduction factor for oxygen stress"
+      unit: "-"
+      type: float
+
+    # --- Nutrients (NWLP Profiles Only - WOFOST 8.1 / SNOMIN) ---
+    NNI:
+      description: "Nitrogen Nutrition Index"
+      unit: "-"
+      type: float
+    NAVAIL:
+      description: "Total mineral N available from soil and fertilizer"
+      unit: "kg N ha-1"
+      type: float
+    RNuptake:
+      description: "Total rate of N uptake by the crop"
+      unit: "kg N ha-1 d-1"
+      type: float
+    NamountLV:
+      description: "Actual N amount in living leaves"
+      unit: "kg N ha-1"
+      type: float
+    NamountST:
+      description: "Actual N amount in living stems"
+      unit: "kg N ha-1"
+      type: float
+    NamountRT:
+      description: "Actual N amount in living roots"
+      unit: "kg N ha-1"
+      type: float
+    NamountSO:
+      description: "Actual N amount in living storage organs"
+      unit: "kg N ha-1"
+      type: float
+
+  # ------------------------------------------------------------------------------
+  # 2. Profiles
+  # Lists of all parameters that can be output for a specific configuration.
+  # ------------------------------------------------------------------------------
+  profiles:
+    # Phenology Only
+    # Includes: Development stage and key dates only
+    # Excludes: Biomass, Canopy, Water balance, Nutrients
+    Phenology_Only:
+      parameters:
+        - DVS
+        - TSUM
+        - STAGE
+        - DOA
+        - DOM
+        - DOH
+        - DOS
+        - DOE
+
+    # Potential Production (PP)
+    # Includes: Phenology, Biomass, Canopy
+    # Excludes: Water balance, Nutrients
+    Potential_Production:
+      parameters:
+        - DVS
+        - TSUM
+        - STAGE
+        - DOA
+        - DOM
+        - DOH
+        - DOS
+        - DOE
+        - TAGP
+        - TWSO
+        - TWLV
+        - WLV
+        - DWLV
+        - TWST
+        - WST
+        - DWST
+        - TWRT
+        - WRT
+        - DWRT
+        - LAI
+        - LAIMAX
+        - SAI
+        - PAI
+        - SLA
+
+    # Water Limited Production (WLP)
+    # Includes: Potential Production + Water Balance
+    # Excludes: Nutrients
+    Water_Limited:
+      parameters:
+        - DVS
+        - TSUM
+        - STAGE
+        - DOA
+        - DOM
+        - DOH
+        - DOS
+        - DOE
+        - TAGP
+        - TWSO
+        - TWLV
+        - WLV
+        - DWLV
+        - TWST
+        - WST
+        - DWST
+        - TWRT
+        - WRT
+        - DWRT
+        - LAI
+        - LAIMAX
+        - SAI
+        - PAI
+        - SLA
+        - SM
+        - RD
+        - TRA
+        - TRAMX
+        - EVSMX
+        - EVWMX
+        - WLOW
+        - WWLOW
+        - IDWST
+        - IDOST
+        - RFWS
+        - RFOS
+
+    # Nutrient & Water Limited Production (NWLP)
+    # Includes: Water Limited + Nutrient Dynamics
+    Nutrient_Water_Limited:
+      parameters:
+        - DVS
+        - TSUM
+        - STAGE
+        - DOA
+        - DOM
+        - DOH
+        - DOS
+        - DOE
+        - TAGP
+        - TWSO
+        - TWLV
+        - WLV
+        - DWLV
+        - TWST
+        - WST
+        - DWST
+        - TWRT
+        - WRT
+        - DWRT
+        - LAI
+        - LAIMAX
+        - SAI
+        - PAI
+        - SLA
+        - SM
+        - RD
+        - TRA
+        - TRAMX
+        - EVSMX
+        - EVWMX
+        - WLOW
+        - WWLOW
+        - IDWST
+        - IDOST
+        - RFWS
+        - RFOS
+        - NNI
+        - NAVAIL
+        - RNuptake
+        - NamountLV
+        - NamountST
+        - NamountRT
+        - NamountSO
+
+  # ------------------------------------------------------------------------------
+  # 3. Model ID Mapping
+  # Maps specific PCSE model classes to the output profiles above.
+  # ------------------------------------------------------------------------------
+  model_mapping:
+    # Phenology Only
+    Wofost72_Phenology: Phenology_Only
+
+    # Potential Production
+    Wofost72_PP: Potential_Production
+    Wofost73_PP: Potential_Production
+    Wofost81_PP: Potential_Production
+
+    # Water Limited
+    Wofost72_WLP_CWB: Water_Limited
+    Wofost73_WLP_CWB: Water_Limited
+    Wofost73_WLP_MLWB: Water_Limited
+    Wofost81_WLP_CWB: Water_Limited
+    Wofost81_WLP_MLWB: Water_Limited
+
+    # Nutrient & Water Limited
+    Wofost81_NWLP_CWB_CNB: Nutrient_Water_Limited
+    Wofost81_NWLP_MLWB_CNB: Nutrient_Water_Limited
+    Wofost81_NWLP_MLWB_SNOMIN: Nutrient_Water_Limited
