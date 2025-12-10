@@ -507,14 +507,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../examples/intro/" class="md-nav__link">
+      <a href="../examples/dashboard/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Intro
+    Dashboard
   
 
     
@@ -583,6 +583,34 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cropengine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cropengine module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -773,6 +801,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#cropengine.models.get_model_class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_model_class()
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -882,6 +921,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#cropengine.models.get_model_class" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_model_class()
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -924,6 +974,44 @@
 
 
 
+
+
+
+
+  <div class="doc doc-object doc-function">
+
+
+
+<h2 id="cropengine.models.get_model_class" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_model_class</span><span class="p">(</span><span class="n">model_id</span><span class="p">)</span></code>
+
+
+<a href="#cropengine.models.get_model_class" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents ">
+
+      <p>Returns the model class based on the string ID.
+Raises ValueError if the model ID is not found.</p>
+
+        <details class="quote">
+          <summary>Source code in <code>cropengine/models.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_model_class</span><span class="p">(</span><span class="n">model_id</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the model class based on the string ID.</span>
+<span class="sd">    Raises ValueError if the model ID is not found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">model_id</span> <span class="ow">in</span> <span class="n">MODEL_CLASS_MAPPING</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">MODEL_CLASS_MAPPING</span><span class="p">[</span><span class="n">model_id</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">valid_keys</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">MODEL_CLASS_MAPPING</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Model ID &#39;</span><span class="si">{</span><span class="n">model_id</span><span class="si">}</span><span class="s2">&#39; not found. Available models: </span><span class="si">{</span><span class="n">valid_keys</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
 
 
 

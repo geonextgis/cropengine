@@ -507,14 +507,14 @@
   
   
     <li class="md-nav__item">
-      <a href="../examples/intro/" class="md-nav__link">
+      <a href="../examples/dashboard/" class="md-nav__link">
         
   
   
   <span class="md-ellipsis">
     
   
-    Intro
+    Dashboard
   
 
     
@@ -583,6 +583,34 @@
 
           </label>
           <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cropengine/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    cropengine module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
             
               
                 
@@ -1088,6 +1116,14 @@ WOFOSTSiteParametersProvider        </code>
 <span class="sd">        **kwargs: Site parameters provided as keyword arguments.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
+    <span class="n">EMERGENCY_DEFAULTS</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;WAV&quot;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">,</span>
+        <span class="s2">&quot;CO2&quot;</span><span class="p">:</span> <span class="mf">360.0</span><span class="p">,</span>
+        <span class="s2">&quot;NAVAILI&quot;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">,</span>
+        <span class="s2">&quot;NH4I&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">],</span>
+        <span class="s2">&quot;NO3I&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">],</span>
+    <span class="p">}</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
@@ -1126,8 +1162,6 @@ WOFOSTSiteParametersProvider        </code>
                     <span class="p">}</span>
                     <span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">all_param_defs</span><span class="p">[</span><span class="n">param</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">pass</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1146,21 +1180,33 @@ WOFOSTSiteParametersProvider        </code>
         <span class="c1"># 2. Process Parameters (Iterating over the LIST now)</span>
         <span class="k">for</span> <span class="n">meta</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="p">:</span>
             <span class="n">par_name</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;parameter&quot;</span><span class="p">]</span>
+            <span class="n">is_required</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;required&quot;</span><span class="p">]</span>
 
             <span class="c1"># Determine value: use provided kwarg or fall back to default</span>
             <span class="k">if</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="p">:</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;required&quot;</span><span class="p">]:</span>
-                    <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;Value for parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; is required for profile &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;!&quot;</span>
-                    <span class="p">)</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMERGENCY_DEFAULTS</span><span class="p">:</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMERGENCY_DEFAULTS</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span>
+                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;[SiteParams] Parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; was missing and has no YAML default. &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;Using fallback value: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">is_required</span><span class="p">:</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;[SiteParams] Required parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; was not provided. &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;Using default value: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
 
             <span class="c1"># Convert types and check valid ranges</span>
             <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_and_validate</span><span class="p">(</span><span class="n">par_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
 
+            <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
             <span class="n">validated_params</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
         <span class="c1"># 3. Check for Unknown Parameters provided by user</span>
@@ -1235,6 +1281,7 @@ WOFOSTSiteParametersProvider        </code>
 
 
 
+
   <div class="doc doc-object doc-method">
 
 
@@ -1269,21 +1316,33 @@ and returns the final parameter dictionary.</p>
     <span class="c1"># 2. Process Parameters (Iterating over the LIST now)</span>
     <span class="k">for</span> <span class="n">meta</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="p">:</span>
         <span class="n">par_name</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;parameter&quot;</span><span class="p">]</span>
+        <span class="n">is_required</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;required&quot;</span><span class="p">]</span>
 
         <span class="c1"># Determine value: use provided kwarg or fall back to default</span>
         <span class="k">if</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;required&quot;</span><span class="p">]:</span>
-                <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;Value for parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; is required for profile &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;!&quot;</span>
-                <span class="p">)</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMERGENCY_DEFAULTS</span><span class="p">:</span>
+                    <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMERGENCY_DEFAULTS</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;[SiteParams] Parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; was missing and has no YAML default. &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;Using fallback value: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">is_required</span><span class="p">:</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;[SiteParams] Required parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; was not provided. &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;Using default value: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
 
         <span class="c1"># Convert types and check valid ranges</span>
         <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_and_validate</span><span class="p">(</span><span class="n">par_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
 
+        <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
         <span class="n">validated_params</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
     <span class="c1"># 3. Check for Unknown Parameters provided by user</span>

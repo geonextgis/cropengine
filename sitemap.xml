@@ -2,82 +2,86 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://geonextgis.github.io/cropengine/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/agromanagement/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/changelog/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/contributing/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/conversions/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/crop/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/cropengine/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/faq/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/installation/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/models/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/site/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/soil/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/usage/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/weather/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/examples/crop/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
+    </url>
+    <url>
+         <loc>https://geonextgis.github.io/cropengine/examples/dashboard/</loc>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/examples/intro/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/examples/run/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/examples/site/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/examples/soil/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
     <url>
          <loc>https://geonextgis.github.io/cropengine/examples/weather/</loc>
-         <lastmod>2025-12-05</lastmod>
+         <lastmod>2025-12-10</lastmod>
     </url>
 </urlset>
