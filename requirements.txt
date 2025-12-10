@@ -1,5 +1,5 @@
 earthengine-api>=1.7
-geeagri
+geeagri>1.0.0
 geemap
 importlib
 numpy
