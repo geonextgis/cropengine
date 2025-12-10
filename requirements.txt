@@ -4,6 +4,8 @@ geemap
 importlib
 numpy
 pandas
+matplotlib
+seaborn
 pcse
 pedon
 PyYAML
