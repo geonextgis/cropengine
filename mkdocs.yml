@@ -9,7 +9,7 @@ copyright: "Copyright &copy; 2024 - 2024 Krishnagopal Halder"
 theme:
     palette:
         - scheme: default
-          primary: deep orange
+          primary: blue grey
           accent: orange
           toggle:
               icon: material/toggle-switch-off-outline
