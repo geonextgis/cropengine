@@ -8,7 +8,7 @@ copyright: "Copyright &copy; 2024 - 2024 Krishnagopal Halder"
 
 theme:
     palette:
-        - scheme: slate
+        - scheme: default
           primary: blue grey
           accent: orange
           toggle:
