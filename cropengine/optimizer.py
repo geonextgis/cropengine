@@ -2,6 +2,7 @@
 
 import os
 import optuna
+from optuna.trial import FixedTrial
 import pandas as pd
 import logging
 from typing import Callable, Dict, List, Union, Optional
@@ -121,7 +122,26 @@ class WOFOSTOptimizer:
                 raise ImportError(f"Could not initialize sampler '{name}'. Missing dependency: {e}. Please install the required package (e.g., 'pip install botorch' or 'pip install cma').")
 
         raise TypeError("Sampler must be a string name or an optuna.samplers.BaseSampler object.")
-    
+
+    def get_best_params(self, study: optuna.Study, search_space: Callable) -> Dict:
+        """
+        Retrieves the optimized parameters from the study, reconstructing any 
+        complex structures (lists/tables) defined in the search space.
+
+        Args:
+            study (optuna.Study): The completed optimization study.
+            search_space (callable): The original search space function used for optimization.
+                                     Required to reconstruct complex parameters (lists/tables)
+                                     from the scalar values stored in the study.
+
+        Returns:
+            dict: A dictionary of parameter overrides (e.g., {'crop_params': {...}})
+                  containing the best values found during optimization.
+        """        
+        best_overrides = search_space(FixedTrial(study.best_params))
+
+        return best_overrides
+        
     def optimize(
         self,
         search_space: Callable[[optuna.Trial], Dict],

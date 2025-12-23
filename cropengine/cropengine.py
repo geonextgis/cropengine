@@ -2,12 +2,10 @@
 
 import os
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
 from datetime import datetime, timedelta
-import concurrent
 import multiprocessing
 from tqdm import tqdm
+import logging
 
 # CropEngine Imports
 from cropengine.models import get_available_models, get_model_class
@@ -22,7 +20,6 @@ from cropengine.soil import (
 from cropengine.site import WOFOSTSiteParametersProvider
 from cropengine.crop import WOFOSTCropParametersProvider
 from cropengine.agromanagement import (
-    WOFOSTAgroEventBuilder,
     WOFOSTAgroManagementProvider,
 )
 
@@ -30,6 +27,16 @@ from cropengine.agromanagement import (
 from pcse.base import ParameterProvider
 from pcse.input import YAMLAgroManagementReader, ExcelWeatherDataProvider
 import ast
+
+
+def _disable_pcse_logging():
+    """
+    Silences PCSE's internal logger to prevent 'RotatingFileHandler' race conditions
+    during parallel execution.
+    """
+    pcse_logger = logging.getLogger("pcse")
+    pcse_logger.handlers = []  # Remove file handlers
+    pcse_logger.setLevel(logging.CRITICAL)  # Only show critical errors
 
 
 class WOFOSTOptionsMixin:
@@ -93,7 +100,73 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
         }
 
     # =========================================================================
-    # 1. DATA PREPARATION (I/O Bound)
+    # 1. UPDATE PARAMETERS IN WORKSPACE
+    # =========================================================================
+    def update_parameters(self, crop_overrides=None, soil_overrides=None, site_overrides=None):
+        """
+        Updates the CSV parameter files in the workspace with new values.
+        Changes are persistent.
+        
+        Args:
+            crop_overrides (dict): Updates for 'params_crop.csv'.
+            soil_overrides (dict): Updates for 'params_soil.csv'.
+            site_overrides (dict): Updates for 'params_site.csv'.
+        """
+        print(f"[UPDATE] Updating parameters in {self.workspace_dir}...")
+        count = 0
+        
+        if crop_overrides:
+            self._update_single_file("crop_params", crop_overrides)
+            count += 1
+            
+        if soil_overrides:
+            self._update_single_file("soil_params", soil_overrides)
+            count += 1
+            
+        if site_overrides:
+            self._update_single_file("site_params", site_overrides)
+            count += 1
+            
+        print(f"[UPDATE] Done. Updated {count} parameter files.")
+
+    def _update_single_file(self, file_key, overrides):
+        """Helper to read, update, and save a parameter CSV."""
+        fpath = self.files[file_key]
+        if not os.path.exists(fpath):
+            print(f"[WARN] Cannot update {file_key}: File not found at {fpath}")
+            return
+
+        try:
+            df = pd.read_csv(fpath)
+            
+            # Ensure 'value' column exists
+            if "value" not in df.columns:
+                df["value"] = pd.NA
+                
+            for param_name, new_val in overrides.items():
+                # Find row
+                mask = df["parameter"] == param_name
+                if mask.any():
+                    # Handle lists/tables (convert to string representation)
+                    if isinstance(new_val, (list, dict)):
+                        val_to_write = str(new_val)
+                    else:
+                        val_to_write = new_val
+                    
+                    if file_key == "crop_params":
+                        # For crop params, write to 'default' column
+                        df.loc[mask, "default"] = val_to_write
+                    else:
+                        # For soil/site params, write to 'value' column     
+                        df.loc[mask, "value"] = val_to_write
+            
+            df.to_csv(fpath, index=False)
+            
+        except Exception as e:
+            print(f"[ERROR] Failed to update {fpath}: {e}")
+            
+    # =========================================================================
+    # 2. DATA PREPARATION (I/O Bound)
     #    Downloads data and writes config files. Run this BEFORE the simulation.
     # =========================================================================
     def prepare_system(
@@ -176,7 +249,7 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
         print("[PREP] System Ready.")
 
     # =========================================================================
-    # 2. SIMULATION EXECUTION
+    # 3. SIMULATION EXECUTION
     #    Pure logic. Reads prepared files and runs math.
     # =========================================================================
     def run_simulation(
@@ -264,7 +337,7 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
             raise RuntimeError(f"Simulation Failed: {e}")
 
     # =========================================================================
-    # 3. INTERNAL HELPERS
+    # 4. INTERNAL HELPERS
     # =========================================================================
     def _save_params(self, provider, file_key):
         """Helper to extract metadata from a provider and save to CSV."""
@@ -391,7 +464,7 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
         agro.save_to_yaml(self.files["agro"])
 
     # =========================================================================
-    # 4. OPTIMIZATION
+    # 5. OPTIMIZATION
     # =========================================================================
     def get_rerunner(self):
         """
@@ -420,6 +493,8 @@ def _WOFOST_prepare_batch_system(kwargs):
     """
     Worker 1: PREPARATION (Downloads & File Generation).
     """
+    _disable_pcse_logging()
+    
     try:
         point_id = kwargs["id"]
         model_name = kwargs["model_name"]
@@ -458,6 +533,7 @@ def _WOFOST_run_batch_task(kwargs):
     """
     Worker 2: EXECUTION (Simulation Only).
     """
+    _disable_pcse_logging()
     try:
         point_id = kwargs["id"]
         model_name = kwargs["model_name"]
@@ -499,6 +575,41 @@ class WOFOSTCropSimulationBatchRunner(WOFOSTOptionsMixin):
         self.locations_df = pd.read_csv(locations_csv_path)
         self.locations_df["id"] = self.locations_df["id"].astype(int)
 
+    # =========================================================================
+    #  UPDATE PARAMETERS IN WORKSPACE
+    # =========================================================================
+    def update_parameters(self, crop_overrides=None, soil_overrides=None, site_overrides=None):
+        """
+        Updates parameter files for ALL locations in the batch.
+        
+        Args:
+            crop_overrides (dict): Updates for 'params_crop.csv'.
+            soil_overrides (dict): Updates for 'params_soil.csv'.
+            site_overrides (dict): Updates for 'params_site.csv'.
+        """
+        print(f"[BATCH UPDATE] Updating parameters for {len(self.locations_df)} locations...")
+        
+        updated_count = 0
+        
+        # Iterate over all point directories
+        for _, row in tqdm(self.locations_df.iterrows(), total=len(self.locations_df), desc="Updating Params"):
+            loc_id = int(row["id"])
+            point_dir = os.path.join(self.workspace_dir, f"point_{loc_id}")
+            
+            # Use the Single Runner's logic to update this specific folder
+            runner = WOFOSTCropSimulationRunner(model_name=self.model_name, workspace_dir=point_dir)
+            
+            if crop_overrides:
+                runner._update_single_file("crop_params", crop_overrides)
+            if soil_overrides:
+                runner._update_single_file("soil_params", soil_overrides)
+            if site_overrides:
+                runner._update_single_file("site_params", site_overrides)
+                
+            updated_count += 1
+            
+        print(f"[BATCH UPDATE] Success! Updated parameters in {updated_count} locations.")
+        
     # =========================================================================
     # PHASE 1: PARALLEL SYSTEM PREPARATION
     # =========================================================================
