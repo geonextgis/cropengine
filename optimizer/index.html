@@ -1019,6 +1019,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#cropengine.optimizer.WOFOSTOptimizer.get_best_params" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_best_params()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cropengine.optimizer.WOFOSTOptimizer.optimize" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1132,6 +1143,17 @@
     <span class="md-ellipsis">
       
         __init__()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cropengine.optimizer.WOFOSTOptimizer.get_best_params" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        get_best_params()
       
     </span>
   </a>
@@ -1301,6 +1323,25 @@ WOFOSTOptimizer        </code>
                 <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not initialize sampler &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;. Missing dependency: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">. Please install the required package (e.g., &#39;pip install botorch&#39; or &#39;pip install cma&#39;).&quot;</span><span class="p">)</span>
 
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Sampler must be a string name or an optuna.samplers.BaseSampler object.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_best_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">study</span><span class="p">:</span> <span class="n">optuna</span><span class="o">.</span><span class="n">Study</span><span class="p">,</span> <span class="n">search_space</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Retrieves the optimized parameters from the study, reconstructing any </span>
+<span class="sd">        complex structures (lists/tables) defined in the search space.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            study (optuna.Study): The completed optimization study.</span>
+<span class="sd">            search_space (callable): The original search space function used for optimization.</span>
+<span class="sd">                                     Required to reconstruct complex parameters (lists/tables)</span>
+<span class="sd">                                     from the scalar values stored in the study.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: A dictionary of parameter overrides (e.g., {&#39;crop_params&#39;: {...}})</span>
+<span class="sd">                  containing the best values found during optimization.</span>
+<span class="sd">        &quot;&quot;&quot;</span>        
+        <span class="n">best_overrides</span> <span class="o">=</span> <span class="n">search_space</span><span class="p">(</span><span class="n">FixedTrial</span><span class="p">(</span><span class="n">study</span><span class="o">.</span><span class="n">best_params</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">best_overrides</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -1499,6 +1540,92 @@ WOFOSTOptimizer        </code>
     <span class="bp">self</span><span class="o">.</span><span class="n">observed_data</span> <span class="o">=</span> <span class="n">observed_data</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">is_batch</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span> <span class="s2">&quot;get_batch_rerunners&quot;</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">engines</span> <span class="o">=</span> <span class="p">{}</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="cropengine.optimizer.WOFOSTOptimizer.get_best_params" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">get_best_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">study</span><span class="p">,</span> <span class="n">search_space</span><span class="p">)</span></code>
+
+
+<a href="#cropengine.optimizer.WOFOSTOptimizer.get_best_params" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Retrieves the optimized parameters from the study, reconstructing any 
+complex structures (lists/tables) defined in the search space.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>study</code></td>
+        <td><code>optuna.Study</code></td>
+        <td><p>The completed optimization study.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>search_space</code></td>
+        <td><code>callable</code></td>
+        <td><p>The original search space function used for optimization.
+                     Required to reconstruct complex parameters (lists/tables)
+                     from the scalar values stored in the study.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>dict</code></td>
+      <td><p>A dictionary of parameter overrides (e.g., {'crop_params': {...}})
+      containing the best values found during optimization.</p></td>
+    </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>cropengine/optimizer.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_best_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">study</span><span class="p">:</span> <span class="n">optuna</span><span class="o">.</span><span class="n">Study</span><span class="p">,</span> <span class="n">search_space</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Retrieves the optimized parameters from the study, reconstructing any </span>
+<span class="sd">    complex structures (lists/tables) defined in the search space.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        study (optuna.Study): The completed optimization study.</span>
+<span class="sd">        search_space (callable): The original search space function used for optimization.</span>
+<span class="sd">                                 Required to reconstruct complex parameters (lists/tables)</span>
+<span class="sd">                                 from the scalar values stored in the study.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        dict: A dictionary of parameter overrides (e.g., {&#39;crop_params&#39;: {...}})</span>
+<span class="sd">              containing the best values found during optimization.</span>
+<span class="sd">    &quot;&quot;&quot;</span>        
+    <span class="n">best_overrides</span> <span class="o">=</span> <span class="n">search_space</span><span class="p">(</span><span class="n">FixedTrial</span><span class="p">(</span><span class="n">study</span><span class="o">.</span><span class="n">best_params</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">best_overrides</span>
 </code></pre></div>
         </details>
     </div>

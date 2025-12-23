@@ -788,6 +788,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#cropengine.cropengine.WOFOSTCropSimulationBatchRunner.update_parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        update_parameters()
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -843,6 +854,17 @@
     <span class="md-ellipsis">
       
         run_simulation()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cropengine.cropengine.WOFOSTCropSimulationRunner.update_parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        update_parameters()
       
     </span>
   </a>
@@ -1315,6 +1337,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#cropengine.cropengine.WOFOSTCropSimulationBatchRunner.update_parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        update_parameters()
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -1370,6 +1403,17 @@
     <span class="md-ellipsis">
       
         run_simulation()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cropengine.cropengine.WOFOSTCropSimulationRunner.update_parameters" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        update_parameters()
       
     </span>
   </a>
@@ -1534,6 +1578,41 @@ WOFOSTCropSimulationBatchRunner            (<a class="autorefs autorefs-internal
         <span class="bp">self</span><span class="o">.</span><span class="n">locations_csv_path</span> <span class="o">=</span> <span class="n">locations_csv_path</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">locations_csv_path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+
+    <span class="c1"># =========================================================================</span>
+    <span class="c1">#  UPDATE PARAMETERS IN WORKSPACE</span>
+    <span class="c1"># =========================================================================</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates parameter files for ALL locations in the batch.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            crop_overrides (dict): Updates for &#39;params_crop.csv&#39;.</span>
+<span class="sd">            soil_overrides (dict): Updates for &#39;params_soil.csv&#39;.</span>
+<span class="sd">            site_overrides (dict): Updates for &#39;params_site.csv&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BATCH UPDATE] Updating parameters for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> locations...&quot;</span><span class="p">)</span>
+
+        <span class="n">updated_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># Iterate over all point directories</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Updating Params&quot;</span><span class="p">):</span>
+            <span class="n">loc_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+            <span class="n">point_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;point_</span><span class="si">{</span><span class="n">loc_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Use the Single Runner&#39;s logic to update this specific folder</span>
+            <span class="n">runner</span> <span class="o">=</span> <span class="n">WOFOSTCropSimulationRunner</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="n">workspace_dir</span><span class="o">=</span><span class="n">point_dir</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">crop_overrides</span><span class="p">:</span>
+                <span class="n">runner</span><span class="o">.</span><span class="n">_update_single_file</span><span class="p">(</span><span class="s2">&quot;crop_params&quot;</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">soil_overrides</span><span class="p">:</span>
+                <span class="n">runner</span><span class="o">.</span><span class="n">_update_single_file</span><span class="p">(</span><span class="s2">&quot;soil_params&quot;</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">site_overrides</span><span class="p">:</span>
+                <span class="n">runner</span><span class="o">.</span><span class="n">_update_single_file</span><span class="p">(</span><span class="s2">&quot;site_params&quot;</span><span class="p">,</span> <span class="n">site_overrides</span><span class="p">)</span>
+
+            <span class="n">updated_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BATCH UPDATE] Success! Updated parameters in </span><span class="si">{</span><span class="n">updated_count</span><span class="si">}</span><span class="s2"> locations.&quot;</span><span class="p">)</span>
 
     <span class="c1"># =========================================================================</span>
     <span class="c1"># PHASE 1: PARALLEL SYSTEM PREPARATION</span>
@@ -2011,6 +2090,92 @@ Assumes data is already prepared.</p>
 
 
 
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="cropengine.cropengine.WOFOSTCropSimulationBatchRunner.update_parameters" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">update_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+<a href="#cropengine.cropengine.WOFOSTCropSimulationBatchRunner.update_parameters" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Updates parameter files for ALL locations in the batch.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>crop_overrides</code></td>
+        <td><code>dict</code></td>
+        <td><p>Updates for 'params_crop.csv'.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>soil_overrides</code></td>
+        <td><code>dict</code></td>
+        <td><p>Updates for 'params_soil.csv'.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>site_overrides</code></td>
+        <td><code>dict</code></td>
+        <td><p>Updates for 'params_site.csv'.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>cropengine/cropengine.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Updates parameter files for ALL locations in the batch.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        crop_overrides (dict): Updates for &#39;params_crop.csv&#39;.</span>
+<span class="sd">        soil_overrides (dict): Updates for &#39;params_soil.csv&#39;.</span>
+<span class="sd">        site_overrides (dict): Updates for &#39;params_site.csv&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BATCH UPDATE] Updating parameters for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> locations...&quot;</span><span class="p">)</span>
+
+    <span class="n">updated_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="c1"># Iterate over all point directories</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Updating Params&quot;</span><span class="p">):</span>
+        <span class="n">loc_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+        <span class="n">point_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;point_</span><span class="si">{</span><span class="n">loc_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Use the Single Runner&#39;s logic to update this specific folder</span>
+        <span class="n">runner</span> <span class="o">=</span> <span class="n">WOFOSTCropSimulationRunner</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="n">workspace_dir</span><span class="o">=</span><span class="n">point_dir</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">crop_overrides</span><span class="p">:</span>
+            <span class="n">runner</span><span class="o">.</span><span class="n">_update_single_file</span><span class="p">(</span><span class="s2">&quot;crop_params&quot;</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">soil_overrides</span><span class="p">:</span>
+            <span class="n">runner</span><span class="o">.</span><span class="n">_update_single_file</span><span class="p">(</span><span class="s2">&quot;soil_params&quot;</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">site_overrides</span><span class="p">:</span>
+            <span class="n">runner</span><span class="o">.</span><span class="n">_update_single_file</span><span class="p">(</span><span class="s2">&quot;site_params&quot;</span><span class="p">,</span> <span class="n">site_overrides</span><span class="p">)</span>
+
+        <span class="n">updated_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BATCH UPDATE] Success! Updated parameters in </span><span class="si">{</span><span class="n">updated_count</span><span class="si">}</span><span class="s2"> locations.&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
 
 
   </div>
@@ -2070,7 +2235,73 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
         <span class="p">}</span>
 
     <span class="c1"># =========================================================================</span>
-    <span class="c1"># 1. DATA PREPARATION (I/O Bound)</span>
+    <span class="c1"># 1. UPDATE PARAMETERS IN WORKSPACE</span>
+    <span class="c1"># =========================================================================</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Updates the CSV parameter files in the workspace with new values.</span>
+<span class="sd">        Changes are persistent.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            crop_overrides (dict): Updates for &#39;params_crop.csv&#39;.</span>
+<span class="sd">            soil_overrides (dict): Updates for &#39;params_soil.csv&#39;.</span>
+<span class="sd">            site_overrides (dict): Updates for &#39;params_site.csv&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[UPDATE] Updating parameters in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+        <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">crop_overrides</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_single_file</span><span class="p">(</span><span class="s2">&quot;crop_params&quot;</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="p">)</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">soil_overrides</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_single_file</span><span class="p">(</span><span class="s2">&quot;soil_params&quot;</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="p">)</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">site_overrides</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_update_single_file</span><span class="p">(</span><span class="s2">&quot;site_params&quot;</span><span class="p">,</span> <span class="n">site_overrides</span><span class="p">)</span>
+            <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[UPDATE] Done. Updated </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> parameter files.&quot;</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_update_single_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_key</span><span class="p">,</span> <span class="n">overrides</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper to read, update, and save a parameter CSV.&quot;&quot;&quot;</span>
+        <span class="n">fpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">file_key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[WARN] Cannot update </span><span class="si">{</span><span class="n">file_key</span><span class="si">}</span><span class="s2">: File not found at </span><span class="si">{</span><span class="n">fpath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
+
+            <span class="c1"># Ensure &#39;value&#39; column exists</span>
+            <span class="k">if</span> <span class="s2">&quot;value&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">NA</span>
+
+            <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">new_val</span> <span class="ow">in</span> <span class="n">overrides</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="c1"># Find row</span>
+                <span class="n">mask</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;parameter&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">param_name</span>
+                <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                    <span class="c1"># Handle lists/tables (convert to string representation)</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_val</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+                        <span class="n">val_to_write</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">new_val</span><span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">val_to_write</span> <span class="o">=</span> <span class="n">new_val</span>
+
+                    <span class="k">if</span> <span class="n">file_key</span> <span class="o">==</span> <span class="s2">&quot;crop_params&quot;</span><span class="p">:</span>
+                        <span class="c1"># For crop params, write to &#39;default&#39; column</span>
+                        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val_to_write</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="c1"># For soil/site params, write to &#39;value&#39; column     </span>
+                        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val_to_write</span>
+
+            <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[ERROR] Failed to update </span><span class="si">{</span><span class="n">fpath</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># =========================================================================</span>
+    <span class="c1"># 2. DATA PREPARATION (I/O Bound)</span>
     <span class="c1">#    Downloads data and writes config files. Run this BEFORE the simulation.</span>
     <span class="c1"># =========================================================================</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">prepare_system</span><span class="p">(</span>
@@ -2153,7 +2384,7 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[PREP] System Ready.&quot;</span><span class="p">)</span>
 
     <span class="c1"># =========================================================================</span>
-    <span class="c1"># 2. SIMULATION EXECUTION</span>
+    <span class="c1"># 3. SIMULATION EXECUTION</span>
     <span class="c1">#    Pure logic. Reads prepared files and runs math.</span>
     <span class="c1"># =========================================================================</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">run_simulation</span><span class="p">(</span>
@@ -2241,7 +2472,7 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
             <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Simulation Failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="c1"># =========================================================================</span>
-    <span class="c1"># 3. INTERNAL HELPERS</span>
+    <span class="c1"># 4. INTERNAL HELPERS</span>
     <span class="c1"># =========================================================================</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">_save_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">provider</span><span class="p">,</span> <span class="n">file_key</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper to extract metadata from a provider and save to CSV.&quot;&quot;&quot;</span>
@@ -2368,7 +2599,7 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
         <span class="n">agro</span><span class="o">.</span><span class="n">save_to_yaml</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;agro&quot;</span><span class="p">])</span>
 
     <span class="c1"># =========================================================================</span>
-    <span class="c1"># 4. OPTIMIZATION</span>
+    <span class="c1"># 5. OPTIMIZATION</span>
     <span class="c1"># =========================================================================</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_rerunner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2733,6 +2964,88 @@ Calls update_workspace immediately to set up file paths.</p>
 
     <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Simulation Failed: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
+
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="cropengine.cropengine.WOFOSTCropSimulationRunner.update_parameters" class="doc doc-heading">
+<code class="highlight language-python"><span class="n">update_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+
+
+<a href="#cropengine.cropengine.WOFOSTCropSimulationRunner.update_parameters" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Updates the CSV parameter files in the workspace with new values.
+Changes are persistent.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>crop_overrides</code></td>
+        <td><code>dict</code></td>
+        <td><p>Updates for 'params_crop.csv'.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>soil_overrides</code></td>
+        <td><code>dict</code></td>
+        <td><p>Updates for 'params_soil.csv'.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>site_overrides</code></td>
+        <td><code>dict</code></td>
+        <td><p>Updates for 'params_site.csv'.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>cropengine/cropengine.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Updates the CSV parameter files in the workspace with new values.</span>
+<span class="sd">    Changes are persistent.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        crop_overrides (dict): Updates for &#39;params_crop.csv&#39;.</span>
+<span class="sd">        soil_overrides (dict): Updates for &#39;params_soil.csv&#39;.</span>
+<span class="sd">        site_overrides (dict): Updates for &#39;params_site.csv&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[UPDATE] Updating parameters in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
+    <span class="n">count</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">crop_overrides</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_single_file</span><span class="p">(</span><span class="s2">&quot;crop_params&quot;</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="p">)</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">soil_overrides</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_single_file</span><span class="p">(</span><span class="s2">&quot;soil_params&quot;</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="p">)</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="n">site_overrides</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_update_single_file</span><span class="p">(</span><span class="s2">&quot;site_params&quot;</span><span class="p">,</span> <span class="n">site_overrides</span><span class="p">)</span>
+        <span class="n">count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[UPDATE] Done. Updated </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> parameter files.&quot;</span><span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
