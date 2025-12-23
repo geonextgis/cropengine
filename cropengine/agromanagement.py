@@ -165,20 +165,27 @@ class WOFOSTAgroManagementProvider(list):
         c_start = self._convert_date(campaign_start_date)
         c_end = self._convert_date(campaign_end_date)
         crop_start = self._convert_date(crop_start_date)
-        crop_end = self._convert_date(crop_end_date)
+        crop_end = self._convert_date(crop_end_date) if crop_end_date else None
 
         self._last_campaign_end = c_end
 
+        # 1. Define the base CropCalendar
+        crop_calendar = {
+            "crop_name": crop_name,
+            "variety_name": variety_name,
+            "crop_start_date": crop_start,
+            "crop_start_type": crop_start_type,
+            "crop_end_type": crop_end_type,
+            "max_duration": max_duration,
+        }
+
+        # 2. Conditionally add crop_end_date only if it exists
+        if crop_end is not None:
+            crop_calendar["crop_end_date"] = crop_end
+
+        # 3. Build the full config
         campaign_config = {
-            "CropCalendar": {
-                "crop_name": crop_name,
-                "variety_name": variety_name,
-                "crop_start_date": crop_start,
-                "crop_start_type": crop_start_type,
-                "crop_end_date": crop_end,
-                "crop_end_type": crop_end_type,
-                "max_duration": max_duration,
-            },
+            "CropCalendar": crop_calendar,
             "TimedEvents": timed_events if timed_events else None,
             "StateEvents": state_events if state_events else None,
         }

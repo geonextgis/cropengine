@@ -15,7 +15,7 @@ theme:
               icon: material/toggle-switch-off-outline
               name: Switch to dark mode
         - scheme: slate
-          primary: indigo
+          primary: blue grey
           accent: indigo
           toggle:
               icon: material/toggle-switch
@@ -80,7 +80,10 @@ nav:
     - Changelog: changelog.md
     - Report Issues: https://github.com/geonextgis/cropengine/issues
     - Examples:
-        - examples/dashboard.ipynb
+        - examples/Run wofost (single location).ipynb
+        - examples/Run wofost (multiple location).ipynb
+        - examples/Run sensitivity analysis (wofost).ipynb
+        - examples/Run parameter optimization (wofost).ipynb
     - API Reference:
           - cropengine module: cropengine.md
           - weather module: weather.md
@@ -90,3 +93,6 @@ nav:
           - models module: models.md
           - crop module: crop.md
           - agromanagement module: agromanagement.md
+          - sensitivity module: sensitivity.md
+          - optimizer module: optimizer.md
+          - output module: output.md
