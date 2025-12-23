@@ -4,9 +4,8 @@ import os
 import optuna
 import pandas as pd
 import logging
-from concurrent.futures import ProcessPoolExecutor
-import multiprocessing
 from typing import Callable, Dict, List, Union, Optional
+from joblib import Parallel, delayed
 
 
 # GLOBAL WORKER FUNCTION
@@ -20,6 +19,10 @@ def _global_worker_task(payload):
     Returns:
         pd.DataFrame or None: The simulation result with an added 'point_id' column.
     """
+    # DISABLE PCSE LOGGING
+    pcse_logger = logging.getLogger("pcse")
+    pcse_logger.handlers = []
+    pcse_logger.setLevel(logging.CRITICAL)
 
     loc_id, engine, overrides = payload
     try:
@@ -31,7 +34,8 @@ def _global_worker_task(payload):
         if df is not None and not df.empty:
             df["point_id"] = loc_id
             return df
-    except Exception:
+    except Exception as e:
+        print(f"Worker Error loc {loc_id}: {e}")
         return None
     return None
 
@@ -60,6 +64,64 @@ class WOFOSTOptimizer:
         self.is_batch = hasattr(runner, "get_batch_rerunners")
         self.engines = {}
 
+    def _get_sampler(self, sampler_input: Union[str, optuna.samplers.BaseSampler, None]) -> optuna.samplers.BaseSampler:
+        """
+        Helper to resolve the sampler from a string name or object.
+        """
+        if sampler_input is None:
+            return None  # Let Optuna choose default (usually TPESampler)
+        
+        if isinstance(sampler_input, optuna.samplers.BaseSampler):
+            return sampler_input
+
+        if isinstance(sampler_input, str):
+            name = sampler_input.lower().strip()
+            
+            try:
+                if name == "random":
+                    return optuna.samplers.RandomSampler()
+                
+                elif name == "tpe":
+                    return optuna.samplers.TPESampler()
+                
+                elif name == "cmaes":
+                    # Requires 'cma' package
+                    return optuna.samplers.CmaEsSampler()
+                
+                elif name == "nsgaii":
+                    return optuna.samplers.NSGAIISampler()
+                
+                elif name == "nsgaiii":
+                    return optuna.samplers.NSGAIIISampler()
+                
+                elif name == "qmc":
+                    # Quasi-Monte Carlo (requires Scipy)
+                    return optuna.samplers.QMCSampler()
+                
+                elif name == "bruteforce":
+                    return optuna.samplers.BruteForceSampler()
+                
+                elif name == "grid":
+                    return optuna.samplers.GridSampler(search_space={}) # Note: GridSampler requires search space passed later or usually managed by study
+                
+                elif name == "botorch":
+                    # Requires 'botorch' package
+                    from optuna.integration import BoTorchSampler
+                    return BoTorchSampler()
+                
+                elif name == "gp":
+                    # Gaussian Process Sampler (Requires 'botorch' & 'scipy')
+                    return optuna.samplers.GPSampler()
+
+                else:
+                    raise ValueError(f"Unknown sampler name: '{sampler_input}'.")
+
+            except ImportError as e:
+                # Catch missing dependency errors (e.g., missing botorch or cma)
+                raise ImportError(f"Could not initialize sampler '{name}'. Missing dependency: {e}. Please install the required package (e.g., 'pip install botorch' or 'pip install cma').")
+
+        raise TypeError("Sampler must be a string name or an optuna.samplers.BaseSampler object.")
+    
     def optimize(
         self,
         search_space: Callable[[optuna.Trial], Dict],
@@ -86,8 +148,27 @@ class WOFOSTOptimizer:
 
             n_workers (int): Number of parallel processes to spawn.
 
-            sampler (optuna.samplers.BaseSampler): Custom Optuna sampler (e.g., TPESampler, NSGAII).
-
+            sampler (str | optuna.samplers.BaseSampler | None): 
+                The optimization strategy. Supported strings:
+                
+                **Standard:**
+                - "TPE": Tree-structured Parzen Estimator (Default, good general purpose).
+                - "Random": Pure random search.
+                
+                **Advanced (May require extra packages):**
+                - "GP": Gaussian Process Sampler. Excellent for expensive simulations. (Requires `botorch`).
+                - "CmaEs": Covariance Matrix Adaptation. Good for continuous global optima. (Requires `cma`).
+                - "BoTorch": Bayesian Optimization. (Requires `botorch`).
+                
+                **Multi-Objective:**
+                - "NSGAII": Standard for Pareto optimization.
+                - "NSGAIII": For many-objective problems (3+ targets).
+                
+                **Grid/Deterministic:**
+                - "BruteForce": Tries ALL combinations.
+                - "Grid": Tries specified grid points.
+                - "QMC": Quasi-Monte Carlo.
+                
             directions (list[str]): Optimization directions.
                                     Default is ["minimize"].
                                     For multi-objective, use e.g., ["minimize", "maximize"].
@@ -104,7 +185,12 @@ class WOFOSTOptimizer:
             os.makedirs(output_folder, exist_ok=True)
             print(f"[OPT] Saving all trial outputs to: {output_folder}")
 
-        # 2. PRE-LOADING PHASE
+        # 2. RESOLVE SAMPLER
+        optuna_sampler = self._get_sampler(sampler)
+        if optuna_sampler:
+             print(f"[OPT] Using Sampler: {optuna_sampler.__class__.__name__}")
+             
+        # 3. PRE-LOADING PHASE
         print("[OPT] Loading simulation engines...")
         if not self.engines:
             if self.is_batch:
@@ -114,7 +200,7 @@ class WOFOSTOptimizer:
 
         print(f"[OPT] Ready. Optimized execution for {len(self.engines)} locations.")
 
-        # 2. DEFINE OBJECTIVE
+        # 4. DEFINE OBJECTIVE
         def objective(trial):
             # A. Get Parameters from Optuna
             overrides = search_space(trial)
@@ -125,16 +211,20 @@ class WOFOSTOptimizer:
             ]
 
             results = []
+            
+            # C. Execute in Parallel using JOBLIB
+            try:
+                # Parallel returns a list of results in order
+                results_raw = Parallel(n_jobs=n_workers, backend="loky")(
+                    delayed(_global_worker_task)(task) for task in tasks
+                )
+                
+                # Filter out None values (failed runs)
+                results = [res for res in results_raw if res is not None]
 
-            # C. Execute in Parallel (ProcessPool for True Parallelism)
-            with ProcessPoolExecutor(max_workers=n_workers) as executor:
-                chunk_size = max(1, len(tasks) // (n_workers * 4))
-
-                for res in executor.map(
-                    _global_worker_task, tasks, chunksize=chunk_size
-                ):
-                    if res is not None:
-                        results.append(res)
+            except Exception as e:
+                logging.error(f"[OPT] Parallel Execution Error: {e}")
+                results = []
 
             # D. Validation
             if not results:
@@ -161,11 +251,11 @@ class WOFOSTOptimizer:
                     return [float("inf")] * len(directions)
                 return float("inf")
 
-        # 3. CREATE STUDY
+        # 5. CREATE STUDY
         if directions is None:
             directions = ["minimize"]
 
-        study = optuna.create_study(directions=directions, sampler=sampler)
+        study = optuna.create_study(directions=directions, sampler=optuna_sampler)
 
         print(
             f"[OPT] Starting {len(directions)}-objective optimization with {n_trials} trials..."

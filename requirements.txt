@@ -12,3 +12,8 @@ PyYAML
 SALib
 scipy
 seaborn
+joblib
+cma
+cmaes
+scipy
+# botorch

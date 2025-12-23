@@ -32,6 +32,11 @@ class WOFOSTSensitivityAnalyzer:
             runner: A WOFOST simulation runner object. Must implement
                     `get_batch_rerunners()` or `get_rerunner()`.
         """
+        # DISABLE PCSE LOGGING
+        pcse_logger = logging.getLogger("pcse")
+        pcse_logger.handlers = []
+        pcse_logger.setLevel(logging.CRITICAL)
+    
         self.runner = runner
         self.engines = {}
 
