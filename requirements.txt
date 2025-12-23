@@ -10,3 +10,5 @@ pedon
 PyYAML
 scipy
 seaborn
+optuna
+SALib

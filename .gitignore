@@ -105,3 +105,8 @@ ENV/
 
 # IDE settings
 .vscode/
+
+# Folder
+test_data/
+test_output/
+test_notebook/

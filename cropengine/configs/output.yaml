@@ -1,9 +1,9 @@
 wofost:
   # ------------------------------------------------------------------------------
-  # 1. Output Parameter Definitions
+  # 1. Output Variable Definitions
   # Defines all potential output variables across all production levels.
   # ------------------------------------------------------------------------------
-  output_params:
+  output_vars:
     # --- Phenology (All Profiles) ---
     DVS:
       description: "Development stage (0=emergence, 1=anthesis, 2=maturity)"
@@ -14,7 +14,7 @@ wofost:
       unit: "degree days"
       type: float
     STAGE:
-      description: "Current phenological stage (e.g., emerging, vegetative, reproductive) [cite: 2420]"
+      description: "Current phenological stage (e.g., emerging, vegetative, reproductive)"
       unit: "-"
       type: string
     DOA:
@@ -188,14 +188,14 @@ wofost:
 
   # ------------------------------------------------------------------------------
   # 2. Profiles
-  # Lists of all parameters that can be output for a specific configuration.
+  # Lists of all variables that can be output for a specific configuration.
   # ------------------------------------------------------------------------------
   profiles:
     # Phenology Only
     # Includes: Development stage and key dates only
     # Excludes: Biomass, Canopy, Water balance, Nutrients
     Phenology_Only:
-      parameters:
+      variables:
         - DVS
         - TSUM
         - STAGE
@@ -209,7 +209,7 @@ wofost:
     # Includes: Phenology, Biomass, Canopy
     # Excludes: Water balance, Nutrients
     Potential_Production:
-      parameters:
+      variables:
         - DVS
         - TSUM
         - STAGE
@@ -239,7 +239,7 @@ wofost:
     # Includes: Potential Production + Water Balance
     # Excludes: Nutrients
     Water_Limited:
-      parameters:
+      variables:
         - DVS
         - TSUM
         - STAGE
@@ -280,7 +280,7 @@ wofost:
     # Nutrient & Water Limited Production (NWLP)
     # Includes: Water Limited + Nutrient Dynamics
     Nutrient_Water_Limited:
-      parameters:
+      variables:
         - DVS
         - TSUM
         - STAGE

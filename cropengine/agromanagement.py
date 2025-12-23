@@ -160,32 +160,39 @@ class WOFOSTAgroManagementProvider(list):
             max_duration: Maximum duration of the crop cycle in days.
             timed_events: List of timed event dictionaries (from EventBuilder).
             state_events: List of state event dictionaries (from EventBuilder).
-        """
+        """    
         # Convert inputs to ensure they are date objects or valid strings
         c_start = self._convert_date(campaign_start_date)
         c_end = self._convert_date(campaign_end_date)
         crop_start = self._convert_date(crop_start_date)
-        crop_end = self._convert_date(crop_end_date)
+        crop_end = self._convert_date(crop_end_date) if crop_end_date else None
 
         self._last_campaign_end = c_end
 
+        # 1. Define the base CropCalendar
+        crop_calendar = {
+            "crop_name": crop_name,
+            "variety_name": variety_name,
+            "crop_start_date": crop_start,
+            "crop_start_type": crop_start_type,
+            "crop_end_type": crop_end_type,
+            "max_duration": max_duration,
+        }
+
+        # 2. Conditionally add crop_end_date only if it exists
+        if crop_end is not None:
+            crop_calendar["crop_end_date"] = crop_end
+
+        # 3. Build the full config
         campaign_config = {
-            "CropCalendar": {
-                "crop_name": crop_name,
-                "variety_name": variety_name,
-                "crop_start_date": crop_start,
-                "crop_start_type": crop_start_type,
-                "crop_end_date": crop_end,
-                "crop_end_type": crop_end_type,
-                "max_duration": max_duration,
-            },
+            "CropCalendar": crop_calendar,
             "TimedEvents": timed_events if timed_events else None,
             "StateEvents": state_events if state_events else None,
         }
 
         # Append the campaign dictionary {start_date: config} to the list
         self.append({c_start: campaign_config})
-
+        
     def add_trailing_empty_campaign(self):
         """
         Adds a final empty campaign to ensure the simulation runs until the very end
