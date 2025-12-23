@@ -1,7 +1,0 @@
-parameter,required,default,range,type,description,unit,value
-IFUNRN,False,0.0,"[0, 1]",int,Indicates whether non-infiltrating fraction of rain is a function of storm size (1) or not (0).,-,0.0
-NOTINF,False,0.0,"[0.0, 1.0]",float,Maximum fraction of rain not-infiltrating into the soil.,-,0.0
-SMLIM,False,0.4,"[0.0, 1.0]",float,Initial maximum moisture content in initial rooting depth zone.,-,0.4
-SSI,False,0.0,"[0.0, 100.0]",float,Initial depth of water stored on the surface.,cm,0.0
-SSMAX,False,0.0,"[0.0, 100.0]",float,Maximum depth of water that can be stored on the soil surface.,cm,0.0
-WAV,True,,"[0.0, 100.0]",float,Initial amount of water in total soil profile.,cm,10.0
