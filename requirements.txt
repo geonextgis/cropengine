@@ -1,7 +1,10 @@
+cma
+cmaes
 earthengine-api>=1.7
 geeagri>1.0.0
 geemap
 importlib
+joblib
 matplotlib
 numpy
 optuna
@@ -12,8 +15,3 @@ PyYAML
 SALib
 scipy
 seaborn
-joblib
-cma
-cmaes
-scipy
-# botorch
