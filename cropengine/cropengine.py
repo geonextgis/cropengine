@@ -37,25 +37,26 @@ class WOFOSTOptionsMixin:
     Mixin class that provides helper methods for UI dropdowns.
     Inherit from this to give your class access to model/crop options.
     """
+
     def get_model_options(self):
         """Returns list of available models."""
         return get_available_models()
-    
+
     def get_crop_options(self, model_name):
         """Returns list of crops for the selected model."""
         return get_available_crops(model_name)
-    
+
     def get_variety_options(self, model_name, crop_name):
         """Returns list of varieties for the selected crop."""
         return get_available_crop_varieties(model_name, crop_name)
-    
+
     def get_crop_start_end_options(self):
         """Returns dict of crop start and crop end type available in WOFOST."""
         return {
-            'crop_start_type': ['sowing', 'emergence'],
-            'crop_end_type': ['maturity', 'harvest', 'earliest'] 
+            "crop_start_type": ["sowing", "emergence"],
+            "crop_end_type": ["maturity", "harvest", "earliest"],
         }
-        
+
     def get_output_variables(self, model_name):
         """Returns list of output variables for a given simulation model."""
         return get_output_variables(model_name)
@@ -69,7 +70,7 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
         """
         self.model_name = model_name
         self.update_workspace(workspace_dir)
-        
+
     # =========================================================================
     # 0. WORKSPACE & PATH MANAGEMENT
     # =========================================================================
@@ -90,7 +91,7 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
             "agro": os.path.join(self.workspace_dir, "agro.yaml"),
             "output": os.path.join(self.workspace_dir, "simulation_results.csv"),
         }
-        
+
     # =========================================================================
     # 1. DATA PREPARATION (I/O Bound)
     #    Downloads data and writes config files. Run this BEFORE the simulation.
@@ -135,12 +136,12 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
             self._save_params(WOFOSTSoilParameterProvider(soil_df), "soil_params")
         else:
             print("[PREP] Using existing Soil parameters.")
-            
+
         # C. Site Params (Check existence before processing)
         if force_update or not os.path.exists(self.files["site_params"]):
             site_provider = WOFOSTSiteParametersProvider(self.model_name, **site_kwargs)
             # Ensure params are generated inside the provider if needed
-            if hasattr(site_provider, 'get_params'): 
+            if hasattr(site_provider, "get_params"):
                 site_provider.get_params()
             self._save_params(site_provider, "site_params")
         else:
@@ -171,7 +172,7 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
             )
         else:
             print("[PREP] Using existing Agromanagement config.")
-            
+
         print("[PREP] System Ready.")
 
     # =========================================================================
@@ -184,8 +185,7 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
         site_overrides=None,
         crop_overrides=None,
         agro_file_path=None,
-        output_vars=None
-        
+        output_vars=None,
     ):
         """
         Runs the simulation.
@@ -219,31 +219,38 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
             raise FileNotFoundError(
                 "Missing weather or agro files. Run 'prepare_system' first."
             )
-        
-        weather_provider = ExcelWeatherDataProvider(self.files["weather"], force_reload=True)
+
+        weather_provider = ExcelWeatherDataProvider(
+            self.files["weather"], force_reload=True
+        )
         agromanagement = YAMLAgroManagementReader(agro_path)
 
         # 2. Load Parameters (Priority: DF Input -> CSV File -> Error)
         soil_dict = self._load_param_dict("soil_params", "value")
         site_dict = self._load_param_dict("site_params", "value")
         crop_dict = self._load_param_dict("crop_params", "default")
-        
+
         if soil_overrides:
             soil_dict.update(soil_overrides)
         if site_overrides:
             site_dict.update(site_overrides)
         if crop_overrides:
             crop_dict.update(crop_overrides)
-                        
+
         parameters = ParameterProvider(
             cropdata=crop_dict, soildata=soil_dict, sitedata=site_dict
         )
-                
+
         # 3. Instantiate & Run
         try:
             ModelClass = get_model_class(self.model_name)
             if output_vars:
-                wofsim = ModelClass(parameters, weather_provider, agromanagement, output_vars=output_vars)
+                wofsim = ModelClass(
+                    parameters,
+                    weather_provider,
+                    agromanagement,
+                    output_vars=output_vars,
+                )
             else:
                 wofsim = ModelClass(parameters, weather_provider, agromanagement)
             wofsim.run_till_terminate()
@@ -278,10 +285,10 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
         file_path = self.files[file_key]
         if not os.path.exists(file_path):
             raise FileNotFoundError(f"Missing parameter file: {file_path}")
-        
+
         # 2. Load DataFrame from CSV
         df = pd.read_csv(file_path)
-        
+
         # 3. Determine Column Name (fallback to 'default' if strict col missing)
         col = value_col if value_col in df.columns else "default"
 
@@ -382,27 +389,27 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
         )
         agro.add_trailing_empty_campaign()
         agro.save_to_yaml(self.files["agro"])
-    
+
     # =========================================================================
     # 4. OPTIMIZATION
-    # =========================================================================   
+    # =========================================================================
     def get_rerunner(self):
         """
         Returns a WOFOSTFastEngine instance instead of a closure.
         """
         # Validation & Pre-loading
-        if not os.path.exists(self.files['weather']):
+        if not os.path.exists(self.files["weather"]):
             raise FileNotFoundError("Run prepare_system first.")
-        
+
         # Load the path
-        weather = self.files['weather']
-        agro = self.files['agro']
-        
+        weather = self.files["weather"]
+        agro = self.files["agro"]
+
         # Load Dictionaries
         base_params = {
-            'soil': self._load_param_dict("soil_params", "value"),
-            'site': self._load_param_dict("site_params", "value"),
-            'crop': self._load_param_dict("crop_params", "default")
+            "soil": self._load_param_dict("soil_params", "value"),
+            "site": self._load_param_dict("site_params", "value"),
+            "crop": self._load_param_dict("crop_params", "default"),
         }
 
         # Return the class instance
@@ -414,63 +421,67 @@ def _WOFOST_prepare_batch_system(kwargs):
     Worker 1: PREPARATION (Downloads & File Generation).
     """
     try:
-        point_id = kwargs['id']
-        model_name = kwargs['model_name']
-        unique_dir = os.path.join(kwargs['base_workspace_dir'], f"point_{int(point_id)}")
-        
+        point_id = kwargs["id"]
+        model_name = kwargs["model_name"]
+        unique_dir = os.path.join(
+            kwargs["base_workspace_dir"], f"point_{int(point_id)}"
+        )
+
         # Instantiate Runner locally
         runner = WOFOSTCropSimulationRunner(model_name, workspace_dir=unique_dir)
-        
+
         # Execute Preparation Logic
         runner.prepare_system(
-            latitude=kwargs['latitude'],
-            longitude=kwargs['longitude'],
-            campaign_start=kwargs['campaign_start'],
-            campaign_end=kwargs['campaign_end'],
-            crop_start=kwargs['crop_start'],
-            crop_end=kwargs['crop_end'],
-            crop_name=kwargs['crop_name'],
-            variety_name=kwargs['variety_name'],
-            crop_start_type=kwargs.get('crop_start_type', 'emergence'),
-            crop_end_type=kwargs.get('crop_end_type', 'harvest'),
-            max_duration=kwargs.get('max_duration', 300),
-            timed_events=kwargs.get('timed_events', None),
-            state_events=kwargs.get('state_events', None),
-            force_update=kwargs.get('force_update', False),
-            **kwargs.get('site_kwargs', {})
+            latitude=kwargs["latitude"],
+            longitude=kwargs["longitude"],
+            campaign_start=kwargs["campaign_start"],
+            campaign_end=kwargs["campaign_end"],
+            crop_start=kwargs["crop_start"],
+            crop_end=kwargs["crop_end"],
+            crop_name=kwargs["crop_name"],
+            variety_name=kwargs["variety_name"],
+            crop_start_type=kwargs.get("crop_start_type", "emergence"),
+            crop_end_type=kwargs.get("crop_end_type", "harvest"),
+            max_duration=kwargs.get("max_duration", 300),
+            timed_events=kwargs.get("timed_events", None),
+            state_events=kwargs.get("state_events", None),
+            force_update=kwargs.get("force_update", False),
+            **kwargs.get("site_kwargs", {}),
         )
         return {"id": point_id, "status": "Success"}
-        
+
     except Exception as e:
-        return {"id": kwargs.get('id'), "status": "Failed", "error": str(e)}
-    
-    
+        return {"id": kwargs.get("id"), "status": "Failed", "error": str(e)}
+
+
 def _WOFOST_run_batch_task(kwargs):
     """
     Worker 2: EXECUTION (Simulation Only).
     """
     try:
-        point_id = kwargs['id']
-        model_name = kwargs['model_name']
-        unique_dir = os.path.join(kwargs['base_workspace_dir'], f"point_{int(point_id)}")
-        
+        point_id = kwargs["id"]
+        model_name = kwargs["model_name"]
+        unique_dir = os.path.join(
+            kwargs["base_workspace_dir"], f"point_{int(point_id)}"
+        )
+
         # Instantiate Runner locally
         runner = WOFOSTCropSimulationRunner(model_name, workspace_dir=unique_dir)
-        
+
         # Execute Simulation Logic
         df_result = runner.run_simulation(
-            soil_overrides=kwargs.get('soil_overrides'), # Optional overrides
-            site_overrides=kwargs.get('site_overrides'),
-            crop_overrides=kwargs.get('crop_overrides'),
-            agro_file_path=kwargs.get('agro_file_path'),
-            output_vars=kwargs.get('output_vars')
+            soil_overrides=kwargs.get("soil_overrides"),  # Optional overrides
+            site_overrides=kwargs.get("site_overrides"),
+            crop_overrides=kwargs.get("crop_overrides"),
+            agro_file_path=kwargs.get("agro_file_path"),
+            output_vars=kwargs.get("output_vars"),
         )
-        
+
         # Tag Results
-        df_result['point_id'] = point_id
-        df_result['latitude'] = kwargs['latitude']
-        df_result['longitude'] = kwargs['longitude']
-        
+        df_result["point_id"] = point_id
+        df_result["latitude"] = kwargs["latitude"]
+        df_result["longitude"] = kwargs["longitude"]
+
         return df_result.reset_index()
 
     except Exception as e:
@@ -486,51 +497,62 @@ class WOFOSTCropSimulationBatchRunner(WOFOSTOptionsMixin):
 
         self.locations_csv_path = locations_csv_path
         self.locations_df = pd.read_csv(locations_csv_path)
-        self.locations_df['id'] = self.locations_df['id'].astype(int)
-        
+        self.locations_df["id"] = self.locations_df["id"].astype(int)
+
     # =========================================================================
     # PHASE 1: PARALLEL SYSTEM PREPARATION
     # =========================================================================
-    def prepare_batch_system(self, 
-                             max_workers=4,
-                             **preparation_args):
+    def prepare_batch_system(self, max_workers=4, **preparation_args):
         """
         Runs `prepare_system` for all points in parallel.
         Downloads data and creates config files for every point.
         """
         tasks = []
         print(f"[BATCH PREP] Preparing tasks for {len(self.locations_df)} locations...")
-        
+
         # 1. Build Task List
         for _, row in self.locations_df.iterrows():
             # Separate site_kwargs from the main args
-            site_kwargs = {k: v for k, v in preparation_args.items() if k not in [
-                'campaign_start', 'campaign_end', 'crop_start', 'crop_end',
-                'crop_name', 'variety_name', 'force_update',
-                'crop_start_type', 'crop_end_type', 'max_duration', 
-                'timed_events', 'state_events'
-            ]}
-            
+            site_kwargs = {
+                k: v
+                for k, v in preparation_args.items()
+                if k
+                not in [
+                    "campaign_start",
+                    "campaign_end",
+                    "crop_start",
+                    "crop_end",
+                    "crop_name",
+                    "variety_name",
+                    "force_update",
+                    "crop_start_type",
+                    "crop_end_type",
+                    "max_duration",
+                    "timed_events",
+                    "state_events",
+                ]
+            }
+
             task_payload = {
-                'id': int(row['id']),
-                'latitude': row['latitude'],
-                'longitude': row['longitude'],
-                'base_workspace_dir': self.workspace_dir,
-                'model_name': self.model_name,
-                'site_kwargs': site_kwargs,
-                **preparation_args # Pass rest of args (dates, crop, etc)
+                "id": int(row["id"]),
+                "latitude": row["latitude"],
+                "longitude": row["longitude"],
+                "base_workspace_dir": self.workspace_dir,
+                "model_name": self.model_name,
+                "site_kwargs": site_kwargs,
+                **preparation_args,  # Pass rest of args (dates, crop, etc)
             }
             tasks.append(task_payload)
 
         # 2. Execute Parallel Preparation
         print(f"[BATCH PREP] Starting preparation with {max_workers} workers...")
         success_count = 0
-        
+
         with multiprocessing.Pool(processes=max_workers, maxtasksperchild=1) as pool:
             iterator = pool.imap_unordered(_WOFOST_prepare_batch_system, tasks)
-            
+
             for result in tqdm(iterator, total=len(tasks), desc="Preparing Data"):
-                if result['status'] == "Success":
+                if result["status"] == "Success":
                     success_count += 1
                 else:
                     print(f"FAILED Point {result['id']}: {result.get('error')}")
@@ -540,17 +562,19 @@ class WOFOSTCropSimulationBatchRunner(WOFOSTOptionsMixin):
     # =========================================================================
     # PHASE 2: PARALLEL EXECUTION
     # =========================================================================
-    def run_batch_simulation(self, 
-                             max_workers=4,
-                             soil_overrides=None, 
-                             site_overrides=None, 
-                             crop_overrides=None,
-                             agro_file_path=None,
-                             output_vars=None):
+    def run_batch_simulation(
+        self,
+        max_workers=4,
+        soil_overrides=None,
+        site_overrides=None,
+        crop_overrides=None,
+        agro_file_path=None,
+        output_vars=None,
+    ):
         """
         Runs `run_simulation` for all points in parallel.
         Assumes data is already prepared.
-        
+
         Args:
             max_workers (int, optional): Number of CPU cores to use.
             soil_overrides (dict, optional): Override soil params.
@@ -560,23 +584,25 @@ class WOFOSTCropSimulationBatchRunner(WOFOSTOptionsMixin):
             output_vars (list, optional): Variables to output.
         """
         tasks = []
-        
-        print(f"[BATCH RUN] Preparing execution tasks for {len(self.locations_df)} locations...")
-        
+
+        print(
+            f"[BATCH RUN] Preparing execution tasks for {len(self.locations_df)} locations..."
+        )
+
         # 1. Build Task List
         for _, row in self.locations_df.iterrows():
             task_payload = {
-                'id': row['id'],
-                'latitude': row['latitude'],
-                'longitude': row['longitude'],
-                'base_workspace_dir': self.workspace_dir,
-                'model_name': self.model_name,
+                "id": row["id"],
+                "latitude": row["latitude"],
+                "longitude": row["longitude"],
+                "base_workspace_dir": self.workspace_dir,
+                "model_name": self.model_name,
                 # Optional overrides passed to all workers
-                'soil_overrides': soil_overrides,
-                'site_overrides': site_overrides,
-                'crop_overrides': crop_overrides,
-                'agro_file_path': agro_file_path,
-                'output_vars': output_vars
+                "soil_overrides": soil_overrides,
+                "site_overrides": site_overrides,
+                "crop_overrides": crop_overrides,
+                "agro_file_path": agro_file_path,
+                "output_vars": output_vars,
             }
             tasks.append(task_payload)
 
@@ -586,19 +612,19 @@ class WOFOSTCropSimulationBatchRunner(WOFOSTOptionsMixin):
 
         with multiprocessing.Pool(processes=max_workers, maxtasksperchild=1) as pool:
             iterator = pool.imap(_WOFOST_run_batch_task, tasks)
-            
+
             for res_df in tqdm(iterator, total=len(tasks), desc="Simulating"):
                 if res_df is not None:
                     results_list.append(res_df)
-                    
+
         # 3. Combine & Save
         if results_list:
             final_df = pd.concat(results_list, ignore_index=True)
-            if 'index' in final_df.columns:
-                final_df.drop('index', axis=1, inplace=True)
-            
-            final_df['point_id'] = final_df['point_id'].astype(int)
-            
+            if "index" in final_df.columns:
+                final_df.drop("index", axis=1, inplace=True)
+
+            final_df["point_id"] = final_df["point_id"].astype(int)
+
             output_path = os.path.join(self.workspace_dir, "batch_results.csv")
             final_df.to_csv(output_path, index=False)
             print(f"[BATCH RUN] Success! Results saved to {output_path}")
@@ -606,7 +632,7 @@ class WOFOSTCropSimulationBatchRunner(WOFOSTOptionsMixin):
         else:
             print("[BATCH RUN] Failed. No results generated.")
             return pd.DataFrame()
-        
+
     # =========================================================================
     # OPTIMIZATION
     # =========================================================================
@@ -614,38 +640,43 @@ class WOFOSTCropSimulationBatchRunner(WOFOSTOptionsMixin):
         """
         Initializes a fast re-runner for EVERY location in the batch.
         Loads all weather/soil data into RAM once.
-        
+
         Returns:
             dict: { location_id: fast_runner_function }
         """
         batch_runners = {}
-        print(f"[BATCH INIT] Pre-loading data for {len(self.locations_df)} locations...")
-        
+        print(
+            f"[BATCH INIT] Pre-loading data for {len(self.locations_df)} locations..."
+        )
+
         for _, row in self.locations_df.iterrows():
-            loc_id = int(row['id'])
+            loc_id = int(row["id"])
             point_dir = os.path.join(self.workspace_dir, f"point_{loc_id}")
-            
+
             # Initialize the single runner for this specific point
-            runner = WOFOSTCropSimulationRunner(model_name=self.model_name, workspace_dir=point_dir)
-            
+            runner = WOFOSTCropSimulationRunner(
+                model_name=self.model_name, workspace_dir=point_dir
+            )
+
             try:
                 engine_object = runner.get_rerunner()
                 batch_runners[loc_id] = engine_object
             except Exception as e:
                 print(f"[WARN] Skipping point {loc_id}: {e}")
-                
+
         return batch_runners
-    
-    
+
+
 class _WOFOSTLazyEngine:
     """
     A picklable worker class.
     """
+
     def __init__(self, model_name, weather_path, agro_path, base_params):
         self.model_name = model_name
-        self.weather_path = weather_path 
-        self.agro_path = agro_path    
-        self.base_params = base_params    
+        self.weather_path = weather_path
+        self.agro_path = agro_path
+        self.base_params = base_params
 
     def __call__(self, crop_overrides=None, soil_overrides=None, site_overrides=None):
         """
@@ -656,21 +687,24 @@ class _WOFOSTLazyEngine:
             weather = ExcelWeatherDataProvider(self.weather_path, force_reload=True)
             # Agromanagement Loading
             agro = YAMLAgroManagementReader(self.agro_path)
-            
+
         except Exception as e:
             # If IO fails, return None so the worker doesn't crash
             return None
-        
+
         # 1. Merge Parameters (Fast In-Memory)
-        current_crop = self.base_params['crop'].copy()
-        if crop_overrides: current_crop.update(crop_overrides)
-        
-        current_soil = self.base_params['soil'].copy()
-        if soil_overrides: current_soil.update(soil_overrides)
-        
-        current_site = self.base_params['site'].copy()
-        if site_overrides: current_site.update(site_overrides)
-        
+        current_crop = self.base_params["crop"].copy()
+        if crop_overrides:
+            current_crop.update(crop_overrides)
+
+        current_soil = self.base_params["soil"].copy()
+        if soil_overrides:
+            current_soil.update(soil_overrides)
+
+        current_site = self.base_params["site"].copy()
+        if site_overrides:
+            current_site.update(site_overrides)
+
         parameters = ParameterProvider(
             cropdata=current_crop, soildata=current_soil, sitedata=current_site
         )

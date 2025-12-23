@@ -160,7 +160,7 @@ class WOFOSTAgroManagementProvider(list):
             max_duration: Maximum duration of the crop cycle in days.
             timed_events: List of timed event dictionaries (from EventBuilder).
             state_events: List of state event dictionaries (from EventBuilder).
-        """    
+        """
         # Convert inputs to ensure they are date objects or valid strings
         c_start = self._convert_date(campaign_start_date)
         c_end = self._convert_date(campaign_end_date)
@@ -192,7 +192,7 @@ class WOFOSTAgroManagementProvider(list):
 
         # Append the campaign dictionary {start_date: config} to the list
         self.append({c_start: campaign_config})
-        
+
     def add_trailing_empty_campaign(self):
         """
         Adds a final empty campaign to ensure the simulation runs until the very end

@@ -4,11 +4,11 @@ geemap
 importlib
 matplotlib
 numpy
+optuna
 pandas
 pcse
 pedon
 PyYAML
+SALib
 scipy
 seaborn
-optuna
-SALib
