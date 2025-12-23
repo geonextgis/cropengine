@@ -1244,6 +1244,64 @@ WOFOSTOptimizer        </code>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_batch</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span> <span class="s2">&quot;get_batch_rerunners&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">engines</span> <span class="o">=</span> <span class="p">{}</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_sampler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampler_input</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">BaseSampler</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">BaseSampler</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper to resolve the sampler from a string name or object.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">sampler_input</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># Let Optuna choose default (usually TPESampler)</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sampler_input</span><span class="p">,</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">BaseSampler</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">sampler_input</span>
+
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">sampler_input</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">sampler_input</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">RandomSampler</span><span class="p">()</span>
+
+                <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;tpe&quot;</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">TPESampler</span><span class="p">()</span>
+
+                <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;cmaes&quot;</span><span class="p">:</span>
+                    <span class="c1"># Requires &#39;cma&#39; package</span>
+                    <span class="k">return</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">CmaEsSampler</span><span class="p">()</span>
+
+                <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nsgaii&quot;</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">NSGAIISampler</span><span class="p">()</span>
+
+                <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nsgaiii&quot;</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">NSGAIIISampler</span><span class="p">()</span>
+
+                <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;qmc&quot;</span><span class="p">:</span>
+                    <span class="c1"># Quasi-Monte Carlo (requires Scipy)</span>
+                    <span class="k">return</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">QMCSampler</span><span class="p">()</span>
+
+                <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;bruteforce&quot;</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">BruteForceSampler</span><span class="p">()</span>
+
+                <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;grid&quot;</span><span class="p">:</span>
+                    <span class="k">return</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">GridSampler</span><span class="p">(</span><span class="n">search_space</span><span class="o">=</span><span class="p">{})</span> <span class="c1"># Note: GridSampler requires search space passed later or usually managed by study</span>
+
+                <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;botorch&quot;</span><span class="p">:</span>
+                    <span class="c1"># Requires &#39;botorch&#39; package</span>
+                    <span class="kn">from</span><span class="w"> </span><span class="nn">optuna.integration</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoTorchSampler</span>
+                    <span class="k">return</span> <span class="n">BoTorchSampler</span><span class="p">()</span>
+
+                <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;gp&quot;</span><span class="p">:</span>
+                    <span class="c1"># Gaussian Process Sampler (Requires &#39;botorch&#39; &amp; &#39;scipy&#39;)</span>
+                    <span class="k">return</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">GPSampler</span><span class="p">()</span>
+
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown sampler name: &#39;</span><span class="si">{</span><span class="n">sampler_input</span><span class="si">}</span><span class="s2">&#39;.&quot;</span><span class="p">)</span>
+
+            <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># Catch missing dependency errors (e.g., missing botorch or cma)</span>
+                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not initialize sampler &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;. Missing dependency: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">. Please install the required package (e.g., &#39;pip install botorch&#39; or &#39;pip install cma&#39;).&quot;</span><span class="p">)</span>
+
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Sampler must be a string name or an optuna.samplers.BaseSampler object.&quot;</span><span class="p">)</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">optimize</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">search_space</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">optuna</span><span class="o">.</span><span class="n">Trial</span><span class="p">],</span> <span class="n">Dict</span><span class="p">],</span>
@@ -1270,7 +1328,26 @@ WOFOSTOptimizer        </code>
 
 <span class="sd">            n_workers (int): Number of parallel processes to spawn.</span>
 
-<span class="sd">            sampler (optuna.samplers.BaseSampler): Custom Optuna sampler (e.g., TPESampler, NSGAII).</span>
+<span class="sd">            sampler (str | optuna.samplers.BaseSampler | None): </span>
+<span class="sd">                The optimization strategy. Supported strings:</span>
+
+<span class="sd">                **Standard:**</span>
+<span class="sd">                - &quot;TPE&quot;: Tree-structured Parzen Estimator (Default, good general purpose).</span>
+<span class="sd">                - &quot;Random&quot;: Pure random search.</span>
+
+<span class="sd">                **Advanced (May require extra packages):**</span>
+<span class="sd">                - &quot;GP&quot;: Gaussian Process Sampler. Excellent for expensive simulations. (Requires `botorch`).</span>
+<span class="sd">                - &quot;CmaEs&quot;: Covariance Matrix Adaptation. Good for continuous global optima. (Requires `cma`).</span>
+<span class="sd">                - &quot;BoTorch&quot;: Bayesian Optimization. (Requires `botorch`).</span>
+
+<span class="sd">                **Multi-Objective:**</span>
+<span class="sd">                - &quot;NSGAII&quot;: Standard for Pareto optimization.</span>
+<span class="sd">                - &quot;NSGAIII&quot;: For many-objective problems (3+ targets).</span>
+
+<span class="sd">                **Grid/Deterministic:**</span>
+<span class="sd">                - &quot;BruteForce&quot;: Tries ALL combinations.</span>
+<span class="sd">                - &quot;Grid&quot;: Tries specified grid points.</span>
+<span class="sd">                - &quot;QMC&quot;: Quasi-Monte Carlo.</span>
 
 <span class="sd">            directions (list[str]): Optimization directions.</span>
 <span class="sd">                                    Default is [&quot;minimize&quot;].</span>
@@ -1288,7 +1365,12 @@ WOFOSTOptimizer        </code>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_folder</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OPT] Saving all trial outputs to: </span><span class="si">{</span><span class="n">output_folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-        <span class="c1"># 2. PRE-LOADING PHASE</span>
+        <span class="c1"># 2. RESOLVE SAMPLER</span>
+        <span class="n">optuna_sampler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sampler</span><span class="p">(</span><span class="n">sampler</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">optuna_sampler</span><span class="p">:</span>
+             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OPT] Using Sampler: </span><span class="si">{</span><span class="n">optuna_sampler</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+        <span class="c1"># 3. PRE-LOADING PHASE</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[OPT] Loading simulation engines...&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">engines</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_batch</span><span class="p">:</span>
@@ -1298,7 +1380,7 @@ WOFOSTOptimizer        </code>
 
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OPT] Ready. Optimized execution for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engines</span><span class="p">)</span><span class="si">}</span><span class="s2"> locations.&quot;</span><span class="p">)</span>
 
-        <span class="c1"># 2. DEFINE OBJECTIVE</span>
+        <span class="c1"># 4. DEFINE OBJECTIVE</span>
         <span class="k">def</span><span class="w"> </span><span class="nf">objective</span><span class="p">(</span><span class="n">trial</span><span class="p">):</span>
             <span class="c1"># A. Get Parameters from Optuna</span>
             <span class="n">overrides</span> <span class="o">=</span> <span class="n">search_space</span><span class="p">(</span><span class="n">trial</span><span class="p">)</span>
@@ -1310,15 +1392,19 @@ WOFOSTOptimizer        </code>
 
             <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
 
-            <span class="c1"># C. Execute in Parallel (ProcessPool for True Parallelism)</span>
-            <span class="k">with</span> <span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">n_workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
-                <span class="n">chunk_size</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span> <span class="o">//</span> <span class="p">(</span><span class="n">n_workers</span> <span class="o">*</span> <span class="mi">4</span><span class="p">))</span>
+            <span class="c1"># C. Execute in Parallel using JOBLIB</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c1"># Parallel returns a list of results in order</span>
+                <span class="n">results_raw</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">n_workers</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;loky&quot;</span><span class="p">)(</span>
+                    <span class="n">delayed</span><span class="p">(</span><span class="n">_global_worker_task</span><span class="p">)(</span><span class="n">task</span><span class="p">)</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span>
+                <span class="p">)</span>
 
-                <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
-                    <span class="n">_global_worker_task</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunk_size</span>
-                <span class="p">):</span>
-                    <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                        <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+                <span class="c1"># Filter out None values (failed runs)</span>
+                <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">results_raw</span> <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OPT] Parallel Execution Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="c1"># D. Validation</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">results</span><span class="p">:</span>
@@ -1345,11 +1431,11 @@ WOFOSTOptimizer        </code>
                     <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">directions</span><span class="p">)</span>
                 <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
 
-        <span class="c1"># 3. CREATE STUDY</span>
+        <span class="c1"># 5. CREATE STUDY</span>
         <span class="k">if</span> <span class="n">directions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">directions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;minimize&quot;</span><span class="p">]</span>
 
-        <span class="n">study</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">create_study</span><span class="p">(</span><span class="n">directions</span><span class="o">=</span><span class="n">directions</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">sampler</span><span class="p">)</span>
+        <span class="n">study</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">create_study</span><span class="p">(</span><span class="n">directions</span><span class="o">=</span><span class="n">directions</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">optuna_sampler</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span>
             <span class="sa">f</span><span class="s2">&quot;[OPT] Starting </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">directions</span><span class="p">)</span><span class="si">}</span><span class="s2">-objective optimization with </span><span class="si">{</span><span class="n">n_trials</span><span class="si">}</span><span class="s2"> trials...&quot;</span>
@@ -1476,8 +1562,22 @@ WOFOSTOptimizer        </code>
       </tr>
       <tr>
         <td><code>sampler</code></td>
-        <td><code>optuna.samplers.BaseSampler</code></td>
-        <td><p>Custom Optuna sampler (e.g., TPESampler, NSGAII).</p></td>
+        <td><code>str | optuna.samplers.BaseSampler | None</code></td>
+        <td><p>The optimization strategy. Supported strings:</p>
+<p><strong>Standard:</strong>
+- "TPE": Tree-structured Parzen Estimator (Default, good general purpose).
+- "Random": Pure random search.</p>
+<p><strong>Advanced (May require extra packages):</strong>
+- "GP": Gaussian Process Sampler. Excellent for expensive simulations. (Requires <code>botorch</code>).
+- "CmaEs": Covariance Matrix Adaptation. Good for continuous global optima. (Requires <code>cma</code>).
+- "BoTorch": Bayesian Optimization. (Requires <code>botorch</code>).</p>
+<p><strong>Multi-Objective:</strong>
+- "NSGAII": Standard for Pareto optimization.
+- "NSGAIII": For many-objective problems (3+ targets).</p>
+<p><strong>Grid/Deterministic:</strong>
+- "BruteForce": Tries ALL combinations.
+- "Grid": Tries specified grid points.
+- "QMC": Quasi-Monte Carlo.</p></td>
         <td><code>None</code></td>
       </tr>
       <tr>
@@ -1541,7 +1641,26 @@ WOFOSTOptimizer        </code>
 
 <span class="sd">        n_workers (int): Number of parallel processes to spawn.</span>
 
-<span class="sd">        sampler (optuna.samplers.BaseSampler): Custom Optuna sampler (e.g., TPESampler, NSGAII).</span>
+<span class="sd">        sampler (str | optuna.samplers.BaseSampler | None): </span>
+<span class="sd">            The optimization strategy. Supported strings:</span>
+
+<span class="sd">            **Standard:**</span>
+<span class="sd">            - &quot;TPE&quot;: Tree-structured Parzen Estimator (Default, good general purpose).</span>
+<span class="sd">            - &quot;Random&quot;: Pure random search.</span>
+
+<span class="sd">            **Advanced (May require extra packages):**</span>
+<span class="sd">            - &quot;GP&quot;: Gaussian Process Sampler. Excellent for expensive simulations. (Requires `botorch`).</span>
+<span class="sd">            - &quot;CmaEs&quot;: Covariance Matrix Adaptation. Good for continuous global optima. (Requires `cma`).</span>
+<span class="sd">            - &quot;BoTorch&quot;: Bayesian Optimization. (Requires `botorch`).</span>
+
+<span class="sd">            **Multi-Objective:**</span>
+<span class="sd">            - &quot;NSGAII&quot;: Standard for Pareto optimization.</span>
+<span class="sd">            - &quot;NSGAIII&quot;: For many-objective problems (3+ targets).</span>
+
+<span class="sd">            **Grid/Deterministic:**</span>
+<span class="sd">            - &quot;BruteForce&quot;: Tries ALL combinations.</span>
+<span class="sd">            - &quot;Grid&quot;: Tries specified grid points.</span>
+<span class="sd">            - &quot;QMC&quot;: Quasi-Monte Carlo.</span>
 
 <span class="sd">        directions (list[str]): Optimization directions.</span>
 <span class="sd">                                Default is [&quot;minimize&quot;].</span>
@@ -1559,7 +1678,12 @@ WOFOSTOptimizer        </code>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">output_folder</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OPT] Saving all trial outputs to: </span><span class="si">{</span><span class="n">output_folder</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="c1"># 2. PRE-LOADING PHASE</span>
+    <span class="c1"># 2. RESOLVE SAMPLER</span>
+    <span class="n">optuna_sampler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sampler</span><span class="p">(</span><span class="n">sampler</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">optuna_sampler</span><span class="p">:</span>
+         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OPT] Using Sampler: </span><span class="si">{</span><span class="n">optuna_sampler</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># 3. PRE-LOADING PHASE</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[OPT] Loading simulation engines...&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">engines</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_batch</span><span class="p">:</span>
@@ -1569,7 +1693,7 @@ WOFOSTOptimizer        </code>
 
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OPT] Ready. Optimized execution for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engines</span><span class="p">)</span><span class="si">}</span><span class="s2"> locations.&quot;</span><span class="p">)</span>
 
-    <span class="c1"># 2. DEFINE OBJECTIVE</span>
+    <span class="c1"># 4. DEFINE OBJECTIVE</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">objective</span><span class="p">(</span><span class="n">trial</span><span class="p">):</span>
         <span class="c1"># A. Get Parameters from Optuna</span>
         <span class="n">overrides</span> <span class="o">=</span> <span class="n">search_space</span><span class="p">(</span><span class="n">trial</span><span class="p">)</span>
@@ -1581,15 +1705,19 @@ WOFOSTOptimizer        </code>
 
         <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1"># C. Execute in Parallel (ProcessPool for True Parallelism)</span>
-        <span class="k">with</span> <span class="n">ProcessPoolExecutor</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="n">n_workers</span><span class="p">)</span> <span class="k">as</span> <span class="n">executor</span><span class="p">:</span>
-            <span class="n">chunk_size</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">)</span> <span class="o">//</span> <span class="p">(</span><span class="n">n_workers</span> <span class="o">*</span> <span class="mi">4</span><span class="p">))</span>
+        <span class="c1"># C. Execute in Parallel using JOBLIB</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># Parallel returns a list of results in order</span>
+            <span class="n">results_raw</span> <span class="o">=</span> <span class="n">Parallel</span><span class="p">(</span><span class="n">n_jobs</span><span class="o">=</span><span class="n">n_workers</span><span class="p">,</span> <span class="n">backend</span><span class="o">=</span><span class="s2">&quot;loky&quot;</span><span class="p">)(</span>
+                <span class="n">delayed</span><span class="p">(</span><span class="n">_global_worker_task</span><span class="p">)(</span><span class="n">task</span><span class="p">)</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span>
+            <span class="p">)</span>
 
-            <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">executor</span><span class="o">.</span><span class="n">map</span><span class="p">(</span>
-                <span class="n">_global_worker_task</span><span class="p">,</span> <span class="n">tasks</span><span class="p">,</span> <span class="n">chunksize</span><span class="o">=</span><span class="n">chunk_size</span>
-            <span class="p">):</span>
-                <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">results</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="p">)</span>
+            <span class="c1"># Filter out None values (failed runs)</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="p">[</span><span class="n">res</span> <span class="k">for</span> <span class="n">res</span> <span class="ow">in</span> <span class="n">results_raw</span> <span class="k">if</span> <span class="n">res</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">]</span>
+
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OPT] Parallel Execution Error: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">results</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># D. Validation</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">results</span><span class="p">:</span>
@@ -1616,11 +1744,11 @@ WOFOSTOptimizer        </code>
                 <span class="k">return</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">directions</span><span class="p">)</span>
             <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">)</span>
 
-    <span class="c1"># 3. CREATE STUDY</span>
+    <span class="c1"># 5. CREATE STUDY</span>
     <span class="k">if</span> <span class="n">directions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">directions</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;minimize&quot;</span><span class="p">]</span>
 
-    <span class="n">study</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">create_study</span><span class="p">(</span><span class="n">directions</span><span class="o">=</span><span class="n">directions</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">sampler</span><span class="p">)</span>
+    <span class="n">study</span> <span class="o">=</span> <span class="n">optuna</span><span class="o">.</span><span class="n">create_study</span><span class="p">(</span><span class="n">directions</span><span class="o">=</span><span class="n">directions</span><span class="p">,</span> <span class="n">sampler</span><span class="o">=</span><span class="n">optuna_sampler</span><span class="p">)</span>
 
     <span class="nb">print</span><span class="p">(</span>
         <span class="sa">f</span><span class="s2">&quot;[OPT] Starting </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">directions</span><span class="p">)</span><span class="si">}</span><span class="s2">-objective optimization with </span><span class="si">{</span><span class="n">n_trials</span><span class="si">}</span><span class="s2"> trials...&quot;</span>
