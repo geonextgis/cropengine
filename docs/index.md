@@ -10,7 +10,7 @@
 
 <div align="center">
   <a href="https://geonextgis.github.io/cropengine">
-    <img src="https://raw.githubusercontent.com/geonextgis/cropengine/main/docs/assets/logo.png" alt="logo" width="300"/>
+    <img src="https://raw.githubusercontent.com/geonextgis/cropengine/main/docs/assets/logo.png" alt="logo" width="250"/>
   </a>
 </div>
 
