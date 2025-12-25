@@ -1264,10 +1264,10 @@ WOFOSTSiteParametersProvider        </code>
         <td><em>required</em></td>
       </tr>
       <tr>
-        <td><code>**kwargs</code></td>
-        <td></td>
-        <td><p>Site parameters provided as keyword arguments.</p></td>
-        <td><code>{}</code></td>
+        <td><code>site_overrides</code></td>
+        <td><code>dict</code></td>
+        <td><p>Dictionary of parameters to override defaults.</p></td>
+        <td><code>None</code></td>
       </tr>
   </tbody>
 </table>
@@ -1279,7 +1279,7 @@ WOFOSTSiteParametersProvider        </code>
 
 <span class="sd">    Args:</span>
 <span class="sd">        model (str): The name of the WOFOST model version to use.</span>
-<span class="sd">        **kwargs: Site parameters provided as keyword arguments.</span>
+<span class="sd">        site_overrides (dict, optional): Dictionary of parameters to override defaults.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">EMERGENCY_DEFAULTS</span> <span class="o">=</span> <span class="p">{</span>
@@ -1290,12 +1290,13 @@ WOFOSTSiteParametersProvider        </code>
         <span class="s2">&quot;NO3I&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.05</span><span class="p">],</span>
     <span class="p">}</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span> <span class="o">=</span> <span class="n">kwargs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span> <span class="o">=</span> <span class="n">site_overrides</span> <span class="k">if</span> <span class="n">site_overrides</span> <span class="k">else</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">required_params</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">all_param_defs</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="c1"># 1. Load configuration</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1316,72 +1317,77 @@ WOFOSTSiteParametersProvider        </code>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">profile_def</span><span class="p">[</span><span class="s2">&quot;parameters&quot;</span><span class="p">])</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">required_params</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">profile_def</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;required&quot;</span><span class="p">,</span> <span class="p">[]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">all_param_defs</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;site_params&quot;</span><span class="p">]</span>
 
-            <span class="n">all_param_defs</span> <span class="o">=</span> <span class="n">config</span><span class="p">[</span><span class="s2">&quot;site_params&quot;</span><span class="p">]</span>
-
-            <span class="c1"># Build the Metadata List</span>
-            <span class="k">for</span> <span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">all_param_defs</span><span class="p">:</span>
-                    <span class="n">meta</span> <span class="o">=</span> <span class="p">{</span>
-                        <span class="s2">&quot;parameter&quot;</span><span class="p">:</span> <span class="n">param</span><span class="p">,</span>
-                        <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="p">(</span><span class="n">param</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_params</span><span class="p">),</span>
-                    <span class="p">}</span>
-                    <span class="n">meta</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">all_param_defs</span><span class="p">[</span><span class="n">param</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">meta</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">valid_models</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;model_mapping&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+            <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Unknown model &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;. Available models: </span><span class="si">{</span><span class="n">valid_models</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_params</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Validates inputs against the prepared metadata, applies defaults,</span>
 <span class="sd">        and returns the final parameter dictionary.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># 1. Re-validate Model Profile</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="p">:</span>
-            <span class="n">valid_models</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">full_config</span><span class="p">[</span><span class="s2">&quot;wofost&quot;</span><span class="p">][</span><span class="s2">&quot;model_mapping&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-            <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Unknown or unconfigured model &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;. Available models: </span><span class="si">{</span><span class="n">valid_models</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="p">)</span>
-
         <span class="n">validated_params</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="c1"># 2. Process Parameters (Iterating over the LIST now)</span>
-        <span class="k">for</span> <span class="n">meta</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="p">:</span>
-            <span class="n">par_name</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;parameter&quot;</span><span class="p">]</span>
-            <span class="n">is_required</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;required&quot;</span><span class="p">]</span>
+        <span class="c1"># 1. Process Valid Parameters defined for this model</span>
+        <span class="k">for</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">par_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_param_defs</span><span class="p">:</span>
+                <span class="k">continue</span>
 
-            <span class="c1"># Determine value: use provided kwarg or fall back to default</span>
+            <span class="n">meta_def</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_param_defs</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="n">is_required</span> <span class="o">=</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_params</span>
+            <span class="n">default_val</span> <span class="o">=</span> <span class="n">meta_def</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
+
             <span class="k">if</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="p">:</span>
                 <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
-
-                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="k">if</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMERGENCY_DEFAULTS</span><span class="p">:</span>
-                        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMERGENCY_DEFAULTS</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span>
-                        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                            <span class="sa">f</span><span class="s2">&quot;[SiteParams] Parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; was missing and has no YAML default. &quot;</span>
-                            <span class="sa">f</span><span class="s2">&quot;Using fallback value: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
-                        <span class="p">)</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">default_val</span>
 
                 <span class="k">if</span> <span class="n">is_required</span><span class="p">:</span>
-                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;[SiteParams] Required parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; was not provided. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;Using default value: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="p">)</span>
+                    <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="nb">print</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;🚨 [WARN] Required site parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; missing for model &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;Using default value: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMERGENCY_DEFAULTS</span><span class="p">:</span>
+                            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMERGENCY_DEFAULTS</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span>
+                            <span class="nb">print</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;🚨 [WARN] Required site parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; missing (no YAML default). &quot;</span>
+                                <span class="sa">f</span><span class="s2">&quot;Using emergency fallback: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+                            <span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
+                                <span class="sa">f</span><span class="s2">&quot;Required parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; is missing and has no default value.&quot;</span>
+                            <span class="p">)</span>
 
             <span class="c1"># Convert types and check valid ranges</span>
             <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_and_validate</span><span class="p">(</span><span class="n">par_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_and_validate</span><span class="p">(</span><span class="n">par_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">meta_def</span><span class="p">)</span>
 
-            <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+            <span class="c1"># Store Result</span>
             <span class="n">validated_params</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-        <span class="c1"># 3. Check for Unknown Parameters provided by user</span>
+            <span class="c1"># Update Metadata List</span>
+            <span class="n">meta_record</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;parameter&quot;</span><span class="p">:</span> <span class="n">par_name</span><span class="p">,</span>
+                <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="n">is_required</span><span class="p">,</span>
+                <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span>
+            <span class="p">}</span>
+            <span class="n">meta_record</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">meta_def</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">meta_record</span><span class="p">)</span>
+
+        <span class="c1"># 2. Check for Unknown Parameters provided by user</span>
         <span class="n">unknown_keys</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span>
         <span class="p">]</span>
         <span class="k">if</span> <span class="n">unknown_keys</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Unknown parameters provided for profile &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">unknown_keys</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;🚨 [WARN] Ignoring unknown site parameters provided for &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">unknown_keys</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">validated_params</span>
@@ -1470,54 +1476,64 @@ and returns the final parameter dictionary.</p>
 <span class="sd">    Validates inputs against the prepared metadata, applies defaults,</span>
 <span class="sd">    and returns the final parameter dictionary.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c1"># 1. Re-validate Model Profile</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="p">:</span>
-        <span class="n">valid_models</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">full_config</span><span class="p">[</span><span class="s2">&quot;wofost&quot;</span><span class="p">][</span><span class="s2">&quot;model_mapping&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-        <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Unknown or unconfigured model &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;. Available models: </span><span class="si">{</span><span class="n">valid_models</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="p">)</span>
-
     <span class="n">validated_params</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="c1"># 2. Process Parameters (Iterating over the LIST now)</span>
-    <span class="k">for</span> <span class="n">meta</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="p">:</span>
-        <span class="n">par_name</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;parameter&quot;</span><span class="p">]</span>
-        <span class="n">is_required</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;required&quot;</span><span class="p">]</span>
+    <span class="c1"># 1. Process Valid Parameters defined for this model</span>
+    <span class="k">for</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">par_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_param_defs</span><span class="p">:</span>
+            <span class="k">continue</span>
 
-        <span class="c1"># Determine value: use provided kwarg or fall back to default</span>
+        <span class="n">meta_def</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">all_param_defs</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">is_required</span> <span class="o">=</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">required_params</span>
+        <span class="n">default_val</span> <span class="o">=</span> <span class="n">meta_def</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
+
         <span class="k">if</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;default&quot;</span><span class="p">]</span>
-
-            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMERGENCY_DEFAULTS</span><span class="p">:</span>
-                    <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMERGENCY_DEFAULTS</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span>
-                    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                        <span class="sa">f</span><span class="s2">&quot;[SiteParams] Parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; was missing and has no YAML default. &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;Using fallback value: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
-                    <span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">default_val</span>
 
             <span class="k">if</span> <span class="n">is_required</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="sa">f</span><span class="s2">&quot;[SiteParams] Required parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; was not provided. &quot;</span>
-                    <span class="sa">f</span><span class="s2">&quot;Using default value: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
-                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="nb">print</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">&quot;🚨 [WARN] Required site parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; missing for model &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;. &quot;</span>
+                        <span class="sa">f</span><span class="s2">&quot;Using default value: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">par_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMERGENCY_DEFAULTS</span><span class="p">:</span>
+                        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EMERGENCY_DEFAULTS</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span>
+                        <span class="nb">print</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;🚨 [WARN] Required site parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; missing (no YAML default). &quot;</span>
+                            <span class="sa">f</span><span class="s2">&quot;Using emergency fallback: </span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s2">&quot;</span>
+                        <span class="p">)</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
+                            <span class="sa">f</span><span class="s2">&quot;Required parameter &#39;</span><span class="si">{</span><span class="n">par_name</span><span class="si">}</span><span class="s2">&#39; is missing and has no default value.&quot;</span>
+                        <span class="p">)</span>
 
         <span class="c1"># Convert types and check valid ranges</span>
         <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_and_validate</span><span class="p">(</span><span class="n">par_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">meta</span><span class="p">)</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_convert_and_validate</span><span class="p">(</span><span class="n">par_name</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">meta_def</span><span class="p">)</span>
 
-        <span class="n">meta</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="c1"># Store Result</span>
         <span class="n">validated_params</span><span class="p">[</span><span class="n">par_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
-    <span class="c1"># 3. Check for Unknown Parameters provided by user</span>
+        <span class="c1"># Update Metadata List</span>
+        <span class="n">meta_record</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;parameter&quot;</span><span class="p">:</span> <span class="n">par_name</span><span class="p">,</span>
+            <span class="s2">&quot;required&quot;</span><span class="p">:</span> <span class="n">is_required</span><span class="p">,</span>
+            <span class="s2">&quot;value&quot;</span><span class="p">:</span> <span class="n">value</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="n">meta_record</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">meta_def</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">meta_record</span><span class="p">)</span>
+
+    <span class="c1"># 2. Check for Unknown Parameters provided by user</span>
     <span class="n">unknown_keys</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">raw_kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">valid_param_names</span>
     <span class="p">]</span>
     <span class="k">if</span> <span class="n">unknown_keys</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">SiteParameterError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Unknown parameters provided for profile &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">unknown_keys</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;🚨 [WARN] Ignoring unknown site parameters provided for &#39;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">unknown_keys</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">validated_params</span>

@@ -1266,7 +1266,9 @@ WOFOSTOptimizer        </code>
         <span class="bp">self</span><span class="o">.</span><span class="n">is_batch</span> <span class="o">=</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span> <span class="s2">&quot;get_batch_rerunners&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">engines</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_get_sampler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sampler_input</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">BaseSampler</span><span class="p">,</span> <span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">BaseSampler</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_sampler</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">sampler_input</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">BaseSampler</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">BaseSampler</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Helper to resolve the sampler from a string name or object.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1304,11 +1306,14 @@ WOFOSTOptimizer        </code>
                     <span class="k">return</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">BruteForceSampler</span><span class="p">()</span>
 
                 <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;grid&quot;</span><span class="p">:</span>
-                    <span class="k">return</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">GridSampler</span><span class="p">(</span><span class="n">search_space</span><span class="o">=</span><span class="p">{})</span> <span class="c1"># Note: GridSampler requires search space passed later or usually managed by study</span>
+                    <span class="k">return</span> <span class="n">optuna</span><span class="o">.</span><span class="n">samplers</span><span class="o">.</span><span class="n">GridSampler</span><span class="p">(</span>
+                        <span class="n">search_space</span><span class="o">=</span><span class="p">{}</span>
+                    <span class="p">)</span>  <span class="c1"># Note: GridSampler requires search space passed later or usually managed by study</span>
 
                 <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;botorch&quot;</span><span class="p">:</span>
                     <span class="c1"># Requires &#39;botorch&#39; package</span>
                     <span class="kn">from</span><span class="w"> </span><span class="nn">optuna.integration</span><span class="w"> </span><span class="kn">import</span> <span class="n">BoTorchSampler</span>
+
                     <span class="k">return</span> <span class="n">BoTorchSampler</span><span class="p">()</span>
 
                 <span class="k">elif</span> <span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;gp&quot;</span><span class="p">:</span>
@@ -1320,13 +1325,17 @@ WOFOSTOptimizer        </code>
 
             <span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="c1"># Catch missing dependency errors (e.g., missing botorch or cma)</span>
-                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Could not initialize sampler &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;. Missing dependency: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">. Please install the required package (e.g., &#39;pip install botorch&#39; or &#39;pip install cma&#39;).&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Could not initialize sampler &#39;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39;. Missing dependency: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">. Please install the required package (e.g., &#39;pip install botorch&#39; or &#39;pip install cma&#39;).&quot;</span>
+                <span class="p">)</span>
 
-        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Sampler must be a string name or an optuna.samplers.BaseSampler object.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+            <span class="s2">&quot;Sampler must be a string name or an optuna.samplers.BaseSampler object.&quot;</span>
+        <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_best_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">study</span><span class="p">:</span> <span class="n">optuna</span><span class="o">.</span><span class="n">Study</span><span class="p">,</span> <span class="n">search_space</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Retrieves the optimized parameters from the study, reconstructing any </span>
+<span class="sd">        Retrieves the optimized parameters from the study, reconstructing any</span>
 <span class="sd">        complex structures (lists/tables) defined in the search space.</span>
 
 <span class="sd">        Args:</span>
@@ -1338,7 +1347,7 @@ WOFOSTOptimizer        </code>
 <span class="sd">        Returns:</span>
 <span class="sd">            dict: A dictionary of parameter overrides (e.g., {&#39;crop_params&#39;: {...}})</span>
 <span class="sd">                  containing the best values found during optimization.</span>
-<span class="sd">        &quot;&quot;&quot;</span>        
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">best_overrides</span> <span class="o">=</span> <span class="n">search_space</span><span class="p">(</span><span class="n">FixedTrial</span><span class="p">(</span><span class="n">study</span><span class="o">.</span><span class="n">best_params</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">best_overrides</span>
@@ -1369,7 +1378,7 @@ WOFOSTOptimizer        </code>
 
 <span class="sd">            n_workers (int): Number of parallel processes to spawn.</span>
 
-<span class="sd">            sampler (str | optuna.samplers.BaseSampler | None): </span>
+<span class="sd">            sampler (str | optuna.samplers.BaseSampler | None):</span>
 <span class="sd">                The optimization strategy. Supported strings:</span>
 
 <span class="sd">                **Standard:**</span>
@@ -1409,7 +1418,7 @@ WOFOSTOptimizer        </code>
         <span class="c1"># 2. RESOLVE SAMPLER</span>
         <span class="n">optuna_sampler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sampler</span><span class="p">(</span><span class="n">sampler</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">optuna_sampler</span><span class="p">:</span>
-             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OPT] Using Sampler: </span><span class="si">{</span><span class="n">optuna_sampler</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OPT] Using Sampler: </span><span class="si">{</span><span class="n">optuna_sampler</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="c1"># 3. PRE-LOADING PHASE</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[OPT] Loading simulation engines...&quot;</span><span class="p">)</span>
@@ -1560,7 +1569,7 @@ WOFOSTOptimizer        </code>
 
     <div class="doc doc-contents ">
 
-      <p>Retrieves the optimized parameters from the study, reconstructing any 
+      <p>Retrieves the optimized parameters from the study, reconstructing any
 complex structures (lists/tables) defined in the search space.</p>
 
 <p><strong>Parameters:</strong></p>
@@ -1610,7 +1619,7 @@ complex structures (lists/tables) defined in the search space.</p>
           <summary>Source code in <code>cropengine/optimizer.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_best_params</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">study</span><span class="p">:</span> <span class="n">optuna</span><span class="o">.</span><span class="n">Study</span><span class="p">,</span> <span class="n">search_space</span><span class="p">:</span> <span class="n">Callable</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Dict</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Retrieves the optimized parameters from the study, reconstructing any </span>
+<span class="sd">    Retrieves the optimized parameters from the study, reconstructing any</span>
 <span class="sd">    complex structures (lists/tables) defined in the search space.</span>
 
 <span class="sd">    Args:</span>
@@ -1622,7 +1631,7 @@ complex structures (lists/tables) defined in the search space.</p>
 <span class="sd">    Returns:</span>
 <span class="sd">        dict: A dictionary of parameter overrides (e.g., {&#39;crop_params&#39;: {...}})</span>
 <span class="sd">              containing the best values found during optimization.</span>
-<span class="sd">    &quot;&quot;&quot;</span>        
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">best_overrides</span> <span class="o">=</span> <span class="n">search_space</span><span class="p">(</span><span class="n">FixedTrial</span><span class="p">(</span><span class="n">study</span><span class="o">.</span><span class="n">best_params</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">best_overrides</span>
@@ -1768,7 +1777,7 @@ complex structures (lists/tables) defined in the search space.</p>
 
 <span class="sd">        n_workers (int): Number of parallel processes to spawn.</span>
 
-<span class="sd">        sampler (str | optuna.samplers.BaseSampler | None): </span>
+<span class="sd">        sampler (str | optuna.samplers.BaseSampler | None):</span>
 <span class="sd">            The optimization strategy. Supported strings:</span>
 
 <span class="sd">            **Standard:**</span>
@@ -1808,7 +1817,7 @@ complex structures (lists/tables) defined in the search space.</p>
     <span class="c1"># 2. RESOLVE SAMPLER</span>
     <span class="n">optuna_sampler</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sampler</span><span class="p">(</span><span class="n">sampler</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">optuna_sampler</span><span class="p">:</span>
-         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OPT] Using Sampler: </span><span class="si">{</span><span class="n">optuna_sampler</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[OPT] Using Sampler: </span><span class="si">{</span><span class="n">optuna_sampler</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="c1"># 3. PRE-LOADING PHASE</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[OPT] Loading simulation engines...&quot;</span><span class="p">)</span>

@@ -2179,32 +2179,40 @@ nitrogen_events = agro_event_builder.create_state_events(
     <span class="n">campaign_start</span><span class="o">=</span><span class="n">CAMPAIGN_START</span><span class="p">,</span>
     <span class="n">campaign_end</span><span class="o">=</span><span class="n">CAMPAIGN_END</span><span class="p">,</span>
     <span class="n">crop_start</span><span class="o">=</span><span class="n">CROP_START</span><span class="p">,</span>
-    <span class="n">crop_start_type</span><span class="o">=</span><span class="n">CROP_START_TYPE</span><span class="p">,</span>
-    <span class="n">crop_end_type</span><span class="o">=</span><span class="n">CROP_END_TYPE</span><span class="p">,</span>
     <span class="n">crop_end</span><span class="o">=</span><span class="n">CROP_END</span><span class="p">,</span>
-    <span class="n">max_duration</span><span class="o">=</span><span class="n">MAX_DURATION</span><span class="p">,</span>
     <span class="n">crop_name</span><span class="o">=</span><span class="n">CROP_NAME</span><span class="p">,</span>
     <span class="n">variety_name</span><span class="o">=</span><span class="n">CROP_VARIETY</span><span class="p">,</span>
+    <span class="n">max_workers</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">crop_start_type</span><span class="o">=</span><span class="n">CROP_START_TYPE</span><span class="p">,</span>
+    <span class="n">crop_end_type</span><span class="o">=</span><span class="n">CROP_END_TYPE</span><span class="p">,</span>
+    <span class="n">max_duration</span><span class="o">=</span><span class="n">MAX_DURATION</span><span class="p">,</span>
     <span class="n">timed_events</span><span class="o">=</span><span class="p">[</span><span class="n">irrigation_events</span><span class="p">],</span>
     <span class="n">state_events</span><span class="o">=</span><span class="p">[</span><span class="n">nitrogen_events</span><span class="p">],</span>
     <span class="n">force_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">WAV</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>  <span class="c1"># Extra site params can be passed as a kwargs</span>
+    <span class="n">force_param_update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">site_overrides</span><span class="o">=</span><span class="p">{</span><span class="s2">"WAV"</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>  <span class="c1"># Extra site params can be passed as overrides</span>
 <span class="p">)</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-6">batch_runner.prepare_batch_system(
     campaign_start=CAMPAIGN_START,
     campaign_end=CAMPAIGN_END,
     crop_start=CROP_START,
-    crop_start_type=CROP_START_TYPE,
-    crop_end_type=CROP_END_TYPE,
     crop_end=CROP_END,
-    max_duration=MAX_DURATION,
     crop_name=CROP_NAME,
     variety_name=CROP_VARIETY,
+    max_workers=5,
+    crop_start_type=CROP_START_TYPE,
+    crop_end_type=CROP_END_TYPE,
+    max_duration=MAX_DURATION,
     timed_events=[irrigation_events],
     state_events=[nitrogen_events],
     force_update=False,
-    WAV=10,  # Extra site params can be passed as a kwargs
+    force_param_update=True,
+    crop_overrides=None,
+    soil_overrides=None,
+    site_overrides={"WAV": 10},  # Extra site params can be passed as overrides
 )</div>
 </div>
 </div>
@@ -2417,6 +2425,7 @@ plt.show()</div>
     <span class="n">runner</span><span class="o">=</span><span class="n">batch_runner</span><span class="p">,</span> <span class="n">observed_data</span><span class="o">=</span><span class="n">obs_phenology_df</span>
 <span class="p">)</span>
 
+
 <span class="c1"># Create the loss function for phenology</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">loss_fn_phenology</span><span class="p">(</span><span class="n">sim_df</span><span class="p">,</span> <span class="n">obs_df</span><span class="p">):</span>
     <span class="c1"># Process observed data</span>
@@ -2450,6 +2459,7 @@ plt.show()</div>
 
     <span class="k">return</span> <span class="n">total_loss</span>
 
+
 <span class="c1"># Define the search space</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">search_space</span><span class="p">(</span><span class="n">trial</span><span class="p">):</span>
     <span class="k">return</span> <span class="p">{</span>
@@ -2459,8 +2469,14 @@ plt.show()</div>
         <span class="p">}</span>
     <span class="p">}</span>
 
+
 <span class="n">study</span> <span class="o">=</span> <span class="n">phenology_optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span>
-    <span class="n">search_space</span><span class="p">,</span> <span class="n">loss_fn_phenology</span><span class="p">,</span> <span class="n">n_trials</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">n_workers</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">directions</span><span class="o">=</span><span class="p">[</span><span class="s2">"minimize"</span><span class="p">],</span> <span class="n">sampler</span><span class="o">=</span><span class="s1">'TPE'</span>
+    <span class="n">search_space</span><span class="p">,</span>
+    <span class="n">loss_fn_phenology</span><span class="p">,</span>
+    <span class="n">n_trials</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">n_workers</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">directions</span><span class="o">=</span><span class="p">[</span><span class="s2">"minimize"</span><span class="p">],</span>
+    <span class="n">sampler</span><span class="o">=</span><span class="s2">"TPE"</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-9"># Load the observed phenology
@@ -2468,6 +2484,7 @@ obs_phenology_df = pd.read_csv("test_data/optimizer/phenology_observed.csv")
 phenology_optimizer = WOFOSTOptimizer(
     runner=batch_runner, observed_data=obs_phenology_df
 )
+
 
 # Create the loss function for phenology
 def loss_fn_phenology(sim_df, obs_df):
@@ -2502,6 +2519,7 @@ def loss_fn_phenology(sim_df, obs_df):
 
     return total_loss
 
+
 # Define the search space
 def search_space(trial):
     return {
@@ -2511,8 +2529,14 @@ def search_space(trial):
         }
     }
 
+
 study = phenology_optimizer.optimize(
-    search_space, loss_fn_phenology, n_trials=100, n_workers=5, directions=["minimize"], sampler='TPE'
+    search_space,
+    loss_fn_phenology,
+    n_trials=100,
+    n_workers=5,
+    directions=["minimize"],
+    sampler="TPE",
 )</div>
 </div>
 </div>
@@ -2520,7 +2544,7 @@ study = phenology_optimizer.optimize(
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=3e2de5f0">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=18">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -2531,7 +2555,7 @@ study = phenology_optimizer.optimize(
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=18">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=19">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -2553,9 +2577,7 @@ study = phenology_optimizer.optimize(
 <span class="n">best_params</span> <span class="o">=</span> <span class="n">phenology_optimizer</span><span class="o">.</span><span class="n">get_best_params</span><span class="p">(</span><span class="n">study</span><span class="p">,</span> <span class="n">search_space</span><span class="p">)</span>
 
 <span class="c1"># Update the parameters in the workspace</span>
-<span class="n">batch_runner</span><span class="o">.</span><span class="n">update_parameters</span><span class="p">(</span>
-    <span class="n">crop_overrides</span><span class="o">=</span><span class="n">best_params</span><span class="p">[</span><span class="s1">'crop_params'</span><span class="p">]</span>
-<span class="p">)</span>
+<span class="n">batch_runner</span><span class="o">.</span><span class="n">update_parameters</span><span class="p">(</span><span class="n">crop_overrides</span><span class="o">=</span><span class="n">best_params</span><span class="p">[</span><span class="s2">"crop_params"</span><span class="p">])</span>
 
 <span class="c1"># Run the simulations with updated parameters</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">batch_runner</span><span class="o">.</span><span class="n">run_batch_simulation</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -2566,9 +2588,7 @@ study = phenology_optimizer.optimize(
 best_params = phenology_optimizer.get_best_params(study, search_space)
 
 # Update the parameters in the workspace
-batch_runner.update_parameters(
-    crop_overrides=best_params['crop_params']
-)
+batch_runner.update_parameters(crop_overrides=best_params["crop_params"])
 
 # Run the simulations with updated parameters
 results = batch_runner.run_batch_simulation(max_workers=5)
@@ -2580,7 +2600,7 @@ results.head()</div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=080c49d2">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=20">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -2591,7 +2611,7 @@ results.head()</div>
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=19">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=21">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -2708,7 +2728,7 @@ plt.show()</div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5cf1b931">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=22">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -2719,7 +2739,7 @@ plt.show()</div>
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=3923b4d8">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=23">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -2739,38 +2759,34 @@ plt.show()</div>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Load the observed yield</span>
 <span class="n">obs_yield_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s2">"test_data/optimizer/yield_observed.csv"</span><span class="p">)</span>
-<span class="n">yield_optimizer</span> <span class="o">=</span> <span class="n">WOFOSTOptimizer</span><span class="p">(</span>
-    <span class="n">runner</span><span class="o">=</span><span class="n">batch_runner</span><span class="p">,</span> <span class="n">observed_data</span><span class="o">=</span><span class="n">obs_yield_df</span>
-<span class="p">)</span>
+<span class="n">yield_optimizer</span> <span class="o">=</span> <span class="n">WOFOSTOptimizer</span><span class="p">(</span><span class="n">runner</span><span class="o">=</span><span class="n">batch_runner</span><span class="p">,</span> <span class="n">observed_data</span><span class="o">=</span><span class="n">obs_yield_df</span><span class="p">)</span>
+
 
 <span class="c1"># Create the loss function for yield</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">loss_fn_yield</span><span class="p">(</span><span class="n">sim_df</span><span class="p">,</span> <span class="n">obs_df</span><span class="p">):</span>
     <span class="c1"># Process observed data</span>
     <span class="n">obs_df</span> <span class="o">=</span> <span class="n">obs_df</span><span class="p">[[</span><span class="s2">"id"</span><span class="p">,</span> <span class="s2">"yield"</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">obs_df</span><span class="p">[</span><span class="s1">'yield'</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs_df</span><span class="p">[</span><span class="s1">'yield'</span><span class="p">]</span><span class="o">*</span><span class="mi">1000</span> <span class="c1"># t/ha -&gt; kg/ha</span>
+    <span class="n">obs_df</span><span class="p">[</span><span class="s2">"yield"</span><span class="p">]</span> <span class="o">=</span> <span class="n">obs_df</span><span class="p">[</span><span class="s2">"yield"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1000</span>  <span class="c1"># t/ha -&gt; kg/ha</span>
 
     <span class="c1"># Process simulated data</span>
     <span class="n">sim_df</span><span class="p">[</span><span class="s2">"day"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">sim_df</span><span class="p">[</span><span class="s2">"day"</span><span class="p">])</span>
-    <span class="n">sim_df</span> <span class="o">=</span> <span class="n">sim_df</span><span class="p">[</span><span class="n">sim_df</span><span class="p">[</span><span class="s1">'DVS'</span><span class="p">]</span><span class="o">&gt;=</span><span class="mi">2</span><span class="p">]</span>
-    <span class="n">sim_df</span> <span class="o">=</span> <span class="n">sim_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s1">'point_id'</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
-    <span class="n">sim_df</span> <span class="o">=</span> <span class="n">sim_df</span><span class="p">[[</span><span class="s1">'TWSO'</span><span class="p">]]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
-    
-    <span class="n">merged_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
-        <span class="n">left</span><span class="o">=</span><span class="n">obs_df</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">sim_df</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s2">"id"</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s2">"point_id"</span>
-    <span class="p">)</span>
+    <span class="n">sim_df</span> <span class="o">=</span> <span class="n">sim_df</span><span class="p">[</span><span class="n">sim_df</span><span class="p">[</span><span class="s2">"DVS"</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">sim_df</span> <span class="o">=</span> <span class="n">sim_df</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="n">by</span><span class="o">=</span><span class="s2">"point_id"</span><span class="p">)</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+    <span class="n">sim_df</span> <span class="o">=</span> <span class="n">sim_df</span><span class="p">[[</span><span class="s2">"TWSO"</span><span class="p">]]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span>
 
-    <span class="n">yield_loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
-        <span class="n">mean_squared_error</span><span class="p">(</span><span class="n">merged_df</span><span class="p">[</span><span class="s2">"yield"</span><span class="p">],</span> <span class="n">merged_df</span><span class="p">[</span><span class="s2">"TWSO"</span><span class="p">])</span>
-    <span class="p">)</span>
+    <span class="n">merged_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">left</span><span class="o">=</span><span class="n">obs_df</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="n">sim_df</span><span class="p">,</span> <span class="n">left_on</span><span class="o">=</span><span class="s2">"id"</span><span class="p">,</span> <span class="n">right_on</span><span class="o">=</span><span class="s2">"point_id"</span><span class="p">)</span>
+
+    <span class="n">yield_loss</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mean_squared_error</span><span class="p">(</span><span class="n">merged_df</span><span class="p">[</span><span class="s2">"yield"</span><span class="p">],</span> <span class="n">merged_df</span><span class="p">[</span><span class="s2">"TWSO"</span><span class="p">]))</span>
 
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">yield_loss</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
 
 <span class="c1"># Define the search space</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">search_space</span><span class="p">(</span><span class="n">trial</span><span class="p">):</span>
     <span class="c1"># 1. Define a scaling factor for Photosynthesis (AMAX)</span>
     <span class="c1"># This allows Optuna to shift the entire curve up or down by +/- 20%</span>
     <span class="n">amax_factor</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s2">"amax_factor"</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
-    
+
     <span class="c1"># 2. Define a scaling factor for Leaf Thickness (SLA)</span>
     <span class="n">sla_factor</span> <span class="o">=</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s2">"sla_factor"</span><span class="p">,</span> <span class="mf">0.8</span><span class="p">,</span> <span class="mf">1.2</span><span class="p">)</span>
 
@@ -2779,70 +2795,76 @@ plt.show()</div>
             <span class="c1"># LEAF DYNAMICS (Source capacity)</span>
             <span class="c1"># SPAN: Leaf lifespan. Higher = longer green canopy duration.</span>
             <span class="s2">"SPAN"</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s2">"SPAN"</span><span class="p">,</span> <span class="mf">25.0</span><span class="p">,</span> <span class="mf">40.0</span><span class="p">),</span>
-            
             <span class="c1"># SLATB (Specific Leaf Area): Controls how much leaf area is built per kg biomass.</span>
             <span class="c1"># We scale the entire table by a factor (0.8x to 1.2x).</span>
             <span class="s2">"SLATB"</span><span class="p">:</span> <span class="p">[</span>
-                <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.00212</span> <span class="o">*</span> <span class="n">sla_factor</span><span class="p">,</span>
-                <span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.00212</span> <span class="o">*</span> <span class="n">sla_factor</span><span class="p">,</span>
-                <span class="mf">2.0</span><span class="p">,</span> <span class="mf">0.00212</span> <span class="o">*</span> <span class="n">sla_factor</span>
+                <span class="mf">0.0</span><span class="p">,</span>
+                <span class="mf">0.00212</span> <span class="o">*</span> <span class="n">sla_factor</span><span class="p">,</span>
+                <span class="mf">0.5</span><span class="p">,</span>
+                <span class="mf">0.00212</span> <span class="o">*</span> <span class="n">sla_factor</span><span class="p">,</span>
+                <span class="mf">2.0</span><span class="p">,</span>
+                <span class="mf">0.00212</span> <span class="o">*</span> <span class="n">sla_factor</span><span class="p">,</span>
             <span class="p">],</span>
-
             <span class="c1"># ASSIMILATION &amp; CONVERSION (Biomass production)</span>
             <span class="c1"># AMAXTB: Max CO2 assimilation rate. Highly sensitive.</span>
             <span class="s2">"AMAXTB"</span><span class="p">:</span> <span class="p">[</span>
-                <span class="mf">0.0</span><span class="p">,</span> <span class="mf">35.83</span> <span class="o">*</span> <span class="n">amax_factor</span><span class="p">,</span>  <span class="c1"># Vegetative</span>
-                <span class="mf">1.0</span><span class="p">,</span> <span class="mf">35.83</span> <span class="o">*</span> <span class="n">amax_factor</span><span class="p">,</span>  <span class="c1"># Flowering</span>
-                <span class="mf">1.3</span><span class="p">,</span> <span class="mf">35.83</span> <span class="o">*</span> <span class="n">amax_factor</span><span class="p">,</span>  <span class="c1"># Early Grain filling</span>
-                <span class="mf">2.0</span><span class="p">,</span>  <span class="mf">4.48</span> <span class="o">*</span> <span class="n">amax_factor</span>   <span class="c1"># Maturity (Senescence)</span>
+                <span class="mf">0.0</span><span class="p">,</span>
+                <span class="mf">35.83</span> <span class="o">*</span> <span class="n">amax_factor</span><span class="p">,</span>  <span class="c1"># Vegetative</span>
+                <span class="mf">1.0</span><span class="p">,</span>
+                <span class="mf">35.83</span> <span class="o">*</span> <span class="n">amax_factor</span><span class="p">,</span>  <span class="c1"># Flowering</span>
+                <span class="mf">1.3</span><span class="p">,</span>
+                <span class="mf">35.83</span> <span class="o">*</span> <span class="n">amax_factor</span><span class="p">,</span>  <span class="c1"># Early Grain filling</span>
+                <span class="mf">2.0</span><span class="p">,</span>
+                <span class="mf">4.48</span> <span class="o">*</span> <span class="n">amax_factor</span><span class="p">,</span>  <span class="c1"># Maturity (Senescence)</span>
             <span class="p">],</span>
             <span class="c1"># CVT: Efficiency of conversion to storage organs (Harvest Index driver).</span>
             <span class="s2">"CVO"</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_float</span><span class="p">(</span><span class="s2">"CVO"</span><span class="p">,</span> <span class="mf">0.65</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">),</span>
-
             <span class="c1"># ROOTING (Water access)</span>
             <span class="c1"># RDMCR: Max rooting depth. Critical for drought resistance.</span>
             <span class="s2">"RDMCR"</span><span class="p">:</span> <span class="n">trial</span><span class="o">.</span><span class="n">suggest_int</span><span class="p">(</span><span class="s2">"RDMCR"</span><span class="p">,</span> <span class="mi">80</span><span class="p">,</span> <span class="mi">150</span><span class="p">),</span>
         <span class="p">}</span>
     <span class="p">}</span>
 
+
 <span class="n">study</span> <span class="o">=</span> <span class="n">yield_optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">(</span>
-    <span class="n">search_space</span><span class="p">,</span> <span class="n">loss_fn_yield</span><span class="p">,</span> <span class="n">n_trials</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">n_workers</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">directions</span><span class="o">=</span><span class="p">[</span><span class="s2">"minimize"</span><span class="p">],</span> <span class="n">sampler</span><span class="o">=</span><span class="s1">'TPE'</span>
+    <span class="n">search_space</span><span class="p">,</span>
+    <span class="n">loss_fn_yield</span><span class="p">,</span>
+    <span class="n">n_trials</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">n_workers</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">directions</span><span class="o">=</span><span class="p">[</span><span class="s2">"minimize"</span><span class="p">],</span>
+    <span class="n">sampler</span><span class="o">=</span><span class="s2">"TPE"</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-12"># Load the observed yield
 obs_yield_df = pd.read_csv("test_data/optimizer/yield_observed.csv")
-yield_optimizer = WOFOSTOptimizer(
-    runner=batch_runner, observed_data=obs_yield_df
-)
+yield_optimizer = WOFOSTOptimizer(runner=batch_runner, observed_data=obs_yield_df)
+
 
 # Create the loss function for yield
 def loss_fn_yield(sim_df, obs_df):
     # Process observed data
     obs_df = obs_df[["id", "yield"]].copy()
-    obs_df['yield'] = obs_df['yield']*1000 # t/ha -&gt; kg/ha
+    obs_df["yield"] = obs_df["yield"] * 1000  # t/ha -&gt; kg/ha
 
     # Process simulated data
     sim_df["day"] = pd.to_datetime(sim_df["day"])
-    sim_df = sim_df[sim_df['DVS']&gt;=2]
-    sim_df = sim_df.groupby(by='point_id').first()
-    sim_df = sim_df[['TWSO']].reset_index()
-    
-    merged_df = pd.merge(
-        left=obs_df, right=sim_df, left_on="id", right_on="point_id"
-    )
+    sim_df = sim_df[sim_df["DVS"] &gt;= 2]
+    sim_df = sim_df.groupby(by="point_id").first()
+    sim_df = sim_df[["TWSO"]].reset_index()
 
-    yield_loss = np.sqrt(
-        mean_squared_error(merged_df["yield"], merged_df["TWSO"])
-    )
+    merged_df = pd.merge(left=obs_df, right=sim_df, left_on="id", right_on="point_id")
+
+    yield_loss = np.sqrt(mean_squared_error(merged_df["yield"], merged_df["TWSO"]))
 
     return np.round(yield_loss, 2)
+
 
 # Define the search space
 def search_space(trial):
     # 1. Define a scaling factor for Photosynthesis (AMAX)
     # This allows Optuna to shift the entire curve up or down by +/- 20%
     amax_factor = trial.suggest_float("amax_factor", 0.8, 1.2)
-    
+
     # 2. Define a scaling factor for Leaf Thickness (SLA)
     sla_factor = trial.suggest_float("sla_factor", 0.8, 1.2)
 
@@ -2851,34 +2873,44 @@ def search_space(trial):
             # LEAF DYNAMICS (Source capacity)
             # SPAN: Leaf lifespan. Higher = longer green canopy duration.
             "SPAN": trial.suggest_float("SPAN", 25.0, 40.0),
-            
             # SLATB (Specific Leaf Area): Controls how much leaf area is built per kg biomass.
             # We scale the entire table by a factor (0.8x to 1.2x).
             "SLATB": [
-                0.0, 0.00212 * sla_factor,
-                0.5, 0.00212 * sla_factor,
-                2.0, 0.00212 * sla_factor
+                0.0,
+                0.00212 * sla_factor,
+                0.5,
+                0.00212 * sla_factor,
+                2.0,
+                0.00212 * sla_factor,
             ],
-
             # ASSIMILATION &amp; CONVERSION (Biomass production)
             # AMAXTB: Max CO2 assimilation rate. Highly sensitive.
             "AMAXTB": [
-                0.0, 35.83 * amax_factor,  # Vegetative
-                1.0, 35.83 * amax_factor,  # Flowering
-                1.3, 35.83 * amax_factor,  # Early Grain filling
-                2.0,  4.48 * amax_factor   # Maturity (Senescence)
+                0.0,
+                35.83 * amax_factor,  # Vegetative
+                1.0,
+                35.83 * amax_factor,  # Flowering
+                1.3,
+                35.83 * amax_factor,  # Early Grain filling
+                2.0,
+                4.48 * amax_factor,  # Maturity (Senescence)
             ],
             # CVT: Efficiency of conversion to storage organs (Harvest Index driver).
             "CVO": trial.suggest_float("CVO", 0.65, 0.75),
-
             # ROOTING (Water access)
             # RDMCR: Max rooting depth. Critical for drought resistance.
             "RDMCR": trial.suggest_int("RDMCR", 80, 150),
         }
     }
 
+
 study = yield_optimizer.optimize(
-    search_space, loss_fn_yield, n_trials=1000, n_workers=5, directions=["minimize"], sampler='TPE'
+    search_space,
+    loss_fn_yield,
+    n_trials=1000,
+    n_workers=5,
+    directions=["minimize"],
+    sampler="TPE",
 )</div>
 </div>
 </div>
@@ -2886,7 +2918,7 @@ study = yield_optimizer.optimize(
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5670d6a9">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=24">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -2897,7 +2929,7 @@ study = yield_optimizer.optimize(
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=8719e011">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=25">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -2919,9 +2951,7 @@ study = yield_optimizer.optimize(
 <span class="n">best_params</span> <span class="o">=</span> <span class="n">yield_optimizer</span><span class="o">.</span><span class="n">get_best_params</span><span class="p">(</span><span class="n">study</span><span class="p">,</span> <span class="n">search_space</span><span class="p">)</span>
 
 <span class="c1"># Update the parameters in the workspace</span>
-<span class="n">batch_runner</span><span class="o">.</span><span class="n">update_parameters</span><span class="p">(</span>
-    <span class="n">crop_overrides</span><span class="o">=</span><span class="n">best_params</span><span class="p">[</span><span class="s1">'crop_params'</span><span class="p">]</span>
-<span class="p">)</span>
+<span class="n">batch_runner</span><span class="o">.</span><span class="n">update_parameters</span><span class="p">(</span><span class="n">crop_overrides</span><span class="o">=</span><span class="n">best_params</span><span class="p">[</span><span class="s2">"crop_params"</span><span class="p">])</span>
 
 <span class="c1"># Run the simulations with updated parameters</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">batch_runner</span><span class="o">.</span><span class="n">run_batch_simulation</span><span class="p">(</span><span class="n">max_workers</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
@@ -2932,9 +2962,7 @@ study = yield_optimizer.optimize(
 best_params = yield_optimizer.get_best_params(study, search_space)
 
 # Update the parameters in the workspace
-batch_runner.update_parameters(
-    crop_overrides=best_params['crop_params']
-)
+batch_runner.update_parameters(crop_overrides=best_params["crop_params"])
 
 # Run the simulations with updated parameters
 results = batch_runner.run_batch_simulation(max_workers=5)
@@ -2946,7 +2974,7 @@ results.head()</div>
 </div>
 </div>
 </div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=36060a8a">
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=26">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -2957,7 +2985,7 @@ results.head()</div>
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=449c4921">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=27">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -3103,7 +3131,7 @@ plt.show()</div>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="December 23, 2025 21:34:04 UTC"><span class="timeago" datetime="2025-12-23T21:34:04+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="December 23, 2025 21:34:04 UTC">2025-12-23</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="December 25, 2025 13:47:21 UTC"><span class="timeago" datetime="2025-12-25T13:47:21+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="December 25, 2025 13:47:21 UTC">2025-12-25</span>
   </span>
 
     

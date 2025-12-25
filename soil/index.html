@@ -2124,10 +2124,10 @@ equation.</p>
         <td><em>required</em></td>
       </tr>
       <tr>
-        <td><code>**kwargs</code></td>
-        <td></td>
+        <td><code>soil_overrides</code></td>
+        <td><code>dict</code></td>
         <td><p>Optional overrides for specific soil parameters.</p></td>
-        <td><code>{}</code></td>
+        <td><code>None</code></td>
       </tr>
   </tbody>
 </table>
@@ -2144,7 +2144,7 @@ equation.</p>
 
 <span class="sd">    Args:</span>
 <span class="sd">        soil_data (pd.DataFrame): DataFrame containing ISRIC SoilGrids data.</span>
-<span class="sd">        **kwargs: Optional overrides for specific soil parameters.</span>
+<span class="sd">        soil_overrides (dict, optional): Optional overrides for specific soil parameters.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="c1"># Default parameters for potential production</span>
@@ -2162,12 +2162,14 @@ equation.</p>
         <span class="s2">&quot;CNRatioSOMI&quot;</span><span class="p">:</span> <span class="mf">10.0</span><span class="p">,</span>
     <span class="p">}</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">soil_data</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">soil_data</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">df</span> <span class="o">=</span> <span class="n">soil_data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_defaults</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">overrides</span> <span class="o">=</span> <span class="n">kwargs</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span> <span class="o">=</span> <span class="n">get_wofost_soil_parameters_metadata</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">overrides</span> <span class="o">=</span> <span class="n">soil_overrides</span> <span class="k">if</span> <span class="n">soil_overrides</span> <span class="k">else</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_metadata</span> <span class="o">=</span> <span class="n">get_wofost_soil_parameters_metadata</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="c1"># Ranges for generating PCSE tables (h in cm, pF = log10(h))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pf_range</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
@@ -2200,7 +2202,7 @@ equation.</p>
 <span class="sd">        Update the soil parameters metadata.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">param_metadata</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">param_metadata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">base_metadata</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="n">param_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;parameter&quot;</span><span class="p">:</span> <span class="n">param</span><span class="p">}</span>
             <span class="n">param_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">param</span> <span class="ow">in</span> <span class="n">calc_params</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -2275,7 +2277,7 @@ equation.</p>
 
             <span class="n">h_obs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="mf">330.0</span><span class="p">,</span> <span class="mf">15000.0</span><span class="p">]</span>
             <span class="n">th_obs</span> <span class="o">=</span> <span class="p">[</span><span class="n">current_sm0</span><span class="p">,</span> <span class="n">th_10</span><span class="p">,</span> <span class="n">th_33</span><span class="p">,</span> <span class="n">th_1500</span><span class="p">]</span>
-            <span class="n">bounds</span> <span class="o">=</span> <span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1.01</span><span class="p">],</span> <span class="p">[</span><span class="n">theta_1500</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">])</span>
+            <span class="n">bounds</span> <span class="o">=</span> <span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1.01</span><span class="p">],</span> <span class="p">[</span><span class="n">th_1500</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">])</span>
 
             <span class="k">try</span><span class="p">:</span>
                 <span class="c1"># Fit Van Genuchten</span>
@@ -2430,7 +2432,7 @@ equation.</p>
 
         <span class="n">h_obs</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.01</span><span class="p">,</span> <span class="mf">100.0</span><span class="p">,</span> <span class="mf">330.0</span><span class="p">,</span> <span class="mf">15000.0</span><span class="p">]</span>
         <span class="n">th_obs</span> <span class="o">=</span> <span class="p">[</span><span class="n">current_sm0</span><span class="p">,</span> <span class="n">th_10</span><span class="p">,</span> <span class="n">th_33</span><span class="p">,</span> <span class="n">th_1500</span><span class="p">]</span>
-        <span class="n">bounds</span> <span class="o">=</span> <span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1.01</span><span class="p">],</span> <span class="p">[</span><span class="n">theta_1500</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">])</span>
+        <span class="n">bounds</span> <span class="o">=</span> <span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1e-5</span><span class="p">,</span> <span class="mf">1.01</span><span class="p">],</span> <span class="p">[</span><span class="n">th_1500</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">])</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="c1"># Fit Van Genuchten</span>

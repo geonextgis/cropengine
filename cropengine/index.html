@@ -756,6 +756,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#cropengine.cropengine.WOFOSTCropSimulationBatchRunner.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __init__()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cropengine.cropengine.WOFOSTCropSimulationBatchRunner.get_batch_rerunners" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1305,6 +1316,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#cropengine.cropengine.WOFOSTCropSimulationBatchRunner.__init__" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        __init__()
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#cropengine.cropengine.WOFOSTCropSimulationBatchRunner.get_batch_rerunners" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -1566,11 +1588,56 @@ WOFOSTCropSimulationBatchRunner            (<a class="autorefs autorefs-internal
 
     <div class="doc doc-contents ">
 
+      <p>Manages high-performance parallel WOFOST simulations for multiple locations.</p>
 
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>model_name</code></td>
+        <td><code>str</code></td>
+        <td><p>The WOFOST model version.</p></td>
+      </tr>
+      <tr>
+        <td><code>workspace_dir</code></td>
+        <td><code>str</code></td>
+        <td><p>Root directory for batch results.</p></td>
+      </tr>
+      <tr>
+        <td><code>locations_df</code></td>
+        <td><code>pd.DataFrame</code></td>
+        <td><p>DataFrame containing 'id', 'latitude', 'longitude'.</p></td>
+      </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>cropengine/cropengine.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">WOFOSTCropSimulationBatchRunner</span><span class="p">(</span><span class="n">WOFOSTOptionsMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manages high-performance parallel WOFOST simulations for multiple locations.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        model_name (str): The WOFOST model version.</span>
+<span class="sd">        workspace_dir (str): Root directory for batch results.</span>
+<span class="sd">        locations_df (pd.DataFrame): DataFrame containing &#39;id&#39;, &#39;latitude&#39;, &#39;longitude&#39;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">locations_csv_path</span><span class="p">,</span> <span class="n">workspace_dir</span><span class="o">=</span><span class="s2">&quot;batch_workspace&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initializes the batch runner.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model_name (str): The WOFOST model version.</span>
+<span class="sd">            locations_csv_path (str): Path to CSV containing location data.</span>
+<span class="sd">            workspace_dir (str, optional): Root directory for output. Defaults to &quot;batch_workspace&quot;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">workspace_dir</span><span class="p">)</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1582,7 +1649,9 @@ WOFOSTCropSimulationBatchRunner            (<a class="autorefs autorefs-internal
     <span class="c1"># =========================================================================</span>
     <span class="c1">#  UPDATE PARAMETERS IN WORKSPACE</span>
     <span class="c1"># =========================================================================</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">update_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_parameters</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Updates parameter files for ALL locations in the batch.</span>
 
@@ -1591,17 +1660,25 @@ WOFOSTCropSimulationBatchRunner            (<a class="autorefs autorefs-internal
 <span class="sd">            soil_overrides (dict): Updates for &#39;params_soil.csv&#39;.</span>
 <span class="sd">            site_overrides (dict): Updates for &#39;params_site.csv&#39;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BATCH UPDATE] Updating parameters for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> locations...&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;[BATCH UPDATE] Updating parameters for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> locations...&quot;</span>
+        <span class="p">)</span>
 
         <span class="n">updated_count</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="c1"># Iterate over all point directories</span>
-        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Updating Params&quot;</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">(),</span>
+            <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">),</span>
+            <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Updating Params&quot;</span><span class="p">,</span>
+        <span class="p">):</span>
             <span class="n">loc_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
             <span class="n">point_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;point_</span><span class="si">{</span><span class="n">loc_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
             <span class="c1"># Use the Single Runner&#39;s logic to update this specific folder</span>
-            <span class="n">runner</span> <span class="o">=</span> <span class="n">WOFOSTCropSimulationRunner</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="n">workspace_dir</span><span class="o">=</span><span class="n">point_dir</span><span class="p">)</span>
+            <span class="n">runner</span> <span class="o">=</span> <span class="n">WOFOSTCropSimulationRunner</span><span class="p">(</span>
+                <span class="n">model_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="n">workspace_dir</span><span class="o">=</span><span class="n">point_dir</span>
+            <span class="p">)</span>
 
             <span class="k">if</span> <span class="n">crop_overrides</span><span class="p">:</span>
                 <span class="n">runner</span><span class="o">.</span><span class="n">_update_single_file</span><span class="p">(</span><span class="s2">&quot;crop_params&quot;</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="p">)</span>
@@ -1612,41 +1689,61 @@ WOFOSTCropSimulationBatchRunner            (<a class="autorefs autorefs-internal
 
             <span class="n">updated_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BATCH UPDATE] Success! Updated parameters in </span><span class="si">{</span><span class="n">updated_count</span><span class="si">}</span><span class="s2"> locations.&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;[BATCH UPDATE] Success! Updated parameters in </span><span class="si">{</span><span class="n">updated_count</span><span class="si">}</span><span class="s2"> locations.&quot;</span>
+        <span class="p">)</span>
 
     <span class="c1"># =========================================================================</span>
     <span class="c1"># PHASE 1: PARALLEL SYSTEM PREPARATION</span>
     <span class="c1"># =========================================================================</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_batch_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">preparation_args</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">prepare_batch_system</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">campaign_start</span><span class="p">,</span>
+        <span class="n">campaign_end</span><span class="p">,</span>
+        <span class="n">crop_start</span><span class="p">,</span>
+        <span class="n">crop_end</span><span class="p">,</span>
+        <span class="n">crop_name</span><span class="p">,</span>
+        <span class="n">variety_name</span><span class="p">,</span>
+        <span class="n">max_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+        <span class="n">crop_start_type</span><span class="o">=</span><span class="s2">&quot;emergence&quot;</span><span class="p">,</span>
+        <span class="n">crop_end_type</span><span class="o">=</span><span class="s2">&quot;harvest&quot;</span><span class="p">,</span>
+        <span class="n">max_duration</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+        <span class="n">timed_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">state_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">force_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">force_param_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Runs `prepare_system` for all points in parallel.</span>
 <span class="sd">        Downloads data and creates config files for every point.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            campaign_start (str): Start date of the campaign (YYYY-MM-DD).</span>
+<span class="sd">            campaign_end (str): End date of the campaign (YYYY-MM-DD).</span>
+<span class="sd">            crop_start (str): Start date of the crop cycle (YYYY-MM-DD).</span>
+<span class="sd">            crop_end (str): End date of the crop cycle (YYYY-MM-DD).</span>
+<span class="sd">            crop_name (str): Name of the crop (e.g., &#39;wheat&#39;).</span>
+<span class="sd">            variety_name (str): Name of the crop variety.</span>
+<span class="sd">            max_workers (int, optional): Number of parallel processes. Defaults to 4.</span>
+<span class="sd">            crop_start_type (str, optional): &#39;sowing&#39; or &#39;emergence&#39;. Defaults to &quot;emergence&quot;.</span>
+<span class="sd">            crop_end_type (str, optional): &#39;maturity&#39;, &#39;harvest&#39;. Defaults to &quot;harvest&quot;.</span>
+<span class="sd">            max_duration (int, optional): Max days. Defaults to 300.</span>
+<span class="sd">            timed_events (list, optional): Timed management events.</span>
+<span class="sd">            state_events (list, optional): State events.</span>
+<span class="sd">            force_update (bool, optional): Force re-download of weather/soil.</span>
+<span class="sd">            force_param_update (bool, optional): Force regeneration of parameter files.</span>
+<span class="sd">            crop_overrides (dict, optional): Overrides for crop parameters.</span>
+<span class="sd">            soil_overrides (dict, optional): Overrides for soil parameters.</span>
+<span class="sd">            site_overrides (dict, optional): Overrides for site parameters.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BATCH PREP] Preparing tasks for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> locations...&quot;</span><span class="p">)</span>
 
         <span class="c1"># 1. Build Task List</span>
         <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-            <span class="c1"># Separate site_kwargs from the main args</span>
-            <span class="n">site_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-                <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
-                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">preparation_args</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">k</span>
-                <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span>
-                    <span class="s2">&quot;campaign_start&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;campaign_end&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;crop_start&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;crop_end&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;crop_name&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;variety_name&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;force_update&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;crop_start_type&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;crop_end_type&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;max_duration&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;timed_events&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;state_events&quot;</span><span class="p">,</span>
-                <span class="p">]</span>
-            <span class="p">}</span>
 
             <span class="n">task_payload</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]),</span>
@@ -1654,8 +1751,25 @@ WOFOSTCropSimulationBatchRunner            (<a class="autorefs autorefs-internal
                 <span class="s2">&quot;longitude&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;longitude&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;base_workspace_dir&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="p">,</span>
                 <span class="s2">&quot;model_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span>
-                <span class="s2">&quot;site_kwargs&quot;</span><span class="p">:</span> <span class="n">site_kwargs</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">preparation_args</span><span class="p">,</span>  <span class="c1"># Pass rest of args (dates, crop, etc)</span>
+                <span class="c1"># Mandatory Args</span>
+                <span class="s2">&quot;campaign_start&quot;</span><span class="p">:</span> <span class="n">campaign_start</span><span class="p">,</span>
+                <span class="s2">&quot;campaign_end&quot;</span><span class="p">:</span> <span class="n">campaign_end</span><span class="p">,</span>
+                <span class="s2">&quot;crop_start&quot;</span><span class="p">:</span> <span class="n">crop_start</span><span class="p">,</span>
+                <span class="s2">&quot;crop_end&quot;</span><span class="p">:</span> <span class="n">crop_end</span><span class="p">,</span>
+                <span class="s2">&quot;crop_name&quot;</span><span class="p">:</span> <span class="n">crop_name</span><span class="p">,</span>
+                <span class="s2">&quot;variety_name&quot;</span><span class="p">:</span> <span class="n">variety_name</span><span class="p">,</span>
+                <span class="c1"># Optional Args</span>
+                <span class="s2">&quot;crop_start_type&quot;</span><span class="p">:</span> <span class="n">crop_start_type</span><span class="p">,</span>
+                <span class="s2">&quot;crop_end_type&quot;</span><span class="p">:</span> <span class="n">crop_end_type</span><span class="p">,</span>
+                <span class="s2">&quot;max_duration&quot;</span><span class="p">:</span> <span class="n">max_duration</span><span class="p">,</span>
+                <span class="s2">&quot;timed_events&quot;</span><span class="p">:</span> <span class="n">timed_events</span><span class="p">,</span>
+                <span class="s2">&quot;state_events&quot;</span><span class="p">:</span> <span class="n">state_events</span><span class="p">,</span>
+                <span class="s2">&quot;force_update&quot;</span><span class="p">:</span> <span class="n">force_update</span><span class="p">,</span>
+                <span class="s2">&quot;force_param_update&quot;</span><span class="p">:</span> <span class="n">force_param_update</span><span class="p">,</span>
+                <span class="c1"># Overrides</span>
+                <span class="s2">&quot;crop_overrides&quot;</span><span class="p">:</span> <span class="n">crop_overrides</span><span class="p">,</span>
+                <span class="s2">&quot;soil_overrides&quot;</span><span class="p">:</span> <span class="n">soil_overrides</span><span class="p">,</span>
+                <span class="s2">&quot;site_overrides&quot;</span><span class="p">:</span> <span class="n">site_overrides</span><span class="p">,</span>
             <span class="p">}</span>
             <span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task_payload</span><span class="p">)</span>
 
@@ -1795,6 +1909,79 @@ WOFOSTCropSimulationBatchRunner            (<a class="autorefs autorefs-internal
 
 
 
+  <div class="doc doc-object doc-method">
+
+
+
+<h3 id="cropengine.cropengine.WOFOSTCropSimulationBatchRunner.__init__" class="doc doc-heading">
+<code class="highlight language-python"><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">locations_csv_path</span><span class="p">,</span> <span class="n">workspace_dir</span><span class="o">=</span><span class="s1">&#39;batch_workspace&#39;</span><span class="p">)</span></code>
+
+  <span class="doc doc-properties">
+      <small class="doc doc-property doc-property-special"><code>special</code></small>
+  </span>
+
+<a href="#cropengine.cropengine.WOFOSTCropSimulationBatchRunner.__init__" class="headerlink" title="Permanent link">&para;</a></h3>
+
+    <div class="doc doc-contents ">
+
+      <p>Initializes the batch runner.</p>
+
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>model_name</code></td>
+        <td><code>str</code></td>
+        <td><p>The WOFOST model version.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>locations_csv_path</code></td>
+        <td><code>str</code></td>
+        <td><p>Path to CSV containing location data.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>workspace_dir</code></td>
+        <td><code>str</code></td>
+        <td><p>Root directory for output. Defaults to "batch_workspace".</p></td>
+        <td><code>&#39;batch_workspace&#39;</code></td>
+      </tr>
+  </tbody>
+</table>
+        <details class="quote">
+          <summary>Source code in <code>cropengine/cropengine.py</code></summary>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">locations_csv_path</span><span class="p">,</span> <span class="n">workspace_dir</span><span class="o">=</span><span class="s2">&quot;batch_workspace&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Initializes the batch runner.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_name (str): The WOFOST model version.</span>
+<span class="sd">        locations_csv_path (str): Path to CSV containing location data.</span>
+<span class="sd">        workspace_dir (str, optional): Root directory for output. Defaults to &quot;batch_workspace&quot;.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">workspace_dir</span><span class="p">)</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="bp">self</span><span class="o">.</span><span class="n">locations_csv_path</span> <span class="o">=</span> <span class="n">locations_csv_path</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">locations_csv_path</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+</code></pre></div>
+        </details>
+    </div>
+
+  </div>
+
+
 
   <div class="doc doc-object doc-method">
 
@@ -1870,7 +2057,7 @@ Loads all weather/soil data into RAM once.</p>
 
 
 <h3 id="cropengine.cropengine.WOFOSTCropSimulationBatchRunner.prepare_batch_system" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">prepare_batch_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">preparation_args</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">prepare_batch_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">campaign_start</span><span class="p">,</span> <span class="n">campaign_end</span><span class="p">,</span> <span class="n">crop_start</span><span class="p">,</span> <span class="n">crop_end</span><span class="p">,</span> <span class="n">crop_name</span><span class="p">,</span> <span class="n">variety_name</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">crop_start_type</span><span class="o">=</span><span class="s1">&#39;emergence&#39;</span><span class="p">,</span> <span class="n">crop_end_type</span><span class="o">=</span><span class="s1">&#39;harvest&#39;</span><span class="p">,</span> <span class="n">max_duration</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">timed_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">state_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_param_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#cropengine.cropengine.WOFOSTCropSimulationBatchRunner.prepare_batch_system" class="headerlink" title="Permanent link">&para;</a></h3>
@@ -1880,38 +2067,171 @@ Loads all weather/soil data into RAM once.</p>
       <p>Runs <code>prepare_system</code> for all points in parallel.
 Downloads data and creates config files for every point.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>campaign_start</code></td>
+        <td><code>str</code></td>
+        <td><p>Start date of the campaign (YYYY-MM-DD).</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>campaign_end</code></td>
+        <td><code>str</code></td>
+        <td><p>End date of the campaign (YYYY-MM-DD).</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>crop_start</code></td>
+        <td><code>str</code></td>
+        <td><p>Start date of the crop cycle (YYYY-MM-DD).</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>crop_end</code></td>
+        <td><code>str</code></td>
+        <td><p>End date of the crop cycle (YYYY-MM-DD).</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>crop_name</code></td>
+        <td><code>str</code></td>
+        <td><p>Name of the crop (e.g., 'wheat').</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>variety_name</code></td>
+        <td><code>str</code></td>
+        <td><p>Name of the crop variety.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>max_workers</code></td>
+        <td><code>int</code></td>
+        <td><p>Number of parallel processes. Defaults to 4.</p></td>
+        <td><code>4</code></td>
+      </tr>
+      <tr>
+        <td><code>crop_start_type</code></td>
+        <td><code>str</code></td>
+        <td><p>'sowing' or 'emergence'. Defaults to "emergence".</p></td>
+        <td><code>&#39;emergence&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>crop_end_type</code></td>
+        <td><code>str</code></td>
+        <td><p>'maturity', 'harvest'. Defaults to "harvest".</p></td>
+        <td><code>&#39;harvest&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>max_duration</code></td>
+        <td><code>int</code></td>
+        <td><p>Max days. Defaults to 300.</p></td>
+        <td><code>300</code></td>
+      </tr>
+      <tr>
+        <td><code>timed_events</code></td>
+        <td><code>list</code></td>
+        <td><p>Timed management events.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>state_events</code></td>
+        <td><code>list</code></td>
+        <td><p>State events.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>force_update</code></td>
+        <td><code>bool</code></td>
+        <td><p>Force re-download of weather/soil.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>force_param_update</code></td>
+        <td><code>bool</code></td>
+        <td><p>Force regeneration of parameter files.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>crop_overrides</code></td>
+        <td><code>dict</code></td>
+        <td><p>Overrides for crop parameters.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>soil_overrides</code></td>
+        <td><code>dict</code></td>
+        <td><p>Overrides for soil parameters.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>site_overrides</code></td>
+        <td><code>dict</code></td>
+        <td><p>Overrides for site parameters.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>cropengine/cropengine.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">prepare_batch_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">max_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">preparation_args</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">prepare_batch_system</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">campaign_start</span><span class="p">,</span>
+    <span class="n">campaign_end</span><span class="p">,</span>
+    <span class="n">crop_start</span><span class="p">,</span>
+    <span class="n">crop_end</span><span class="p">,</span>
+    <span class="n">crop_name</span><span class="p">,</span>
+    <span class="n">variety_name</span><span class="p">,</span>
+    <span class="n">max_workers</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">crop_start_type</span><span class="o">=</span><span class="s2">&quot;emergence&quot;</span><span class="p">,</span>
+    <span class="n">crop_end_type</span><span class="o">=</span><span class="s2">&quot;harvest&quot;</span><span class="p">,</span>
+    <span class="n">max_duration</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">timed_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">state_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">force_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">force_param_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Runs `prepare_system` for all points in parallel.</span>
 <span class="sd">    Downloads data and creates config files for every point.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        campaign_start (str): Start date of the campaign (YYYY-MM-DD).</span>
+<span class="sd">        campaign_end (str): End date of the campaign (YYYY-MM-DD).</span>
+<span class="sd">        crop_start (str): Start date of the crop cycle (YYYY-MM-DD).</span>
+<span class="sd">        crop_end (str): End date of the crop cycle (YYYY-MM-DD).</span>
+<span class="sd">        crop_name (str): Name of the crop (e.g., &#39;wheat&#39;).</span>
+<span class="sd">        variety_name (str): Name of the crop variety.</span>
+<span class="sd">        max_workers (int, optional): Number of parallel processes. Defaults to 4.</span>
+<span class="sd">        crop_start_type (str, optional): &#39;sowing&#39; or &#39;emergence&#39;. Defaults to &quot;emergence&quot;.</span>
+<span class="sd">        crop_end_type (str, optional): &#39;maturity&#39;, &#39;harvest&#39;. Defaults to &quot;harvest&quot;.</span>
+<span class="sd">        max_duration (int, optional): Max days. Defaults to 300.</span>
+<span class="sd">        timed_events (list, optional): Timed management events.</span>
+<span class="sd">        state_events (list, optional): State events.</span>
+<span class="sd">        force_update (bool, optional): Force re-download of weather/soil.</span>
+<span class="sd">        force_param_update (bool, optional): Force regeneration of parameter files.</span>
+<span class="sd">        crop_overrides (dict, optional): Overrides for crop parameters.</span>
+<span class="sd">        soil_overrides (dict, optional): Overrides for soil parameters.</span>
+<span class="sd">        site_overrides (dict, optional): Overrides for site parameters.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tasks</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BATCH PREP] Preparing tasks for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> locations...&quot;</span><span class="p">)</span>
 
     <span class="c1"># 1. Build Task List</span>
     <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
-        <span class="c1"># Separate site_kwargs from the main args</span>
-        <span class="n">site_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">k</span><span class="p">:</span> <span class="n">v</span>
-            <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">preparation_args</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">k</span>
-            <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span>
-                <span class="s2">&quot;campaign_start&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;campaign_end&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;crop_start&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;crop_end&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;crop_name&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;variety_name&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;force_update&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;crop_start_type&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;crop_end_type&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;max_duration&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;timed_events&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;state_events&quot;</span><span class="p">,</span>
-            <span class="p">]</span>
-        <span class="p">}</span>
 
         <span class="n">task_payload</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;id&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]),</span>
@@ -1919,8 +2239,25 @@ Downloads data and creates config files for every point.</p>
             <span class="s2">&quot;longitude&quot;</span><span class="p">:</span> <span class="n">row</span><span class="p">[</span><span class="s2">&quot;longitude&quot;</span><span class="p">],</span>
             <span class="s2">&quot;base_workspace_dir&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="p">,</span>
             <span class="s2">&quot;model_name&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span>
-            <span class="s2">&quot;site_kwargs&quot;</span><span class="p">:</span> <span class="n">site_kwargs</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">preparation_args</span><span class="p">,</span>  <span class="c1"># Pass rest of args (dates, crop, etc)</span>
+            <span class="c1"># Mandatory Args</span>
+            <span class="s2">&quot;campaign_start&quot;</span><span class="p">:</span> <span class="n">campaign_start</span><span class="p">,</span>
+            <span class="s2">&quot;campaign_end&quot;</span><span class="p">:</span> <span class="n">campaign_end</span><span class="p">,</span>
+            <span class="s2">&quot;crop_start&quot;</span><span class="p">:</span> <span class="n">crop_start</span><span class="p">,</span>
+            <span class="s2">&quot;crop_end&quot;</span><span class="p">:</span> <span class="n">crop_end</span><span class="p">,</span>
+            <span class="s2">&quot;crop_name&quot;</span><span class="p">:</span> <span class="n">crop_name</span><span class="p">,</span>
+            <span class="s2">&quot;variety_name&quot;</span><span class="p">:</span> <span class="n">variety_name</span><span class="p">,</span>
+            <span class="c1"># Optional Args</span>
+            <span class="s2">&quot;crop_start_type&quot;</span><span class="p">:</span> <span class="n">crop_start_type</span><span class="p">,</span>
+            <span class="s2">&quot;crop_end_type&quot;</span><span class="p">:</span> <span class="n">crop_end_type</span><span class="p">,</span>
+            <span class="s2">&quot;max_duration&quot;</span><span class="p">:</span> <span class="n">max_duration</span><span class="p">,</span>
+            <span class="s2">&quot;timed_events&quot;</span><span class="p">:</span> <span class="n">timed_events</span><span class="p">,</span>
+            <span class="s2">&quot;state_events&quot;</span><span class="p">:</span> <span class="n">state_events</span><span class="p">,</span>
+            <span class="s2">&quot;force_update&quot;</span><span class="p">:</span> <span class="n">force_update</span><span class="p">,</span>
+            <span class="s2">&quot;force_param_update&quot;</span><span class="p">:</span> <span class="n">force_param_update</span><span class="p">,</span>
+            <span class="c1"># Overrides</span>
+            <span class="s2">&quot;crop_overrides&quot;</span><span class="p">:</span> <span class="n">crop_overrides</span><span class="p">,</span>
+            <span class="s2">&quot;soil_overrides&quot;</span><span class="p">:</span> <span class="n">soil_overrides</span><span class="p">,</span>
+            <span class="s2">&quot;site_overrides&quot;</span><span class="p">:</span> <span class="n">site_overrides</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">tasks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">task_payload</span><span class="p">)</span>
 
@@ -2137,7 +2474,9 @@ Assumes data is already prepared.</p>
 </table>
         <details class="quote">
           <summary>Source code in <code>cropengine/cropengine.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_parameters</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Updates parameter files for ALL locations in the batch.</span>
 
@@ -2146,17 +2485,25 @@ Assumes data is already prepared.</p>
 <span class="sd">        soil_overrides (dict): Updates for &#39;params_soil.csv&#39;.</span>
 <span class="sd">        site_overrides (dict): Updates for &#39;params_site.csv&#39;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BATCH UPDATE] Updating parameters for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> locations...&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;[BATCH UPDATE] Updating parameters for </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">)</span><span class="si">}</span><span class="s2"> locations...&quot;</span>
+    <span class="p">)</span>
 
     <span class="n">updated_count</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="c1"># Iterate over all point directories</span>
-    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">(),</span> <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">),</span> <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Updating Params&quot;</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="o">.</span><span class="n">iterrows</span><span class="p">(),</span>
+        <span class="n">total</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">locations_df</span><span class="p">),</span>
+        <span class="n">desc</span><span class="o">=</span><span class="s2">&quot;Updating Params&quot;</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="n">loc_id</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
         <span class="n">point_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;point_</span><span class="si">{</span><span class="n">loc_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="c1"># Use the Single Runner&#39;s logic to update this specific folder</span>
-        <span class="n">runner</span> <span class="o">=</span> <span class="n">WOFOSTCropSimulationRunner</span><span class="p">(</span><span class="n">model_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="n">workspace_dir</span><span class="o">=</span><span class="n">point_dir</span><span class="p">)</span>
+        <span class="n">runner</span> <span class="o">=</span> <span class="n">WOFOSTCropSimulationRunner</span><span class="p">(</span>
+            <span class="n">model_name</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="n">workspace_dir</span><span class="o">=</span><span class="n">point_dir</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">crop_overrides</span><span class="p">:</span>
             <span class="n">runner</span><span class="o">.</span><span class="n">_update_single_file</span><span class="p">(</span><span class="s2">&quot;crop_params&quot;</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="p">)</span>
@@ -2167,7 +2514,9 @@ Assumes data is already prepared.</p>
 
         <span class="n">updated_count</span> <span class="o">+=</span> <span class="mi">1</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[BATCH UPDATE] Success! Updated parameters in </span><span class="si">{</span><span class="n">updated_count</span><span class="si">}</span><span class="s2"> locations.&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;[BATCH UPDATE] Success! Updated parameters in </span><span class="si">{</span><span class="n">updated_count</span><span class="si">}</span><span class="s2"> locations.&quot;</span>
+    <span class="p">)</span>
 </code></pre></div>
         </details>
     </div>
@@ -2201,14 +2550,55 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
 
     <div class="doc doc-contents ">
 
+      <p>Manages the setup, data preparation, and execution of a single WOFOST simulation.</p>
 
+<p><strong>Attributes:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>model_name</code></td>
+        <td><code>str</code></td>
+        <td><p>The specific WOFOST model version (e.g., 'Wofost73_PP').</p></td>
+      </tr>
+      <tr>
+        <td><code>workspace_dir</code></td>
+        <td><code>str</code></td>
+        <td><p>Path to the directory where simulation files are stored.</p></td>
+      </tr>
+      <tr>
+        <td><code>files</code></td>
+        <td><code>dict</code></td>
+        <td><p>A dictionary mapping file keys (e.g., 'weather', 'soil') to absolute file paths.</p></td>
+      </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>cropengine/cropengine.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">class</span><span class="w"> </span><span class="nc">WOFOSTCropSimulationRunner</span><span class="p">(</span><span class="n">WOFOSTOptionsMixin</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Manages the setup, data preparation, and execution of a single WOFOST simulation.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        model_name (str): The specific WOFOST model version (e.g., &#39;Wofost73_PP&#39;).</span>
+<span class="sd">        workspace_dir (str): Path to the directory where simulation files are stored.</span>
+<span class="sd">        files (dict): A dictionary mapping file keys (e.g., &#39;weather&#39;, &#39;soil&#39;) to absolute file paths.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">workspace_dir</span><span class="o">=</span><span class="s2">&quot;workspace&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Initialize the runner.</span>
-<span class="sd">        Calls update_workspace immediately to set up file paths.</span>
+<span class="sd">        Initialize the simulation runner.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            model_name (str): The name of the WOFOST model to run.</span>
+<span class="sd">            workspace_dir (str, optional): Directory to store intermediate files and results.</span>
+<span class="sd">                                           Defaults to &quot;workspace&quot;.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">update_workspace</span><span class="p">(</span><span class="n">workspace_dir</span><span class="p">)</span>
@@ -2218,8 +2608,11 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
     <span class="c1"># =========================================================================</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">update_workspace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_dir</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Updates the workspace directory and refreshes all file paths.</span>
-<span class="sd">        Call this method when switching to a new simulation point in a loop.</span>
+<span class="sd">        Updates the workspace directory and refreshes all internal file paths.</span>
+<span class="sd">        This is useful when reusing the runner instance for a different location.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            new_dir (str): The new directory path.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span> <span class="o">=</span> <span class="n">new_dir</span>
         <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -2237,10 +2630,12 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
     <span class="c1"># =========================================================================</span>
     <span class="c1"># 1. UPDATE PARAMETERS IN WORKSPACE</span>
     <span class="c1"># =========================================================================</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">update_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_parameters</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span>
+    <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Updates the CSV parameter files in the workspace with new values.</span>
-<span class="sd">        Changes are persistent.</span>
+<span class="sd">        Changes made by this method are persistent on disk.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            crop_overrides (dict): Updates for &#39;params_crop.csv&#39;.</span>
@@ -2265,7 +2660,13 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[UPDATE] Done. Updated </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2"> parameter files.&quot;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_update_single_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_key</span><span class="p">,</span> <span class="n">overrides</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Helper to read, update, and save a parameter CSV.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Helper method to read a parameter CSV, apply overrides, and save it back.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            file_key (str): The key in `self.files` pointing to the CSV file.</span>
+<span class="sd">            overrides (dict): Key-value pairs to update or add.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">fpath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">file_key</span><span class="p">]</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">fpath</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[WARN] Cannot update </span><span class="si">{</span><span class="n">file_key</span><span class="si">}</span><span class="s2">: File not found at </span><span class="si">{</span><span class="n">fpath</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -2274,26 +2675,38 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
         <span class="k">try</span><span class="p">:</span>
             <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">fpath</span><span class="p">)</span>
 
-            <span class="c1"># Ensure &#39;value&#39; column exists</span>
-            <span class="k">if</span> <span class="s2">&quot;value&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
-                <span class="n">df</span><span class="p">[</span><span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">NA</span>
+            <span class="c1"># Ensure target value column exists</span>
+            <span class="n">target_col</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span>
+            <span class="k">if</span> <span class="n">target_col</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                <span class="n">df</span><span class="p">[</span><span class="n">target_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">NA</span>
+
+            <span class="n">new_rows</span> <span class="o">=</span> <span class="p">[]</span>
 
             <span class="k">for</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">new_val</span> <span class="ow">in</span> <span class="n">overrides</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_val</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
+                    <span class="n">val_to_write</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">new_val</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">val_to_write</span> <span class="o">=</span> <span class="n">new_val</span>
+
                 <span class="c1"># Find row</span>
                 <span class="n">mask</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;parameter&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">param_name</span>
-                <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
-                    <span class="c1"># Handle lists/tables (convert to string representation)</span>
-                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_val</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)):</span>
-                        <span class="n">val_to_write</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">new_val</span><span class="p">)</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="n">val_to_write</span> <span class="o">=</span> <span class="n">new_val</span>
 
-                    <span class="k">if</span> <span class="n">file_key</span> <span class="o">==</span> <span class="s2">&quot;crop_params&quot;</span><span class="p">:</span>
-                        <span class="c1"># For crop params, write to &#39;default&#39; column</span>
-                        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val_to_write</span>
-                    <span class="k">else</span><span class="p">:</span>
-                        <span class="c1"># For soil/site params, write to &#39;value&#39; column     </span>
-                        <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">val_to_write</span>
+                <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+                    <span class="c1"># Update existing</span>
+                    <span class="n">df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="n">target_col</span><span class="p">]</span> <span class="o">=</span> <span class="n">val_to_write</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># Create new</span>
+                    <span class="n">new_row</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;parameter&quot;</span><span class="p">:</span> <span class="n">param_name</span><span class="p">,</span> <span class="n">target_col</span><span class="p">:</span> <span class="n">val_to_write</span><span class="p">}</span>
+
+                    <span class="c1"># Fill other columns with reasonable defaults (optional)</span>
+                    <span class="k">if</span> <span class="s2">&quot;description&quot;</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+                        <span class="n">new_row</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Added via override&quot;</span>
+
+                    <span class="n">new_rows</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_row</span><span class="p">)</span>
+
+            <span class="c1"># Append all new rows at once</span>
+            <span class="k">if</span> <span class="n">new_rows</span><span class="p">:</span>
+                <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">df</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">new_rows</span><span class="p">)],</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
             <span class="n">df</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">fpath</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
@@ -2320,14 +2733,41 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
         <span class="n">timed_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">state_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">force_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">site_kwargs</span><span class="p">,</span>
+        <span class="n">force_param_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Prepares the workspace:</span>
-<span class="sd">        1. Downloads Weather/Soil if missing.</span>
-<span class="sd">        2. Generates and saves Parameter CSVs (Soil, Site, Crop).</span>
-<span class="sd">        3. Generates and saves Agromanagement YAML.</span>
+<span class="sd">        Prepares the simulation workspace by downloading data and generating configuration files.</span>
+
+<span class="sd">        This method performs the following steps:</span>
+<span class="sd">        1. Downloads or checks for weather data (Meteo).</span>
+<span class="sd">        2. Downloads or checks for soil data (SoilGrids).</span>
+<span class="sd">        3. Generates parameter CSVs (Soil, Site, Crop).</span>
+<span class="sd">        4. Generates the Agromanagement YAML file.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            latitude (float): Latitude of the location.</span>
+<span class="sd">            longitude (float): Longitude of the location.</span>
+<span class="sd">            campaign_start (str): Start date of the campaign (YYYY-MM-DD).</span>
+<span class="sd">            campaign_end (str): End date of the campaign (YYYY-MM-DD).</span>
+<span class="sd">            crop_start (str): Start date of the crop cycle (YYYY-MM-DD).</span>
+<span class="sd">            crop_end (str): End date of the crop cycle (YYYY-MM-DD).</span>
+<span class="sd">            crop_name (str): Name of the crop (e.g., &#39;wheat&#39;).</span>
+<span class="sd">            variety_name (str): Name of the crop variety.</span>
+<span class="sd">            crop_start_type (str, optional): &#39;sowing&#39; or &#39;emergence&#39;. Defaults to &quot;emergence&quot;.</span>
+<span class="sd">            crop_end_type (str, optional): &#39;maturity&#39;, &#39;harvest&#39;, or &#39;earliest&#39;. Defaults to &quot;harvest&quot;.</span>
+<span class="sd">            max_duration (int, optional): Max simulation duration in days. Defaults to 300.</span>
+<span class="sd">            timed_events (list, optional): List of timed management events.</span>
+<span class="sd">            state_events (list, optional): List of state events.</span>
+<span class="sd">            force_update (bool, optional): If True, re-downloads weather/soil data. Defaults to False.</span>
+<span class="sd">            force_param_update (bool, optional): If True, regenerates parameter CSVs even if they exist. Defaults to False.</span>
+<span class="sd">            crop_overrides (dict, optional): Initial overrides for crop parameters.</span>
+<span class="sd">            soil_overrides (dict, optional): Initial overrides for soil parameters.</span>
+<span class="sd">            site_overrides (dict, optional): Initial overrides for site parameters.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[PREP] Preparing workspace: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
         <span class="c1"># A. Weather &amp; Soil (Download/Cache)</span>
@@ -2337,28 +2777,32 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
         <span class="n">soil_raw_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_soil</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">force_update</span><span class="p">)</span>
 
         <span class="c1"># B. Soil Params (Check existence before processing)</span>
-        <span class="k">if</span> <span class="n">force_update</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;soil_params&quot;</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">force_param_update</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;soil_params&quot;</span><span class="p">]):</span>
             <span class="c1"># Only ensure/download raw soil if we actually need to generate params</span>
             <span class="n">soil_raw_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_soil</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">force_update</span><span class="p">)</span>
             <span class="n">soil_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">soil_raw_path</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_save_params</span><span class="p">(</span><span class="n">WOFOSTSoilParameterProvider</span><span class="p">(</span><span class="n">soil_df</span><span class="p">),</span> <span class="s2">&quot;soil_params&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_save_params</span><span class="p">(</span>
+                <span class="n">WOFOSTSoilParameterProvider</span><span class="p">(</span><span class="n">soil_df</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="p">),</span> <span class="s2">&quot;soil_params&quot;</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[PREP] Using existing Soil parameters.&quot;</span><span class="p">)</span>
 
         <span class="c1"># C. Site Params (Check existence before processing)</span>
-        <span class="k">if</span> <span class="n">force_update</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;site_params&quot;</span><span class="p">]):</span>
-            <span class="n">site_provider</span> <span class="o">=</span> <span class="n">WOFOSTSiteParametersProvider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="o">**</span><span class="n">site_kwargs</span><span class="p">)</span>
-            <span class="c1"># Ensure params are generated inside the provider if needed</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">site_provider</span><span class="p">,</span> <span class="s2">&quot;get_params&quot;</span><span class="p">):</span>
-                <span class="n">site_provider</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">force_param_update</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;site_params&quot;</span><span class="p">]):</span>
+            <span class="n">site_provider</span> <span class="o">=</span> <span class="n">WOFOSTSiteParametersProvider</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="n">site_overrides</span>
+            <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_save_params</span><span class="p">(</span><span class="n">site_provider</span><span class="p">,</span> <span class="s2">&quot;site_params&quot;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[PREP] Using existing Site parameters.&quot;</span><span class="p">)</span>
 
         <span class="c1"># D. Crop Params (Check existence before processing)</span>
-        <span class="k">if</span> <span class="n">force_update</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;crop_params&quot;</span><span class="p">]):</span>
+        <span class="k">if</span> <span class="n">force_param_update</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;crop_params&quot;</span><span class="p">]):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_save_params</span><span class="p">(</span>
-                <span class="n">WOFOSTCropParametersProvider</span><span class="p">(</span><span class="n">crop_name</span><span class="p">,</span> <span class="n">variety_name</span><span class="p">),</span> <span class="s2">&quot;crop_params&quot;</span>
+                <span class="n">WOFOSTCropParametersProvider</span><span class="p">(</span>
+                    <span class="n">crop_name</span><span class="p">,</span> <span class="n">variety_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="n">crop_overrides</span>
+                <span class="p">),</span>
+                <span class="s2">&quot;crop_params&quot;</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[PREP] Using existing Crop parameters.&quot;</span><span class="p">)</span>
@@ -2389,21 +2833,29 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
     <span class="c1"># =========================================================================</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">run_simulation</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
+        <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">agro_file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Runs the simulation.</span>
+<span class="sd">        Executes the WOFOST simulation using the prepared files and parameters.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            soil_overrides (dict, optional): Override soil params.</span>
-<span class="sd">            site_overrides (dict, optional): Override site params.</span>
-<span class="sd">            crop_overrides (dict, optional): Override crop params.</span>
-<span class="sd">            agro_file_path (str, optional): Path to a user-provided YAML file. If None, uses the workspace default.</span>
-<span class="sd">            output_vars (list, optional): Variables to output.</span>
+<span class="sd">            crop_overrides (dict, optional): Runtime overrides for crop params.</span>
+<span class="sd">            soil_overrides (dict, optional): Runtime overrides for soil params.</span>
+<span class="sd">            site_overrides (dict, optional): Runtime overrides for site params.</span>
+<span class="sd">            agro_file_path (str, optional): Path to a custom agromanagement YAML file.</span>
+<span class="sd">                                            If None, uses the default workspace file.</span>
+<span class="sd">            output_vars (list, optional): List of variable names to retrieve from the simulation.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            pd.DataFrame: DataFrame containing daily simulation results.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            FileNotFoundError: If required input files (weather, agro) are missing.</span>
+<span class="sd">            RuntimeError: If the simulation crashes during execution.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[RUN] Initializing </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
 
@@ -2436,7 +2888,7 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
         <span class="c1"># 2. Load Parameters (Priority: DF Input -&gt; CSV File -&gt; Error)</span>
         <span class="n">soil_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;soil_params&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
         <span class="n">site_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;site_params&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
-        <span class="n">crop_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;crop_params&quot;</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
+        <span class="n">crop_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;crop_params&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">soil_overrides</span><span class="p">:</span>
             <span class="n">soil_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">soil_overrides</span><span class="p">)</span>
@@ -2487,7 +2939,8 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_load_param_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_key</span><span class="p">,</span> <span class="n">value_col</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Helper to load parameters from disk.</span>
+<span class="sd">        Helper to load parameters from a CSV file into a python dictionary.</span>
+<span class="sd">        Handles type conversion for lists and numbers.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># 1. Validate File Existence</span>
         <span class="n">file_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="n">file_key</span><span class="p">]</span>
@@ -2497,8 +2950,8 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
         <span class="c1"># 2. Load DataFrame from CSV</span>
         <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">file_path</span><span class="p">)</span>
 
-        <span class="c1"># 3. Determine Column Name (fallback to &#39;default&#39; if strict col missing)</span>
-        <span class="n">col</span> <span class="o">=</span> <span class="n">value_col</span> <span class="k">if</span> <span class="n">value_col</span> <span class="ow">in</span> <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="k">else</span> <span class="s2">&quot;default&quot;</span>
+        <span class="c1"># 3. Define column name</span>
+        <span class="n">col</span> <span class="o">=</span> <span class="s2">&quot;value&quot;</span>
 
         <span class="c1"># 3. Build Dictionary with Type Conversion</span>
         <span class="n">params</span> <span class="o">=</span> <span class="p">{}</span>
@@ -2542,6 +2995,7 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
         <span class="k">return</span> <span class="n">params</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_weather</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">force</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Downloads weather data using GEE if not present or forced.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;weather&quot;</span><span class="p">]):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;weather&quot;</span><span class="p">]</span>
 
@@ -2558,6 +3012,7 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
         <span class="n">meteo</span><span class="o">.</span><span class="n">save_weather_excel</span><span class="p">()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_ensure_soil</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">force</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Downloads soil data using GEE if not present or forced.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">force</span> <span class="ow">and</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;soil&quot;</span><span class="p">]):</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;soil&quot;</span><span class="p">]</span>
 
@@ -2581,6 +3036,7 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
         <span class="n">timed_events</span><span class="p">,</span>
         <span class="n">state_events</span><span class="p">,</span>
     <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Generates the agromanagement YAML file.&quot;&quot;&quot;</span>
         <span class="n">agro</span> <span class="o">=</span> <span class="n">WOFOSTAgroManagementProvider</span><span class="p">()</span>
         <span class="n">agro</span><span class="o">.</span><span class="n">add_campaign</span><span class="p">(</span>
             <span class="n">c_start</span><span class="p">,</span>
@@ -2603,7 +3059,13 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
     <span class="c1"># =========================================================================</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_rerunner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Returns a WOFOSTFastEngine instance instead of a closure.</span>
+<span class="sd">        Creates a lightweight, picklable engine instance for fast re-runs.</span>
+
+<span class="sd">        This loads all static data (Weather, Agro, Base Params) into memory</span>
+<span class="sd">        so they don&#39;t need to be re-read from disk for every iteration.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            _WOFOSTLazyEngine: A callable object that runs the simulation given overrides.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Validation &amp; Pre-loading</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;weather&quot;</span><span class="p">]):</span>
@@ -2617,7 +3079,7 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
         <span class="n">base_params</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;soil&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;soil_params&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
             <span class="s2">&quot;site&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;site_params&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;crop&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;crop_params&quot;</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;crop&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;crop_params&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
         <span class="p">}</span>
 
         <span class="c1"># Return the class instance</span>
@@ -2652,15 +3114,44 @@ WOFOSTCropSimulationRunner            (<a class="autorefs autorefs-internal" tit
 
     <div class="doc doc-contents ">
 
-      <p>Initialize the runner.
-Calls update_workspace immediately to set up file paths.</p>
+      <p>Initialize the simulation runner.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>model_name</code></td>
+        <td><code>str</code></td>
+        <td><p>The name of the WOFOST model to run.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>workspace_dir</code></td>
+        <td><code>str</code></td>
+        <td><p>Directory to store intermediate files and results.
+                           Defaults to "workspace".</p></td>
+        <td><code>&#39;workspace&#39;</code></td>
+      </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>cropengine/cropengine.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model_name</span><span class="p">,</span> <span class="n">workspace_dir</span><span class="o">=</span><span class="s2">&quot;workspace&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Initialize the runner.</span>
-<span class="sd">    Calls update_workspace immediately to set up file paths.</span>
+<span class="sd">    Initialize the simulation runner.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        model_name (str): The name of the WOFOST model to run.</span>
+<span class="sd">        workspace_dir (str, optional): Directory to store intermediate files and results.</span>
+<span class="sd">                                       Defaults to &quot;workspace&quot;.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span> <span class="o">=</span> <span class="n">model_name</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">update_workspace</span><span class="p">(</span><span class="n">workspace_dir</span><span class="p">)</span>
@@ -2684,13 +3175,36 @@ Calls update_workspace immediately to set up file paths.</p>
 
     <div class="doc doc-contents ">
 
-      <p>Returns a WOFOSTFastEngine instance instead of a closure.</p>
+      <p>Creates a lightweight, picklable engine instance for fast re-runs.</p>
+<p>This loads all static data (Weather, Agro, Base Params) into memory
+so they don't need to be re-read from disk for every iteration.</p>
 
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>_WOFOSTLazyEngine</code></td>
+      <td><p>A callable object that runs the simulation given overrides.</p></td>
+    </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>cropengine/cropengine.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">get_rerunner</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Returns a WOFOSTFastEngine instance instead of a closure.</span>
+<span class="sd">    Creates a lightweight, picklable engine instance for fast re-runs.</span>
+
+<span class="sd">    This loads all static data (Weather, Agro, Base Params) into memory</span>
+<span class="sd">    so they don&#39;t need to be re-read from disk for every iteration.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        _WOFOSTLazyEngine: A callable object that runs the simulation given overrides.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># Validation &amp; Pre-loading</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;weather&quot;</span><span class="p">]):</span>
@@ -2704,7 +3218,7 @@ Calls update_workspace immediately to set up file paths.</p>
     <span class="n">base_params</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;soil&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;soil_params&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
         <span class="s2">&quot;site&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;site_params&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
-        <span class="s2">&quot;crop&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;crop_params&quot;</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;crop&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;crop_params&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">),</span>
     <span class="p">}</span>
 
     <span class="c1"># Return the class instance</span>
@@ -2722,18 +3236,141 @@ Calls update_workspace immediately to set up file paths.</p>
 
 
 <h3 id="cropengine.cropengine.WOFOSTCropSimulationRunner.prepare_system" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">prepare_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">campaign_start</span><span class="p">,</span> <span class="n">campaign_end</span><span class="p">,</span> <span class="n">crop_start</span><span class="p">,</span> <span class="n">crop_end</span><span class="p">,</span> <span class="n">crop_name</span><span class="p">,</span> <span class="n">variety_name</span><span class="p">,</span> <span class="n">crop_start_type</span><span class="o">=</span><span class="s1">&#39;emergence&#39;</span><span class="p">,</span> <span class="n">crop_end_type</span><span class="o">=</span><span class="s1">&#39;harvest&#39;</span><span class="p">,</span> <span class="n">max_duration</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">timed_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">state_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">site_kwargs</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">prepare_system</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">campaign_start</span><span class="p">,</span> <span class="n">campaign_end</span><span class="p">,</span> <span class="n">crop_start</span><span class="p">,</span> <span class="n">crop_end</span><span class="p">,</span> <span class="n">crop_name</span><span class="p">,</span> <span class="n">variety_name</span><span class="p">,</span> <span class="n">crop_start_type</span><span class="o">=</span><span class="s1">&#39;emergence&#39;</span><span class="p">,</span> <span class="n">crop_end_type</span><span class="o">=</span><span class="s1">&#39;harvest&#39;</span><span class="p">,</span> <span class="n">max_duration</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">timed_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">state_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">force_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_param_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#cropengine.cropengine.WOFOSTCropSimulationRunner.prepare_system" class="headerlink" title="Permanent link">&para;</a></h3>
 
     <div class="doc doc-contents ">
 
-      <p>Prepares the workspace:
-1. Downloads Weather/Soil if missing.
-2. Generates and saves Parameter CSVs (Soil, Site, Crop).
-3. Generates and saves Agromanagement YAML.</p>
+      <p>Prepares the simulation workspace by downloading data and generating configuration files.</p>
+<p>This method performs the following steps:
+1. Downloads or checks for weather data (Meteo).
+2. Downloads or checks for soil data (SoilGrids).
+3. Generates parameter CSVs (Soil, Site, Crop).
+4. Generates the Agromanagement YAML file.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>latitude</code></td>
+        <td><code>float</code></td>
+        <td><p>Latitude of the location.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>longitude</code></td>
+        <td><code>float</code></td>
+        <td><p>Longitude of the location.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>campaign_start</code></td>
+        <td><code>str</code></td>
+        <td><p>Start date of the campaign (YYYY-MM-DD).</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>campaign_end</code></td>
+        <td><code>str</code></td>
+        <td><p>End date of the campaign (YYYY-MM-DD).</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>crop_start</code></td>
+        <td><code>str</code></td>
+        <td><p>Start date of the crop cycle (YYYY-MM-DD).</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>crop_end</code></td>
+        <td><code>str</code></td>
+        <td><p>End date of the crop cycle (YYYY-MM-DD).</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>crop_name</code></td>
+        <td><code>str</code></td>
+        <td><p>Name of the crop (e.g., 'wheat').</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>variety_name</code></td>
+        <td><code>str</code></td>
+        <td><p>Name of the crop variety.</p></td>
+        <td><em>required</em></td>
+      </tr>
+      <tr>
+        <td><code>crop_start_type</code></td>
+        <td><code>str</code></td>
+        <td><p>'sowing' or 'emergence'. Defaults to "emergence".</p></td>
+        <td><code>&#39;emergence&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>crop_end_type</code></td>
+        <td><code>str</code></td>
+        <td><p>'maturity', 'harvest', or 'earliest'. Defaults to "harvest".</p></td>
+        <td><code>&#39;harvest&#39;</code></td>
+      </tr>
+      <tr>
+        <td><code>max_duration</code></td>
+        <td><code>int</code></td>
+        <td><p>Max simulation duration in days. Defaults to 300.</p></td>
+        <td><code>300</code></td>
+      </tr>
+      <tr>
+        <td><code>timed_events</code></td>
+        <td><code>list</code></td>
+        <td><p>List of timed management events.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>state_events</code></td>
+        <td><code>list</code></td>
+        <td><p>List of state events.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>force_update</code></td>
+        <td><code>bool</code></td>
+        <td><p>If True, re-downloads weather/soil data. Defaults to False.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>force_param_update</code></td>
+        <td><code>bool</code></td>
+        <td><p>If True, regenerates parameter CSVs even if they exist. Defaults to False.</p></td>
+        <td><code>False</code></td>
+      </tr>
+      <tr>
+        <td><code>crop_overrides</code></td>
+        <td><code>dict</code></td>
+        <td><p>Initial overrides for crop parameters.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>soil_overrides</code></td>
+        <td><code>dict</code></td>
+        <td><p>Initial overrides for soil parameters.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
+        <td><code>site_overrides</code></td>
+        <td><code>dict</code></td>
+        <td><p>Initial overrides for site parameters.</p></td>
+        <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>cropengine/cropengine.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">prepare_system</span><span class="p">(</span>
@@ -2752,14 +3389,41 @@ Calls update_workspace immediately to set up file paths.</p>
     <span class="n">timed_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">state_events</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">force_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">site_kwargs</span><span class="p">,</span>
+    <span class="n">force_param_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Prepares the workspace:</span>
-<span class="sd">    1. Downloads Weather/Soil if missing.</span>
-<span class="sd">    2. Generates and saves Parameter CSVs (Soil, Site, Crop).</span>
-<span class="sd">    3. Generates and saves Agromanagement YAML.</span>
+<span class="sd">    Prepares the simulation workspace by downloading data and generating configuration files.</span>
+
+<span class="sd">    This method performs the following steps:</span>
+<span class="sd">    1. Downloads or checks for weather data (Meteo).</span>
+<span class="sd">    2. Downloads or checks for soil data (SoilGrids).</span>
+<span class="sd">    3. Generates parameter CSVs (Soil, Site, Crop).</span>
+<span class="sd">    4. Generates the Agromanagement YAML file.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        latitude (float): Latitude of the location.</span>
+<span class="sd">        longitude (float): Longitude of the location.</span>
+<span class="sd">        campaign_start (str): Start date of the campaign (YYYY-MM-DD).</span>
+<span class="sd">        campaign_end (str): End date of the campaign (YYYY-MM-DD).</span>
+<span class="sd">        crop_start (str): Start date of the crop cycle (YYYY-MM-DD).</span>
+<span class="sd">        crop_end (str): End date of the crop cycle (YYYY-MM-DD).</span>
+<span class="sd">        crop_name (str): Name of the crop (e.g., &#39;wheat&#39;).</span>
+<span class="sd">        variety_name (str): Name of the crop variety.</span>
+<span class="sd">        crop_start_type (str, optional): &#39;sowing&#39; or &#39;emergence&#39;. Defaults to &quot;emergence&quot;.</span>
+<span class="sd">        crop_end_type (str, optional): &#39;maturity&#39;, &#39;harvest&#39;, or &#39;earliest&#39;. Defaults to &quot;harvest&quot;.</span>
+<span class="sd">        max_duration (int, optional): Max simulation duration in days. Defaults to 300.</span>
+<span class="sd">        timed_events (list, optional): List of timed management events.</span>
+<span class="sd">        state_events (list, optional): List of state events.</span>
+<span class="sd">        force_update (bool, optional): If True, re-downloads weather/soil data. Defaults to False.</span>
+<span class="sd">        force_param_update (bool, optional): If True, regenerates parameter CSVs even if they exist. Defaults to False.</span>
+<span class="sd">        crop_overrides (dict, optional): Initial overrides for crop parameters.</span>
+<span class="sd">        soil_overrides (dict, optional): Initial overrides for soil parameters.</span>
+<span class="sd">        site_overrides (dict, optional): Initial overrides for site parameters.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[PREP] Preparing workspace: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="c1"># A. Weather &amp; Soil (Download/Cache)</span>
@@ -2769,28 +3433,32 @@ Calls update_workspace immediately to set up file paths.</p>
     <span class="n">soil_raw_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_soil</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">force_update</span><span class="p">)</span>
 
     <span class="c1"># B. Soil Params (Check existence before processing)</span>
-    <span class="k">if</span> <span class="n">force_update</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;soil_params&quot;</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="n">force_param_update</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;soil_params&quot;</span><span class="p">]):</span>
         <span class="c1"># Only ensure/download raw soil if we actually need to generate params</span>
         <span class="n">soil_raw_path</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ensure_soil</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">force_update</span><span class="p">)</span>
         <span class="n">soil_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">soil_raw_path</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_save_params</span><span class="p">(</span><span class="n">WOFOSTSoilParameterProvider</span><span class="p">(</span><span class="n">soil_df</span><span class="p">),</span> <span class="s2">&quot;soil_params&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_save_params</span><span class="p">(</span>
+            <span class="n">WOFOSTSoilParameterProvider</span><span class="p">(</span><span class="n">soil_df</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="p">),</span> <span class="s2">&quot;soil_params&quot;</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[PREP] Using existing Soil parameters.&quot;</span><span class="p">)</span>
 
     <span class="c1"># C. Site Params (Check existence before processing)</span>
-    <span class="k">if</span> <span class="n">force_update</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;site_params&quot;</span><span class="p">]):</span>
-        <span class="n">site_provider</span> <span class="o">=</span> <span class="n">WOFOSTSiteParametersProvider</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="o">**</span><span class="n">site_kwargs</span><span class="p">)</span>
-        <span class="c1"># Ensure params are generated inside the provider if needed</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">site_provider</span><span class="p">,</span> <span class="s2">&quot;get_params&quot;</span><span class="p">):</span>
-            <span class="n">site_provider</span><span class="o">.</span><span class="n">get_params</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">force_param_update</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;site_params&quot;</span><span class="p">]):</span>
+        <span class="n">site_provider</span> <span class="o">=</span> <span class="n">WOFOSTSiteParametersProvider</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="n">site_overrides</span>
+        <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_save_params</span><span class="p">(</span><span class="n">site_provider</span><span class="p">,</span> <span class="s2">&quot;site_params&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[PREP] Using existing Site parameters.&quot;</span><span class="p">)</span>
 
     <span class="c1"># D. Crop Params (Check existence before processing)</span>
-    <span class="k">if</span> <span class="n">force_update</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;crop_params&quot;</span><span class="p">]):</span>
+    <span class="k">if</span> <span class="n">force_param_update</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">&quot;crop_params&quot;</span><span class="p">]):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_save_params</span><span class="p">(</span>
-            <span class="n">WOFOSTCropParametersProvider</span><span class="p">(</span><span class="n">crop_name</span><span class="p">,</span> <span class="n">variety_name</span><span class="p">),</span> <span class="s2">&quot;crop_params&quot;</span>
+            <span class="n">WOFOSTCropParametersProvider</span><span class="p">(</span>
+                <span class="n">crop_name</span><span class="p">,</span> <span class="n">variety_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="p">,</span> <span class="n">crop_overrides</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;crop_params&quot;</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[PREP] Using existing Crop parameters.&quot;</span><span class="p">)</span>
@@ -2827,14 +3495,14 @@ Calls update_workspace immediately to set up file paths.</p>
 
 
 <h3 id="cropengine.cropengine.WOFOSTCropSimulationRunner.run_simulation" class="doc doc-heading">
-<code class="highlight language-python"><span class="n">run_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">agro_file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
+<code class="highlight language-python"><span class="n">run_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">agro_file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></code>
 
 
 <a href="#cropengine.cropengine.WOFOSTCropSimulationRunner.run_simulation" class="headerlink" title="Permanent link">&para;</a></h3>
 
     <div class="doc doc-contents ">
 
-      <p>Runs the simulation.</p>
+      <p>Executes the WOFOST simulation using the prepared files and parameters.</p>
 
 <p><strong>Parameters:</strong></p>
 <table>
@@ -2848,34 +3516,69 @@ Calls update_workspace immediately to set up file paths.</p>
   </thead>
   <tbody>
       <tr>
+        <td><code>crop_overrides</code></td>
+        <td><code>dict</code></td>
+        <td><p>Runtime overrides for crop params.</p></td>
+        <td><code>None</code></td>
+      </tr>
+      <tr>
         <td><code>soil_overrides</code></td>
         <td><code>dict</code></td>
-        <td><p>Override soil params.</p></td>
+        <td><p>Runtime overrides for soil params.</p></td>
         <td><code>None</code></td>
       </tr>
       <tr>
         <td><code>site_overrides</code></td>
         <td><code>dict</code></td>
-        <td><p>Override site params.</p></td>
-        <td><code>None</code></td>
-      </tr>
-      <tr>
-        <td><code>crop_overrides</code></td>
-        <td><code>dict</code></td>
-        <td><p>Override crop params.</p></td>
+        <td><p>Runtime overrides for site params.</p></td>
         <td><code>None</code></td>
       </tr>
       <tr>
         <td><code>agro_file_path</code></td>
         <td><code>str</code></td>
-        <td><p>Path to a user-provided YAML file. If None, uses the workspace default.</p></td>
+        <td><p>Path to a custom agromanagement YAML file.
+                            If None, uses the default workspace file.</p></td>
         <td><code>None</code></td>
       </tr>
       <tr>
         <td><code>output_vars</code></td>
         <td><code>list</code></td>
-        <td><p>Variables to output.</p></td>
+        <td><p>List of variable names to retrieve from the simulation.</p></td>
         <td><code>None</code></td>
+      </tr>
+  </tbody>
+</table>
+<p><strong>Returns:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>pd.DataFrame</code></td>
+      <td><p>DataFrame containing daily simulation results.</p></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Exceptions:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>FileNotFoundError</code></td>
+        <td><p>If required input files (weather, agro) are missing.</p></td>
+      </tr>
+      <tr>
+        <td><code>RuntimeError</code></td>
+        <td><p>If the simulation crashes during execution.</p></td>
       </tr>
   </tbody>
 </table>
@@ -2883,21 +3586,29 @@ Calls update_workspace immediately to set up file paths.</p>
           <summary>Source code in <code>cropengine/cropengine.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">run_simulation</span><span class="p">(</span>
     <span class="bp">self</span><span class="p">,</span>
+    <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">agro_file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">output_vars</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Runs the simulation.</span>
+<span class="sd">    Executes the WOFOST simulation using the prepared files and parameters.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        soil_overrides (dict, optional): Override soil params.</span>
-<span class="sd">        site_overrides (dict, optional): Override site params.</span>
-<span class="sd">        crop_overrides (dict, optional): Override crop params.</span>
-<span class="sd">        agro_file_path (str, optional): Path to a user-provided YAML file. If None, uses the workspace default.</span>
-<span class="sd">        output_vars (list, optional): Variables to output.</span>
+<span class="sd">        crop_overrides (dict, optional): Runtime overrides for crop params.</span>
+<span class="sd">        soil_overrides (dict, optional): Runtime overrides for soil params.</span>
+<span class="sd">        site_overrides (dict, optional): Runtime overrides for site params.</span>
+<span class="sd">        agro_file_path (str, optional): Path to a custom agromanagement YAML file.</span>
+<span class="sd">                                        If None, uses the default workspace file.</span>
+<span class="sd">        output_vars (list, optional): List of variable names to retrieve from the simulation.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        pd.DataFrame: DataFrame containing daily simulation results.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        FileNotFoundError: If required input files (weather, agro) are missing.</span>
+<span class="sd">        RuntimeError: If the simulation crashes during execution.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[RUN] Initializing </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">model_name</span><span class="si">}</span><span class="s2"> in </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="si">}</span><span class="s2">...&quot;</span><span class="p">)</span>
 
@@ -2930,7 +3641,7 @@ Calls update_workspace immediately to set up file paths.</p>
     <span class="c1"># 2. Load Parameters (Priority: DF Input -&gt; CSV File -&gt; Error)</span>
     <span class="n">soil_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;soil_params&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
     <span class="n">site_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;site_params&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
-    <span class="n">crop_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;crop_params&quot;</span><span class="p">,</span> <span class="s2">&quot;default&quot;</span><span class="p">)</span>
+    <span class="n">crop_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_param_dict</span><span class="p">(</span><span class="s2">&quot;crop_params&quot;</span><span class="p">,</span> <span class="s2">&quot;value&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">soil_overrides</span><span class="p">:</span>
         <span class="n">soil_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">soil_overrides</span><span class="p">)</span>
@@ -2985,7 +3696,7 @@ Calls update_workspace immediately to set up file paths.</p>
     <div class="doc doc-contents ">
 
       <p>Updates the CSV parameter files in the workspace with new values.
-Changes are persistent.</p>
+Changes made by this method are persistent on disk.</p>
 
 <p><strong>Parameters:</strong></p>
 <table>
@@ -3020,10 +3731,12 @@ Changes are persistent.</p>
 </table>
         <details class="quote">
           <summary>Source code in <code>cropengine/cropengine.py</code></summary>
-          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+          <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_parameters</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Updates the CSV parameter files in the workspace with new values.</span>
-<span class="sd">    Changes are persistent.</span>
+<span class="sd">    Changes made by this method are persistent on disk.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        crop_overrides (dict): Updates for &#39;params_crop.csv&#39;.</span>
@@ -3066,15 +3779,37 @@ Changes are persistent.</p>
 
     <div class="doc doc-contents ">
 
-      <p>Updates the workspace directory and refreshes all file paths.
-Call this method when switching to a new simulation point in a loop.</p>
+      <p>Updates the workspace directory and refreshes all internal file paths.
+This is useful when reusing the runner instance for a different location.</p>
 
+<p><strong>Parameters:</strong></p>
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Type</th>
+      <th>Description</th>
+      <th>Default</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><code>new_dir</code></td>
+        <td><code>str</code></td>
+        <td><p>The new directory path.</p></td>
+        <td><em>required</em></td>
+      </tr>
+  </tbody>
+</table>
         <details class="quote">
           <summary>Source code in <code>cropengine/cropengine.py</code></summary>
           <div class="highlight"><pre><span></span><code><span class="k">def</span><span class="w"> </span><span class="nf">update_workspace</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_dir</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Updates the workspace directory and refreshes all file paths.</span>
-<span class="sd">    Call this method when switching to a new simulation point in a loop.</span>
+<span class="sd">    Updates the workspace directory and refreshes all internal file paths.</span>
+<span class="sd">    This is useful when reusing the runner instance for a different location.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        new_dir (str): The new directory path.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span> <span class="o">=</span> <span class="n">new_dir</span>
     <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">workspace_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
