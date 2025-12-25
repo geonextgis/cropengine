@@ -1,0 +1,153 @@
+wofost:
+  # ------------------------------------------------------------------------------
+  # 1. Parameter Definitions
+  # ------------------------------------------------------------------------------
+  crop_params:
+    # --- WOFOST 7.3: Biomass Reallocation Parameters ---
+    REALLOC_DVS:
+      default: 1.1
+      range: [0.0, 2.5]
+      type: float
+      description: "Development stage above which reallocation to storage organs takes place."
+      unit: "-"
+
+    REALLOC_EFFICIENCY:
+      default: 0.95
+      range: [0.0, 1.0]
+      type: float
+      description: "Efficiency of conversion of reallocated biomass."
+      unit: "-"
+
+    REALLOC_LEAF_FRACTION:
+      default: 0.0
+      range: [0.0, 1.0]
+      type: float
+      description: "Maximum fraction of leaf biomass that can be reallocated."
+      unit: "-"
+
+    REALLOC_LEAF_RATE:
+      default: 0.0
+      range: [0.0, 1.0]
+      type: float
+      description: "Maximum rate of reallocation from leaves."
+      unit: "d-1"
+
+    REALLOC_STEM_FRACTION:
+      default: 0.3
+      range: [0.0, 1.0]
+      type: float
+      description: "Maximum fraction of stem biomass that can be reallocated."
+      unit: "-"
+
+    REALLOC_STEM_RATE:
+      default: 0.05
+      range: [0.0, 1.0]
+      type: float
+      description: "Maximum rate of reallocation from stems."
+      unit: "d-1"
+
+    CO2:
+      default: 400.0
+      range: [300.0, 1000.0]
+      type: float
+      description: "Atmospheric CO2 concentration."
+      unit: "ppm"
+
+    # --- WOFOST 8.1: Nitrogen & Assimilation Parameters ---
+    AMAX_LNB:
+      default: 0.25
+      range: [0.0, 1.0]
+      type: float
+      description: "Specific leaf nitrogen below which there is no gross photosynthesis."
+      unit: "kg N ha-1 leaf"
+
+    AMAX_SLP:
+      default: 23.5
+      range: [0.0, 50.0]
+      type: float
+      description: "Slope of the relationship between AMAX and leaf N content."
+      unit: "kg CO2 ha-1 hr-1 / kg N ha-1"
+
+    AMAX_REF:
+      default: 1.0
+      range: [0.0, 5.0]
+      type: float
+      description: "Reference max assimilation rate (scaling factor)."
+      unit: "-"
+
+    KN:
+      default: 0.6
+      range: [0.1, 1.5]
+      type: float
+      description: "Extinction coefficient for nitrogen distribution in the canopy."
+      unit: "-"
+
+    DVS_N_TRANSL:
+      default: 0.5
+      range: [0.0, 2.0]
+      type: float
+      description: "Development stage above which N translocation to storage organs occurs."
+      unit: "-"
+
+    NSLLV_TB:
+      default: [0.0, 0.03, 1.0, 0.02, 2.0, 0.01]
+      range: null
+      type: list
+      description: "Table describing fraction of N retranslocated from dying leaves as function of DVS."
+      unit: "DVS, Fraction"
+
+    RGRLAI_MIN:
+      default: 0.005
+      range: [0.0, 0.1]
+      type: float
+      description: "Minimum relative growth rate of LAI."
+      unit: "d-1"
+
+  # ------------------------------------------------------------------------------
+  # 2. Profiles (Model Versions)
+  # ------------------------------------------------------------------------------
+  profiles:
+    WOFOST73:
+      # Requires CO2 + Reallocation params
+      required:
+        - WAV
+        - CO2
+        - REALLOC_DVS
+        - REALLOC_EFFICIENCY
+        - REALLOC_LEAF_FRACTION
+        - REALLOC_LEAF_RATE
+        - REALLOC_STEM_FRACTION
+        - REALLOC_STEM_RATE
+
+    WOFOST81_Classic:
+      # Requires CO2 + N Assimilation params
+      required:
+        - REALLOC_DVS
+        - REALLOC_EFFICIENCY
+        - REALLOC_LEAF_FRACTION
+        - REALLOC_LEAF_RATE
+        - REALLOC_STEM_FRACTION
+        - REALLOC_STEM_RATE
+        - WAV
+        - NAVAILI
+        - AMAX_LNB
+        - AMAX_SLP
+        - AMAX_REF
+        - KN
+        - DVS_N_TRANSL
+        - NSLLV_TB
+        - RGRLAI_MIN
+
+  # ------------------------------------------------------------------------------
+  # 3. Model ID Mapping
+  # ------------------------------------------------------------------------------
+  model_mapping:
+    Wofost73_PP: WOFOST73
+    Wofost73_WLP_CWB: WOFOST73
+    Wofost73_WLP_MLWB: WOFOST73
+
+    Wofost81_PP: WOFOST81_Classic
+    Wofost81_WLP_CWB: WOFOST81_Classic
+    Wofost81_WLP_MLWB: WOFOST81_Classic
+    Wofost81_NWLP_CWB_CNB: WOFOST81_Classic
+    Wofost81_NWLP_MLWB_CNB: WOFOST81_Classic

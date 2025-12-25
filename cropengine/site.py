@@ -19,7 +19,7 @@ class WOFOSTSiteParametersProvider:
 
     Args:
         model (str): The name of the WOFOST model version to use.
-        **kwargs: Site parameters provided as keyword arguments.
+        site_overrides (dict, optional): Dictionary of parameters to override defaults.
     """
 
     EMERGENCY_DEFAULTS = {
@@ -30,12 +30,13 @@ class WOFOSTSiteParametersProvider:
         "NO3I": [0.05],
     }
 
-    def __init__(self, model, **kwargs):
+    def __init__(self, model, site_overrides=None):
         self.model = model
-        self.raw_kwargs = kwargs
+        self.raw_kwargs = site_overrides if site_overrides else {}
         self.param_metadata = []
         self.required_params = set()
         self.valid_param_names = set()
+        self.all_param_defs = {}
 
         # 1. Load configuration
         try:
@@ -56,72 +57,77 @@ class WOFOSTSiteParametersProvider:
 
             self.valid_param_names = set(profile_def["parameters"])
             self.required_params = set(profile_def.get("required", []))
+            self.all_param_defs = config["site_params"]
 
-            all_param_defs = config["site_params"]
-
-            # Build the Metadata List
-            for param in self.valid_param_names:
-                if param in all_param_defs:
-                    meta = {
-                        "parameter": param,
-                        "required": (param in self.required_params),
-                    }
-                    meta.update(all_param_defs[param].copy())
-                    self.param_metadata.append(meta)
+        else:
+            valid_models = list(config["model_mapping"].keys())
+            raise SiteParameterError(
+                f"Unknown model '{self.model}'. Available models: {valid_models}"
+            )
 
     def get_params(self):
         """
         Validates inputs against the prepared metadata, applies defaults,
         and returns the final parameter dictionary.
         """
-        # 1. Re-validate Model Profile
-        if not self.param_metadata:
-            valid_models = list(self.full_config["wofost"]["model_mapping"].keys())
-            raise SiteParameterError(
-                f"Unknown or unconfigured model '{self.model}'. Available models: {valid_models}"
-            )
-
         validated_params = {}
+        self.param_metadata = []
 
-        # 2. Process Parameters (Iterating over the LIST now)
-        for meta in self.param_metadata:
-            par_name = meta["parameter"]
-            is_required = meta["required"]
+        # 1. Process Valid Parameters defined for this model
+        for par_name in self.valid_param_names:
+            if par_name not in self.all_param_defs:
+                continue
 
-            # Determine value: use provided kwarg or fall back to default
+            meta_def = self.all_param_defs[par_name].copy()
+            is_required = par_name in self.required_params
+            default_val = meta_def["default"]
+
             if par_name in self.raw_kwargs:
                 value = self.raw_kwargs[par_name]
             else:
-                value = meta["default"]
-
-                if value is None:
-                    if par_name in self.EMERGENCY_DEFAULTS:
-                        value = self.EMERGENCY_DEFAULTS[par_name]
-                        warnings.warn(
-                            f"[SiteParams] Parameter '{par_name}' was missing and has no YAML default. "
-                            f"Using fallback value: {value}"
-                        )
+                value = default_val
 
                 if is_required:
-                    warnings.warn(
-                        f"[SiteParams] Required parameter '{par_name}' was not provided. "
-                        f"Using default value: {value}"
-                    )
+                    if value is not None:
+                        print(
+                            f"🚨 [WARN] Required site parameter '{par_name}' missing for model '{self.model}'. "
+                            f"Using default value: {value}"
+                        )
+                    else:
+                        if par_name in self.EMERGENCY_DEFAULTS:
+                            value = self.EMERGENCY_DEFAULTS[par_name]
+                            print(
+                                f"🚨 [WARN] Required site parameter '{par_name}' missing (no YAML default). "
+                                f"Using emergency fallback: {value}"
+                            )
+                        else:
+                            raise SiteParameterError(
+                                f"Required parameter '{par_name}' is missing and has no default value."
+                            )
 
             # Convert types and check valid ranges
             if value is not None:
-                value = self._convert_and_validate(par_name, value, meta)
+                value = self._convert_and_validate(par_name, value, meta_def)
 
-            meta["value"] = value
+            # Store Result
             validated_params[par_name] = value
 
-        # 3. Check for Unknown Parameters provided by user
+            # Update Metadata List
+            meta_record = {
+                "parameter": par_name,
+                "required": is_required,
+                "value": value,
+            }
+            meta_record.update(meta_def)
+            self.param_metadata.append(meta_record)
+
+        # 2. Check for Unknown Parameters provided by user
         unknown_keys = [
             k for k in self.raw_kwargs.keys() if k not in self.valid_param_names
         ]
         if unknown_keys:
             raise SiteParameterError(
-                f"Unknown parameters provided for profile '{self.model}': {unknown_keys}"
+                f"🚨 [WARN] Ignoring unknown site parameters provided for '{self.model}': {unknown_keys}"
             )
 
         return validated_params
