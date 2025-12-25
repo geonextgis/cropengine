@@ -60,3 +60,14 @@ pip install cropengine
 # (Optional) Upgrade to the latest version if already installed
 pip install --upgrade cropengine
 ```
+
+## Models
+| Model ID | Model Name | Description | Production Level | Water Balance | Nutrient Balance |
+|---------|-----------|-------------|------------------|---------------|------------------|
+| Wofost72_Phenology | WOFOST 7.2 (Phenology Only) | Simulates only the phenological development stages of the crop, ignoring biomass growth. | Phenology | N/A | N/A |
+| Wofost72_PP | WOFOST 7.2 (Potential Production) | Simulates crop growth under potential production conditions (no water or nutrient stress). | Potential | N/A | N/A |
+| Wofost72_WLP_CWB | WOFOST 7.2 (Water-Limited) | Simulates crop growth limited by water availability using the Classic Water Balance (free drainage). | Water-limited | Classic | N/A |
+| Wofost73_PP | WOFOST 7.3 (Potential Production) | Includes atmospheric CO₂ response and biomass reallocation under potential conditions. | Potential | N/A | N/A |
+| Wofost73_WLP_CWB | WOFOST 7.3 (Water-Limited, Classic) | Includes CO₂ response and biomass reallocation under water-limited conditions using the Classic Water Balance. | Water-limited | Classic | N/A |
+
+

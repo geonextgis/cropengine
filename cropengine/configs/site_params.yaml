@@ -81,8 +81,8 @@ wofost:
       unit: "-"
 
     NAVAILI:
-      default: null
-      range: [0.0, 250.0]
+      default: 50.0
+      range: [0.0, 500.0]
       type: float
       description: "Amount of N available in the pool at initialization of the system."
       unit: "kg/ha"
@@ -151,15 +151,15 @@ wofost:
       unit: "mg NO3--N L-1 water"
 
     NH4I:
-      default: null
-      range: [0.0, 300.0]
+      default: [0.1, 0.05, 0.02]
+      range: null
       type: list
       description: "Initial amount of NH4+ per soil layer. Should match number of soil layers."
       unit: "kg NH4+ ha-1"
 
     NO3I:
-      default: null
-      range: [0.0, 500.0]
+      default: [5.0, 2.0, 1.0]
+      range: null
       type: list
       description: "Initial amount of NO3-N per soil layer. Should match number of soil layers."
       unit: "kg NO3-N ha-1"
@@ -170,7 +170,6 @@ wofost:
       type: float
       description: "Critical fraction water filled soil pores."
       unit: "m3 water m-3 pores"
-
 
   # ------------------------------------------------------------------------------
   # 2. Profiles (Model Versions)
@@ -183,8 +182,8 @@ wofost:
       required: [WAV]
 
     WOFOST73:
-      parameters: [IFUNRN, NOTINF, SSI, SSMAX, WAV, SMLIM, CO2]
-      required: [WAV, CO2]
+      parameters: [IFUNRN, NOTINF, SSI, SSMAX, WAV, SMLIM]
+      required: [WAV]
 
     WOFOST81_Classic:
       parameters: [IFUNRN, NOTINF, SSI, SSMAX, WAV, SMLIM, CO2, BG_N_SUPPLY, NSOILBASE, NSOILBASE_FR, NAVAILI]

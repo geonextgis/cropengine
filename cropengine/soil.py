@@ -625,7 +625,7 @@ class WOFOSTSoilParameterProvider:
 
     Args:
         soil_data (pd.DataFrame): DataFrame containing ISRIC SoilGrids data.
-        **kwargs: Optional overrides for specific soil parameters.
+        soil_overrides (dict, optional): Optional overrides for specific soil parameters.
     """
 
     # Default parameters for potential production
@@ -643,12 +643,14 @@ class WOFOSTSoilParameterProvider:
         "CNRatioSOMI": 10.0,
     }
 
-    def __init__(self, soil_data, **kwargs):
+    def __init__(self, soil_data, soil_overrides=None):
 
         self.df = soil_data
         self.params = self._defaults.copy()
-        self.overrides = kwargs
-        self.param_metadata = get_wofost_soil_parameters_metadata()
+        self.overrides = soil_overrides if soil_overrides else {}
+        self.base_metadata = get_wofost_soil_parameters_metadata()
+        
+        self.param_metadata = []
 
         # Ranges for generating PCSE tables (h in cm, pF = log10(h))
         self.pf_range = np.array(
@@ -681,7 +683,7 @@ class WOFOSTSoilParameterProvider:
         Update the soil parameters metadata.
         """
         param_metadata = []
-        for param, info in self.param_metadata.items():
+        for param, info in self.base_metadata.items():
             param_dict = {"parameter": param}
             param_dict.update(info)
             if param in calc_params.keys():
@@ -756,7 +758,7 @@ class WOFOSTSoilParameterProvider:
 
             h_obs = [0.01, 100.0, 330.0, 15000.0]
             th_obs = [current_sm0, th_10, th_33, th_1500]
-            bounds = ([0.0, 1e-5, 1.01], [theta_1500, 10.0, 10.0])
+            bounds = ([0.0, 1e-5, 1.01], [th_1500, 10.0, 10.0])
 
             try:
                 # Fit Van Genuchten
