@@ -78,14 +78,14 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
         workspace_dir (str): Path to the directory where simulation files are stored.
         files (dict): A dictionary mapping file keys (e.g., 'weather', 'soil') to absolute file paths.
     """
-    
+
     def __init__(self, model_name, workspace_dir="workspace"):
         """
         Initialize the simulation runner.
 
         Args:
             model_name (str): The name of the WOFOST model to run.
-            workspace_dir (str, optional): Directory to store intermediate files and results. 
+            workspace_dir (str, optional): Directory to store intermediate files and results.
                                            Defaults to "workspace".
         """
         self.model_name = model_name
@@ -118,11 +118,13 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
     # =========================================================================
     # 1. UPDATE PARAMETERS IN WORKSPACE
     # =========================================================================
-    def update_parameters(self, crop_overrides=None, soil_overrides=None, site_overrides=None):
+    def update_parameters(
+        self, crop_overrides=None, soil_overrides=None, site_overrides=None
+    ):
         """
         Updates the CSV parameter files in the workspace with new values.
         Changes made by this method are persistent on disk.
-        
+
         Args:
             crop_overrides (dict): Updates for 'params_crop.csv'.
             soil_overrides (dict): Updates for 'params_soil.csv'.
@@ -130,19 +132,19 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
         """
         print(f"[UPDATE] Updating parameters in {self.workspace_dir}...")
         count = 0
-        
+
         if crop_overrides:
             self._update_single_file("crop_params", crop_overrides)
             count += 1
-            
+
         if soil_overrides:
             self._update_single_file("soil_params", soil_overrides)
             count += 1
-            
+
         if site_overrides:
             self._update_single_file("site_params", site_overrides)
             count += 1
-            
+
         print(f"[UPDATE] Done. Updated {count} parameter files.")
 
     def _update_single_file(self, file_key, overrides):
@@ -160,45 +162,45 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
 
         try:
             df = pd.read_csv(fpath)
-            
+
             # Ensure target value column exists
             target_col = "value"
             if target_col not in df.columns:
                 df[target_col] = pd.NA
-                
+
             new_rows = []
-            
+
             for param_name, new_val in overrides.items():
                 if isinstance(new_val, (list, dict)):
                     val_to_write = str(new_val)
                 else:
                     val_to_write = new_val
-                    
+
                 # Find row
                 mask = df["parameter"] == param_name
-                
+
                 if mask.any():
                     # Update existing
                     df.loc[mask, target_col] = val_to_write
                 else:
                     # Create new
                     new_row = {"parameter": param_name, target_col: val_to_write}
-                    
+
                     # Fill other columns with reasonable defaults (optional)
                     if "description" in df.columns:
                         new_row["description"] = "Added via override"
-                        
+
                     new_rows.append(new_row)
 
             # Append all new rows at once
             if new_rows:
                 df = pd.concat([df, pd.DataFrame(new_rows)], ignore_index=True)
-            
+
             df.to_csv(fpath, index=False)
-            
+
         except Exception as e:
             print(f"[ERROR] Failed to update {fpath}: {e}")
-            
+
     # =========================================================================
     # 2. DATA PREPARATION (I/O Bound)
     #    Downloads data and writes config files. Run this BEFORE the simulation.
@@ -220,9 +222,9 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
         state_events=None,
         force_update=False,
         force_param_update=False,
-        crop_overrides=None, 
-        soil_overrides=None, 
-        site_overrides=None
+        crop_overrides=None,
+        soil_overrides=None,
+        site_overrides=None,
     ):
         """
         Prepares the simulation workspace by downloading data and generating configuration files.
@@ -253,7 +255,7 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
             soil_overrides (dict, optional): Initial overrides for soil parameters.
             site_overrides (dict, optional): Initial overrides for site parameters.
         """
-        
+
         print(f"[PREP] Preparing workspace: {self.workspace_dir}")
 
         # A. Weather & Soil (Download/Cache)
@@ -267,13 +269,17 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
             # Only ensure/download raw soil if we actually need to generate params
             soil_raw_path = self._ensure_soil(latitude, longitude, force_update)
             soil_df = pd.read_csv(soil_raw_path)
-            self._save_params(WOFOSTSoilParameterProvider(soil_df, soil_overrides), "soil_params")
+            self._save_params(
+                WOFOSTSoilParameterProvider(soil_df, soil_overrides), "soil_params"
+            )
         else:
             print("[PREP] Using existing Soil parameters.")
 
         # C. Site Params (Check existence before processing)
         if force_param_update or not os.path.exists(self.files["site_params"]):
-            site_provider = WOFOSTSiteParametersProvider(self.model_name, site_overrides)
+            site_provider = WOFOSTSiteParametersProvider(
+                self.model_name, site_overrides
+            )
             self._save_params(site_provider, "site_params")
         else:
             print("[PREP] Using existing Site parameters.")
@@ -281,7 +287,10 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
         # D. Crop Params (Check existence before processing)
         if force_param_update or not os.path.exists(self.files["crop_params"]):
             self._save_params(
-                WOFOSTCropParametersProvider(crop_name, variety_name, self.model_name, crop_overrides), "crop_params"
+                WOFOSTCropParametersProvider(
+                    crop_name, variety_name, self.model_name, crop_overrides
+                ),
+                "crop_params",
             )
         else:
             print("[PREP] Using existing Crop parameters.")
@@ -289,8 +298,17 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
         # E. Agromanagement Generation (Save to YAML)
         if force_update or not os.path.exists(self.files["agro"]):
             self._build_agromanagement(
-                campaign_start, campaign_end, crop_start, crop_end, crop_name, variety_name,
-                crop_start_type, crop_end_type, max_duration, timed_events, state_events
+                campaign_start,
+                campaign_end,
+                crop_start,
+                crop_end,
+                crop_name,
+                variety_name,
+                crop_start_type,
+                crop_end_type,
+                max_duration,
+                timed_events,
+                state_events,
             )
         else:
             print("[PREP] Using existing Agromanagement config.")
@@ -313,10 +331,10 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
         Executes the WOFOST simulation using the prepared files and parameters.
 
         Args:
-            crop_overrides (dict, optional): Runtime overrides for crop params. 
+            crop_overrides (dict, optional): Runtime overrides for crop params.
             soil_overrides (dict, optional): Runtime overrides for soil params.
             site_overrides (dict, optional): Runtime overrides for site params.
-            agro_file_path (str, optional): Path to a custom agromanagement YAML file. 
+            agro_file_path (str, optional): Path to a custom agromanagement YAML file.
                                             If None, uses the default workspace file.
             output_vars (list, optional): List of variable names to retrieve from the simulation.
 
@@ -492,13 +510,34 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
         soil.get_data()
         return self.files["soil"]
 
-    def _build_agromanagement(self, c_start, c_end, start, end, crop, var, 
-                              st_type, end_type, dur, timed_events, state_events):
+    def _build_agromanagement(
+        self,
+        c_start,
+        c_end,
+        start,
+        end,
+        crop,
+        var,
+        st_type,
+        end_type,
+        dur,
+        timed_events,
+        state_events,
+    ):
         """Generates the agromanagement YAML file."""
         agro = WOFOSTAgroManagementProvider()
         agro.add_campaign(
-            c_start, c_end, crop, var, start, end,
-            st_type, end_type, dur, timed_events, state_events,
+            c_start,
+            c_end,
+            crop,
+            var,
+            start,
+            end,
+            st_type,
+            end_type,
+            dur,
+            timed_events,
+            state_events,
         )
         agro.add_trailing_empty_campaign()
         agro.save_to_yaml(self.files["agro"])
@@ -509,10 +548,10 @@ class WOFOSTCropSimulationRunner(WOFOSTOptionsMixin):
     def get_rerunner(self):
         """
         Creates a lightweight, picklable engine instance for fast re-runs.
-        
-        This loads all static data (Weather, Agro, Base Params) into memory 
+
+        This loads all static data (Weather, Agro, Base Params) into memory
         so they don't need to be re-read from disk for every iteration.
-        
+
         Returns:
             _WOFOSTLazyEngine: A callable object that runs the simulation given overrides.
         """
@@ -541,7 +580,7 @@ def _WOFOST_prepare_batch_system(kwargs):
     Unpacks kwargs and runs `prepare_system` for a single location.
     """
     _disable_pcse_logging()
-    
+
     try:
         point_id = kwargs["id"]
         model_name = kwargs["model_name"]
@@ -625,7 +664,7 @@ class WOFOSTCropSimulationBatchRunner(WOFOSTOptionsMixin):
         workspace_dir (str): Root directory for batch results.
         locations_df (pd.DataFrame): DataFrame containing 'id', 'latitude', 'longitude'.
     """
-    
+
     def __init__(self, model_name, locations_csv_path, workspace_dir="batch_workspace"):
         """
         Initializes the batch runner.
@@ -646,38 +685,50 @@ class WOFOSTCropSimulationBatchRunner(WOFOSTOptionsMixin):
     # =========================================================================
     #  UPDATE PARAMETERS IN WORKSPACE
     # =========================================================================
-    def update_parameters(self, crop_overrides=None, soil_overrides=None, site_overrides=None):
+    def update_parameters(
+        self, crop_overrides=None, soil_overrides=None, site_overrides=None
+    ):
         """
         Updates parameter files for ALL locations in the batch.
-        
+
         Args:
             crop_overrides (dict): Updates for 'params_crop.csv'.
             soil_overrides (dict): Updates for 'params_soil.csv'.
             site_overrides (dict): Updates for 'params_site.csv'.
         """
-        print(f"[BATCH UPDATE] Updating parameters for {len(self.locations_df)} locations...")
-        
+        print(
+            f"[BATCH UPDATE] Updating parameters for {len(self.locations_df)} locations..."
+        )
+
         updated_count = 0
-        
+
         # Iterate over all point directories
-        for _, row in tqdm(self.locations_df.iterrows(), total=len(self.locations_df), desc="Updating Params"):
+        for _, row in tqdm(
+            self.locations_df.iterrows(),
+            total=len(self.locations_df),
+            desc="Updating Params",
+        ):
             loc_id = int(row["id"])
             point_dir = os.path.join(self.workspace_dir, f"point_{loc_id}")
-            
+
             # Use the Single Runner's logic to update this specific folder
-            runner = WOFOSTCropSimulationRunner(model_name=self.model_name, workspace_dir=point_dir)
-            
+            runner = WOFOSTCropSimulationRunner(
+                model_name=self.model_name, workspace_dir=point_dir
+            )
+
             if crop_overrides:
                 runner._update_single_file("crop_params", crop_overrides)
             if soil_overrides:
                 runner._update_single_file("soil_params", soil_overrides)
             if site_overrides:
                 runner._update_single_file("site_params", site_overrides)
-                
+
             updated_count += 1
-            
-        print(f"[BATCH UPDATE] Success! Updated parameters in {updated_count} locations.")
-        
+
+        print(
+            f"[BATCH UPDATE] Success! Updated parameters in {updated_count} locations."
+        )
+
     # =========================================================================
     # PHASE 1: PARALLEL SYSTEM PREPARATION
     # =========================================================================
@@ -699,7 +750,7 @@ class WOFOSTCropSimulationBatchRunner(WOFOSTOptionsMixin):
         force_param_update=False,
         crop_overrides=None,
         soil_overrides=None,
-        site_overrides=None
+        site_overrides=None,
     ):
         """
         Runs `prepare_system` for all points in parallel.
@@ -729,14 +780,13 @@ class WOFOSTCropSimulationBatchRunner(WOFOSTOptionsMixin):
 
         # 1. Build Task List
         for _, row in self.locations_df.iterrows():
-            
+
             task_payload = {
                 "id": int(row["id"]),
                 "latitude": row["latitude"],
                 "longitude": row["longitude"],
                 "base_workspace_dir": self.workspace_dir,
                 "model_name": self.model_name,
-                
                 # Mandatory Args
                 "campaign_start": campaign_start,
                 "campaign_end": campaign_end,
@@ -744,7 +794,6 @@ class WOFOSTCropSimulationBatchRunner(WOFOSTOptionsMixin):
                 "crop_end": crop_end,
                 "crop_name": crop_name,
                 "variety_name": variety_name,
-                
                 # Optional Args
                 "crop_start_type": crop_start_type,
                 "crop_end_type": crop_end_type,
@@ -753,7 +802,6 @@ class WOFOSTCropSimulationBatchRunner(WOFOSTOptionsMixin):
                 "state_events": state_events,
                 "force_update": force_update,
                 "force_param_update": force_param_update,
-                
                 # Overrides
                 "crop_overrides": crop_overrides,
                 "soil_overrides": soil_overrides,

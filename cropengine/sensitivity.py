@@ -36,7 +36,7 @@ class WOFOSTSensitivityAnalyzer:
         pcse_logger = logging.getLogger("pcse")
         pcse_logger.handlers = []
         pcse_logger.setLevel(logging.CRITICAL)
-    
+
         self.runner = runner
         self.engines = {}
 

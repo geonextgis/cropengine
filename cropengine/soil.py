@@ -649,7 +649,7 @@ class WOFOSTSoilParameterProvider:
         self.params = self._defaults.copy()
         self.overrides = soil_overrides if soil_overrides else {}
         self.base_metadata = get_wofost_soil_parameters_metadata()
-        
+
         self.param_metadata = []
 
         # Ranges for generating PCSE tables (h in cm, pF = log10(h))

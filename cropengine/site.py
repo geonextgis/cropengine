@@ -21,7 +21,7 @@ class WOFOSTSiteParametersProvider:
         model (str): The name of the WOFOST model version to use.
         site_overrides (dict, optional): Dictionary of parameters to override defaults.
     """
-    
+
     EMERGENCY_DEFAULTS = {
         "WAV": 10.0,
         "CO2": 360.0,
@@ -64,7 +64,7 @@ class WOFOSTSiteParametersProvider:
             raise SiteParameterError(
                 f"Unknown model '{self.model}'. Available models: {valid_models}"
             )
-        
+
     def get_params(self):
         """
         Validates inputs against the prepared metadata, applies defaults,
@@ -72,47 +72,51 @@ class WOFOSTSiteParametersProvider:
         """
         validated_params = {}
         self.param_metadata = []
-        
+
         # 1. Process Valid Parameters defined for this model
         for par_name in self.valid_param_names:
             if par_name not in self.all_param_defs:
                 continue
-            
+
             meta_def = self.all_param_defs[par_name].copy()
-            is_required = (par_name in self.required_params)
+            is_required = par_name in self.required_params
             default_val = meta_def["default"]
-            
+
             if par_name in self.raw_kwargs:
                 value = self.raw_kwargs[par_name]
             else:
                 value = default_val
-                
+
                 if is_required:
                     if value is not None:
-                        print(f"🚨 [WARN] Required site parameter '{par_name}' missing for model '{self.model}'. "
-                              f"Using default value: {value}")
+                        print(
+                            f"🚨 [WARN] Required site parameter '{par_name}' missing for model '{self.model}'. "
+                            f"Using default value: {value}"
+                        )
                     else:
                         if par_name in self.EMERGENCY_DEFAULTS:
                             value = self.EMERGENCY_DEFAULTS[par_name]
-                            print(f"🚨 [WARN] Required site parameter '{par_name}' missing (no YAML default). "
-                                  f"Using emergency fallback: {value}")
+                            print(
+                                f"🚨 [WARN] Required site parameter '{par_name}' missing (no YAML default). "
+                                f"Using emergency fallback: {value}"
+                            )
                         else:
                             raise SiteParameterError(
                                 f"Required parameter '{par_name}' is missing and has no default value."
                             )
-            
+
             # Convert types and check valid ranges
             if value is not None:
                 value = self._convert_and_validate(par_name, value, meta_def)
 
             # Store Result
             validated_params[par_name] = value
-            
+
             # Update Metadata List
             meta_record = {
                 "parameter": par_name,
                 "required": is_required,
-                "value": value
+                "value": value,
             }
             meta_record.update(meta_def)
             self.param_metadata.append(meta_record)

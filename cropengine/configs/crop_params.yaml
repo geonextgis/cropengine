@@ -109,7 +109,7 @@ wofost:
   profiles:
     WOFOST73:
       # Requires CO2 + Reallocation params
-      required: 
+      required:
         - WAV
         - CO2
         - REALLOC_DVS
