@@ -69,7 +69,7 @@ class WOFOSTEnKF:
             config = copy.deepcopy(self.base_config)
 
             for p_name, p_std in param_std.items():
-                # Perturb crop paramaters
+                # Perturb crop parameters
                 curr_val = config["params"][p_name]
                 new_val = self.rng.normal(curr_val, p_std)
                 config["params"][p_name] = max(0, new_val)
