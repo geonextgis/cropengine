@@ -12,9 +12,13 @@
         <meta name="author" content="geonextgis">
       
       
-        <link rel="canonical" href="https://geonextgis.github.io/cropengine/examples/Run%20wofost%20%28single%20location%29%20copy/">
+        <link rel="canonical" href="https://geonextgis.github.io/cropengine/examples/Run%20data%20assimilation%20%28wofost%29/">
       
       
+        <link rel="prev" href="../Run%20parameter%20optimization%20%28wofost%29/">
+      
+      
+        <link rel="next" href="../../cropengine/">
       
       
         
@@ -25,7 +29,7 @@
     
     
       
-        <title>Run wofost (single location) copy - cropengine</title>
+        <title>Run data assimilation (wofost) - cropengine</title>
       
     
     
@@ -115,7 +119,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Run wofost (single location) copy
+              Run data assimilation (wofost)
             
           </span>
         </div>
@@ -451,18 +455,20 @@
       
   
   
+    
   
   
+  
     
     
     
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
         
           
           <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
@@ -483,7 +489,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             
@@ -601,6 +607,154 @@
   
 
       </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run data assimilation (wofost)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Run data assimilation (wofost)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#import-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Import libraries
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#instantiate-crop-simulation-engine-for-wofost" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Instantiate crop simulation engine for WOFOST
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#prepare-system-must-be-implemented-before-running-the-simulation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Prepare system (must be implemented before running the simulation)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#read-the-observations-for-lai-and-sm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Read the observations for LAI and SM
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#initialize-and-run-data-assimilation-using-ensemble-kalman-filter" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Initialize and run data assimilation using Ensemble Kalman Filter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summarize-the-ensemble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summarize the ensemble
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plot-the-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plot the data
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -947,6 +1101,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../assimilation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    assimilation module
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../output/" class="md-nav__link">
         
   
@@ -1011,32 +1193,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#user-inputs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        User inputs
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
   <a href="#instantiate-crop-simulation-engine-for-wofost" class="md-nav__link">
     <span class="md-ellipsis">
       
         Instantiate crop simulation engine for WOFOST
-      
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#create-agromanagements-with-user-inputs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Create agromanagements with user inputs
       
     </span>
   </a>
@@ -1055,38 +1215,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#get-the-parameters-table-to-be-displayed-in-the-dashboard" class="md-nav__link">
+  <a href="#read-the-observations-for-lai-and-sm" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Get the parameters table to be displayed in the dashboard
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="Get the parameters table to be displayed in the dashboard">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#soil-parameters" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Soil parameters
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#run-the-simulation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Run the Simulation
+        Read the observations for LAI and SM
       
     </span>
   </a>
@@ -1094,10 +1226,32 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#plot-the-simulation-output" class="md-nav__link">
+  <a href="#initialize-and-run-data-assimilation-using-ensemble-kalman-filter" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Plot the simulation output
+        Initialize and run data assimilation using Ensemble Kalman Filter
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#summarize-the-ensemble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Summarize the ensemble
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plot-the-data" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Plot the data
       
     </span>
   </a>
@@ -1118,7 +1272,7 @@
               <article class="md-content__inner md-typeset">
                 
 
-    <a href="/cropengine/examples/Run%20wofost%20%28single%20location%29%20copy/Run wofost (single location) copy.ipynb" title="Download Notebook" class="md-content__button md-icon">
+    <a href="/cropengine/examples/Run%20data%20assimilation%20%28wofost%29/Run data assimilation (wofost).ipynb" title="Download Notebook" class="md-content__button md-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M5 20h14v-2H5m14-9h-4V3H9v6H5l7 7z"/></svg>
     </a>
 
@@ -1131,7 +1285,7 @@
   
 
 
-  <h1>Run wofost (single location) copy</h1>
+  <h1>Run data assimilation (wofost)</h1>
 
 <script>
 (function (global, factory) {
@@ -1575,7 +1729,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p><a href="https://githubtocolab.com/geonextgis/cropengine/blob/main/docs/examples/Run wofost (single location).ipynb" target="_parent"><img alt="Open in Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
+<p><a href="https://githubtocolab.com/geonextgis/cropengine/blob/main/docs/examples/Run data assimilation (wofost).ipynb" target="_parent"><img alt="Open in Colab" src="https://colab.research.google.com/assets/colab-badge.svg"/></a></p>
 <p>Uncomment the following line to install the latest version of <a href="https://geonextgis.github.io/cropengine">cropengine</a> if needed.</p>
 </div>
 </div>
@@ -1639,15 +1793,15 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">cropengine</span><span class="w"> </span><span class="kn">import</span> <span class="n">WOFOSTCropSimulationRunner</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">cropengine.agromanagement</span><span class="w"> </span><span class="kn">import</span> <span class="n">WOFOSTAgroEventBuilder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cropengine.assimilation</span><span class="w"> </span><span class="kn">import</span> <span class="n">WOFOSTEnKF</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-2">import os
 import pandas as pd
-import seaborn as sns
+import matplotlib.pyplot as plt
 from cropengine import WOFOSTCropSimulationRunner
-from cropengine.agromanagement import WOFOSTAgroEventBuilder</div>
+from cropengine.assimilation import WOFOSTEnKF</div>
 </div>
 </div>
 </div>
@@ -1660,23 +1814,12 @@ from cropengine.agromanagement import WOFOSTAgroEventBuilder</div>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="user-inputs">User inputs<a class="anchor-link" href="#user-inputs">¶</a></h2>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="instantiate-crop-simulation-engine-for-wofost">Instantiate crop simulation engine for WOFOST<a class="anchor-link" href="#instantiate-crop-simulation-engine-for-wofost">¶</a></h2>
 </div>
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=6">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=5">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -1695,19 +1838,19 @@ from cropengine.agromanagement import WOFOSTAgroEventBuilder</div>
 </clipboard-copy>
 </div>
 <div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Define the model name</span>
-<span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">"Wofost81_PP"</span>
+<span class="n">MODEL_NAME</span> <span class="o">=</span> <span class="s2">"Wofost72_WLP_CWB"</span>
 
 <span class="c1"># Initialize Engine</span>
 <span class="n">runner</span> <span class="o">=</span> <span class="n">WOFOSTCropSimulationRunner</span><span class="p">(</span>
-    <span class="n">model_name</span><span class="o">=</span><span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">workspace_dir</span><span class="o">=</span><span class="s2">"test_output/location_workspace"</span>
+    <span class="n">model_name</span><span class="o">=</span><span class="n">MODEL_NAME</span><span class="p">,</span> <span class="n">workspace_dir</span><span class="o">=</span><span class="s2">"test_output/assimilation_workspace"</span>
 <span class="p">)</span>
 </pre></div>
 <div class="clipboard-copy-txt" id="cell-3"># Define the model name
-MODEL_NAME = "Wofost81_PP"
+MODEL_NAME = "Wofost72_WLP_CWB"
 
 # Initialize Engine
 runner = WOFOSTCropSimulationRunner(
-    model_name=MODEL_NAME, workspace_dir="test_output/location_workspace"
+    model_name=MODEL_NAME, workspace_dir="test_output/assimilation_workspace"
 )</div>
 </div>
 </div>
@@ -1715,7 +1858,7 @@ runner = WOFOSTCropSimulationRunner(
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=7">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=6">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -1724,37 +1867,6 @@ runner = WOFOSTCropSimulationRunner(
 <div class="CodeMirror cm-s-jupyter">
 <div class="zeroclipboard-container">
 <clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-4">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">runner</span><span class="o">.</span><span class="n">get_model_options</span><span class="p">())[</span><span class="s2">"id"</span><span class="p">]</span><span class="o">.</span><span class="n">unique</span><span class="p">()</span>
-
-<span class="c1"># [Wofost72_Phenology, Wofost72_PP, Wofost72_WLP_CWB, Wofost73_PP, Wofost73_WLP_CWB]</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-4">pd.DataFrame(runner.get_model_options())["id"].unique()
-
-# [Wofost72_Phenology, Wofost72_PP, Wofost72_WLP_CWB, Wofost73_PP, Wofost73_WLP_CWB]</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=8">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-5">
 <div>
 <span class="notice" hidden="">Copied!</span>
 <svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
@@ -1786,7 +1898,7 @@ runner = WOFOSTCropSimulationRunner(
 <span class="n">CAMPAIGN_END</span> <span class="o">=</span> <span class="s2">"2007-01-01"</span>
 <span class="n">MAX_DURATION</span> <span class="o">=</span> <span class="mi">300</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-5"># Location
+<div class="clipboard-copy-txt" id="cell-4"># Location
 LATITUDE = 53.3721
 LONGITUDE = 13.82299
 
@@ -1813,13 +1925,81 @@ MAX_DURATION = 300</div>
 </div>
 </div>
 </div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=7">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="prepare-system-must-be-implemented-before-running-the-simulation">Prepare system (must be implemented before running the simulation)<a class="anchor-link" href="#prepare-system-must-be-implemented-before-running-the-simulation">¶</a></h2>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=8">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="CodeMirror cm-s-jupyter">
+<div class="zeroclipboard-container">
+<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-5">
+<div>
+<span class="notice" hidden="">Copied!</span>
+<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
+<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
+</svg>
+</div>
+</clipboard-copy>
+</div>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">runner</span><span class="o">.</span><span class="n">prepare_system</span><span class="p">(</span>
+    <span class="n">latitude</span><span class="o">=</span><span class="n">LATITUDE</span><span class="p">,</span>
+    <span class="n">longitude</span><span class="o">=</span><span class="n">LONGITUDE</span><span class="p">,</span>
+    <span class="n">campaign_start</span><span class="o">=</span><span class="n">CAMPAIGN_START</span><span class="p">,</span>
+    <span class="n">campaign_end</span><span class="o">=</span><span class="n">CAMPAIGN_END</span><span class="p">,</span>
+    <span class="n">crop_start</span><span class="o">=</span><span class="n">CROP_START</span><span class="p">,</span>
+    <span class="n">crop_start_type</span><span class="o">=</span><span class="n">CROP_START_TYPE</span><span class="p">,</span>
+    <span class="n">crop_end_type</span><span class="o">=</span><span class="n">CROP_END_TYPE</span><span class="p">,</span>
+    <span class="n">crop_end</span><span class="o">=</span><span class="n">CROP_END</span><span class="p">,</span>
+    <span class="n">max_duration</span><span class="o">=</span><span class="n">MAX_DURATION</span><span class="p">,</span>
+    <span class="n">crop_name</span><span class="o">=</span><span class="n">CROP_NAME</span><span class="p">,</span>
+    <span class="n">variety_name</span><span class="o">=</span><span class="n">CROP_VARIETY</span><span class="p">,</span>
+    <span class="n">force_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">force_param_update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">site_overrides</span><span class="o">=</span><span class="p">{</span><span class="s2">"WAV"</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>  <span class="c1"># Extra site params can be passed as overrides</span>
+<span class="p">)</span>
+</pre></div>
+<div class="clipboard-copy-txt" id="cell-5">runner.prepare_system(
+    latitude=LATITUDE,
+    longitude=LONGITUDE,
+    campaign_start=CAMPAIGN_START,
+    campaign_end=CAMPAIGN_END,
+    crop_start=CROP_START,
+    crop_start_type=CROP_START_TYPE,
+    crop_end_type=CROP_END_TYPE,
+    crop_end=CROP_END,
+    max_duration=MAX_DURATION,
+    crop_name=CROP_NAME,
+    variety_name=CROP_VARIETY,
+    force_update=False,
+    force_param_update=True,
+    site_overrides={"WAV": 10},  # Extra site params can be passed as overrides
+)</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
 <div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=9">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="create-agromanagements-with-user-inputs">Create agromanagements with user inputs<a class="anchor-link" href="#create-agromanagements-with-user-inputs">¶</a></h2>
+<h2 id="read-the-observations-for-lai-and-sm">Read the observations for LAI and SM<a class="anchor-link" href="#read-the-observations-for-lai-and-sm">¶</a></h2>
 </div>
 </div>
 </div>
@@ -1842,65 +2022,35 @@ MAX_DURATION = 300</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">agro_event_builder</span> <span class="o">=</span> <span class="n">WOFOSTAgroEventBuilder</span><span class="p">()</span>
-
-<span class="c1"># Note: Use agro_event_builder.get_..._events_info() to see valid values if unsure</span>
-<span class="n">timed_events_info</span> <span class="o">=</span> <span class="n">agro_event_builder</span><span class="o">.</span><span class="n">get_timed_events_info</span><span class="p">()</span>
-<span class="n">state_events_info</span> <span class="o">=</span> <span class="n">agro_event_builder</span><span class="o">.</span><span class="n">get_state_events_info</span><span class="p">()</span>
-
-<span class="c1"># Build timed events (irrigation)</span>
-<span class="n">irrigation_schedule</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">"event_date"</span><span class="p">:</span> <span class="s2">"2006-05-25"</span><span class="p">,</span> <span class="s2">"amount"</span><span class="p">:</span> <span class="mf">3.0</span><span class="p">,</span> <span class="s2">"efficiency"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">"event_date"</span><span class="p">:</span> <span class="s2">"2006-06-30"</span><span class="p">,</span> <span class="s2">"amount"</span><span class="p">:</span> <span class="mf">2.5</span><span class="p">,</span> <span class="s2">"efficiency"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">},</span>
-<span class="p">]</span>
-
-<span class="n">irrigation_events</span> <span class="o">=</span> <span class="n">agro_event_builder</span><span class="o">.</span><span class="n">create_timed_events</span><span class="p">(</span>
-    <span class="n">signal_type</span><span class="o">=</span><span class="s2">"irrigate"</span><span class="p">,</span> <span class="n">events_list</span><span class="o">=</span><span class="n">irrigation_schedule</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Prepare a demo observation data</span>
+<span class="n">obs_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">"date"</span><span class="p">:</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">([</span><span class="s2">"2006-06-01"</span><span class="p">,</span> <span class="s2">"2006-07-01"</span><span class="p">,</span> <span class="s2">"2006-08-01"</span><span class="p">]),</span>
+        <span class="s2">"LAI"</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.5</span><span class="p">,</span> <span class="mf">4.2</span><span class="p">,</span> <span class="mf">3.8</span><span class="p">],</span>
+        <span class="s2">"SM"</span><span class="p">:</span> <span class="p">[</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.25</span><span class="p">,</span> <span class="mf">0.22</span><span class="p">],</span>
+    <span class="p">}</span>
 <span class="p">)</span>
 
-<span class="c1"># Build state Events (fertilization based on DVS)</span>
-<span class="n">nitrogen_schedule</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="p">{</span><span class="s2">"threshold"</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">,</span> <span class="s2">"N_amount"</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span> <span class="s2">"N_recovery"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">"threshold"</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span> <span class="s2">"N_amount"</span><span class="p">:</span> <span class="mi">60</span><span class="p">,</span> <span class="s2">"N_recovery"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">},</span>
-    <span class="p">{</span><span class="s2">"threshold"</span><span class="p">:</span> <span class="mf">1.12</span><span class="p">,</span> <span class="s2">"N_amount"</span><span class="p">:</span> <span class="mi">40</span><span class="p">,</span> <span class="s2">"N_recovery"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">},</span>
-<span class="p">]</span>
+<span class="c1"># Define uncertainty in the observation</span>
+<span class="n">uncertainty</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"LAI"</span><span class="p">:</span> <span class="mf">0.2</span><span class="p">,</span> <span class="s2">"SM"</span><span class="p">:</span> <span class="mf">0.05</span><span class="p">}</span>
 
-<span class="n">nitrogen_events</span> <span class="o">=</span> <span class="n">agro_event_builder</span><span class="o">.</span><span class="n">create_state_events</span><span class="p">(</span>
-    <span class="n">signal_type</span><span class="o">=</span><span class="s2">"apply_n"</span><span class="p">,</span>
-    <span class="n">state_var</span><span class="o">=</span><span class="s2">"DVS"</span><span class="p">,</span>
-    <span class="n">zero_condition</span><span class="o">=</span><span class="s2">"rising"</span><span class="p">,</span>
-    <span class="n">events_list</span><span class="o">=</span><span class="n">nitrogen_schedule</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="c1"># Deefine the state variables to track</span>
+<span class="n">states</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"LAI"</span><span class="p">,</span> <span class="s2">"SM"</span><span class="p">,</span> <span class="s2">"TWST"</span><span class="p">,</span> <span class="s2">"TWSO"</span><span class="p">]</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-6">agro_event_builder = WOFOSTAgroEventBuilder()
-
-# Note: Use agro_event_builder.get_..._events_info() to see valid values if unsure
-timed_events_info = agro_event_builder.get_timed_events_info()
-state_events_info = agro_event_builder.get_state_events_info()
-
-# Build timed events (irrigation)
-irrigation_schedule = [
-    {"event_date": "2006-05-25", "amount": 3.0, "efficiency": 0.7},
-    {"event_date": "2006-06-30", "amount": 2.5, "efficiency": 0.7},
-]
-
-irrigation_events = agro_event_builder.create_timed_events(
-    signal_type="irrigate", events_list=irrigation_schedule
+<div class="clipboard-copy-txt" id="cell-6"># Prepare a demo observation data
+obs_df = pd.DataFrame(
+    {
+        "date": pd.to_datetime(["2006-06-01", "2006-07-01", "2006-08-01"]),
+        "LAI": [1.5, 4.2, 3.8],
+        "SM": [0.2, 0.25, 0.22],
+    }
 )
 
-# Build state Events (fertilization based on DVS)
-nitrogen_schedule = [
-    {"threshold": 0.3, "N_amount": 40, "N_recovery": 0.7},
-    {"threshold": 0.6, "N_amount": 60, "N_recovery": 0.7},
-    {"threshold": 1.12, "N_amount": 40, "N_recovery": 0.7},
-]
+# Define uncertainty in the observation
+uncertainty = {"LAI": 0.2, "SM": 0.05}
 
-nitrogen_events = agro_event_builder.create_state_events(
-    signal_type="apply_n",
-    state_var="DVS",
-    zero_condition="rising",
-    events_list=nitrogen_schedule,
-)</div>
+# Deefine the state variables to track
+states = ["LAI", "SM", "TWST", "TWSO"]</div>
 </div>
 </div>
 </div>
@@ -1913,7 +2063,7 @@ nitrogen_events = agro_event_builder.create_state_events(
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="prepare-system-must-be-implemented-before-running-the-simulation">Prepare system (must be implemented before running the simulation)<a class="anchor-link" href="#prepare-system-must-be-implemented-before-running-the-simulation">¶</a></h2>
+<h2 id="initialize-and-run-data-assimilation-using-ensemble-kalman-filter">Initialize and run data assimilation using Ensemble Kalman Filter<a class="anchor-link" href="#initialize-and-run-data-assimilation-using-ensemble-kalman-filter">¶</a></h2>
 </div>
 </div>
 </div>
@@ -1936,43 +2086,37 @@ nitrogen_events = agro_event_builder.create_state_events(
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">runner</span><span class="o">.</span><span class="n">prepare_system</span><span class="p">(</span>
-    <span class="n">latitude</span><span class="o">=</span><span class="n">LATITUDE</span><span class="p">,</span>
-    <span class="n">longitude</span><span class="o">=</span><span class="n">LONGITUDE</span><span class="p">,</span>
-    <span class="n">campaign_start</span><span class="o">=</span><span class="n">CAMPAIGN_START</span><span class="p">,</span>
-    <span class="n">campaign_end</span><span class="o">=</span><span class="n">CAMPAIGN_END</span><span class="p">,</span>
-    <span class="n">crop_start</span><span class="o">=</span><span class="n">CROP_START</span><span class="p">,</span>
-    <span class="n">crop_start_type</span><span class="o">=</span><span class="n">CROP_START_TYPE</span><span class="p">,</span>
-    <span class="n">crop_end_type</span><span class="o">=</span><span class="n">CROP_END_TYPE</span><span class="p">,</span>
-    <span class="n">crop_end</span><span class="o">=</span><span class="n">CROP_END</span><span class="p">,</span>
-    <span class="n">max_duration</span><span class="o">=</span><span class="n">MAX_DURATION</span><span class="p">,</span>
-    <span class="n">crop_name</span><span class="o">=</span><span class="n">CROP_NAME</span><span class="p">,</span>
-    <span class="n">variety_name</span><span class="o">=</span><span class="n">CROP_VARIETY</span><span class="p">,</span>
-    <span class="n">timed_events</span><span class="o">=</span><span class="p">[</span><span class="n">irrigation_events</span><span class="p">],</span>
-    <span class="n">state_events</span><span class="o">=</span><span class="p">[</span><span class="n">nitrogen_events</span><span class="p">],</span>
-    <span class="n">force_update</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">force_param_update</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">site_overrides</span><span class="o">=</span><span class="p">{</span><span class="s2">"WAV"</span><span class="p">:</span> <span class="mi">10</span><span class="p">},</span>  <span class="c1"># Extra site params can be passed as overrides</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Initialize WOFOSTEnKF</span>
+<span class="n">enkf</span> <span class="o">=</span> <span class="n">WOFOSTEnKF</span><span class="p">(</span><span class="n">runner</span><span class="p">,</span> <span class="n">ensemble_size</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>
+
+<span class="c1"># Setup ensemble</span>
+<span class="c1"># Here we perturb the leaf lifespan (SPAN) and temperature sum (TSUM1)</span>
+<span class="c1"># to create variety in the ensemble growth curves.</span>
+<span class="n">enkf</span><span class="o">.</span><span class="n">setup_ensemble</span><span class="p">(</span><span class="n">param_std</span><span class="o">=</span><span class="p">{</span><span class="s2">"TDWI"</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s2">"WAV"</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span> <span class="s2">"SPAN"</span><span class="p">:</span> <span class="mf">5.0</span><span class="p">,</span> <span class="s2">"SMFCF"</span><span class="p">:</span> <span class="mf">0.03</span><span class="p">})</span>
+
+<span class="c1"># Run assimilation</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">enkf</span><span class="o">.</span><span class="n">run_assimilation</span><span class="p">(</span>
+    <span class="n">observations_df</span><span class="o">=</span><span class="n">obs_df</span><span class="p">,</span> <span class="n">observation_std</span><span class="o">=</span><span class="n">uncertainty</span><span class="p">,</span> <span class="n">state_vars</span><span class="o">=</span><span class="n">states</span>
 <span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">results</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-7">runner.prepare_system(
-    latitude=LATITUDE,
-    longitude=LONGITUDE,
-    campaign_start=CAMPAIGN_START,
-    campaign_end=CAMPAIGN_END,
-    crop_start=CROP_START,
-    crop_start_type=CROP_START_TYPE,
-    crop_end_type=CROP_END_TYPE,
-    crop_end=CROP_END,
-    max_duration=MAX_DURATION,
-    crop_name=CROP_NAME,
-    variety_name=CROP_VARIETY,
-    timed_events=[irrigation_events],
-    state_events=[nitrogen_events],
-    force_update=False,
-    force_param_update=True,
-    site_overrides={"WAV": 10},  # Extra site params can be passed as overrides
-)</div>
+<div class="clipboard-copy-txt" id="cell-7"># Initialize WOFOSTEnKF
+enkf = WOFOSTEnKF(runner, ensemble_size=50)
+
+# Setup ensemble
+# Here we perturb the leaf lifespan (SPAN) and temperature sum (TSUM1)
+# to create variety in the ensemble growth curves.
+enkf.setup_ensemble(param_std={"TDWI": 0.5, "WAV": 10, "SPAN": 5.0, "SMFCF": 0.03})
+
+# Run assimilation
+results = enkf.run_assimilation(
+    observations_df=obs_df, observation_std=uncertainty, state_vars=states
+)
+
+print(results.shape)
+results.head()</div>
 </div>
 </div>
 </div>
@@ -1985,23 +2129,12 @@ nitrogen_events = agro_event_builder.create_state_events(
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="get-the-parameters-table-to-be-displayed-in-the-dashboard">Get the parameters table to be displayed in the dashboard<a class="anchor-link" href="#get-the-parameters-table-to-be-displayed-in-the-dashboard">¶</a></h2>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=14">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h3 id="soil-parameters">Soil parameters<a class="anchor-link" href="#soil-parameters">¶</a></h3>
+<h2 id="summarize-the-ensemble">Summarize the ensemble<a class="anchor-link" href="#summarize-the-ensemble">¶</a></h2>
 </div>
 </div>
 </div>
 </div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=15">
+<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=14">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -2019,15 +2152,42 @@ nitrogen_events = agro_event_builder.create_state_events(
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">soil_params</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">runner</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">"soil_params"</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">soil_params</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">soil_params</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">summary</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s2">"day"</span><span class="p">)</span><span class="o">.</span><span class="n">agg</span><span class="p">(</span>
+    <span class="p">{</span>
+        <span class="s2">"LAI"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"mean"</span><span class="p">,</span> <span class="s2">"std"</span><span class="p">],</span>
+        <span class="s2">"SM"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"mean"</span><span class="p">,</span> <span class="s2">"std"</span><span class="p">],</span>
+        <span class="s2">"TWST"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"mean"</span><span class="p">,</span> <span class="s2">"std"</span><span class="p">],</span>
+        <span class="s2">"TWSO"</span><span class="p">:</span> <span class="p">[</span><span class="s2">"mean"</span><span class="p">,</span> <span class="s2">"std"</span><span class="p">],</span>
+    <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">summary</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+<span class="n">summary</span><span class="o">.</span><span class="n">tail</span><span class="p">()</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-8">soil_params = pd.read_csv(runner.files["soil_params"])
-print(soil_params.shape)
-soil_params.head()</div>
+<div class="clipboard-copy-txt" id="cell-8">summary = results.groupby("day").agg(
+    {
+        "LAI": ["mean", "std"],
+        "SM": ["mean", "std"],
+        "TWST": ["mean", "std"],
+        "TWSO": ["mean", "std"],
+    }
+)
+
+print(summary.shape)
+summary.tail()</div>
 </div>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=15">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="plot-the-data">Plot the data<a class="anchor-link" href="#plot-the-data">¶</a></h2>
 </div>
 </div>
 </div>
@@ -2050,195 +2210,86 @@ soil_params.head()</div>
 </div>
 </clipboard-copy>
 </div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">site_params</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">runner</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">"site_params"</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">site_params</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">site_params</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-9">site_params = pd.read_csv(runner.files["site_params"])
-print(site_params.shape)
-site_params.head()</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=17">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-10">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">crop_params</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">runner</span><span class="o">.</span><span class="n">files</span><span class="p">[</span><span class="s2">"crop_params"</span><span class="p">])</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">crop_params</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">crop_params</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-10">crop_params = pd.read_csv(runner.files["crop_params"])
-print(crop_params.shape)
-crop_params.head()</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=18">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="run-the-simulation">Run the Simulation<a class="anchor-link" href="#run-the-simulation">¶</a></h2>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=19">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-11">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="n">simulation_output</span> <span class="o">=</span> <span class="n">runner</span><span class="o">.</span><span class="n">run_simulation</span><span class="p">(</span>
-    <span class="n">soil_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># Runtime soil params can be passed as overrides</span>
-    <span class="n">site_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># Runtime site parameters can be passed as overrides</span>
-    <span class="n">crop_overrides</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># Runtime crop parameters can be passed as overrides</span>
-    <span class="n">agro_file_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># Runtime agro_file_path if any</span>
-<span class="p">)</span>
+<div class="highlight-ipynb hl-python"><pre><span></span><span class="c1"># Simulation summary (your EnKF output)</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">summary</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">df</span><span class="o">.</span><span class="n">dropna</span><span class="p">(</span><span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">)</span>
 
-<span class="c1"># Set day as index</span>
-<span class="n">simulation_output</span> <span class="o">=</span> <span class="n">simulation_output</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"day"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">simulation_output</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-<span class="n">simulation_output</span><span class="o">.</span><span class="n">head</span><span class="p">()</span>
-</pre></div>
-<div class="clipboard-copy-txt" id="cell-11">simulation_output = runner.run_simulation(
-    soil_overrides=None,  # Runtime soil params can be passed as overrides
-    site_overrides=None,  # Runtime site parameters can be passed as overrides
-    crop_overrides=None,  # Runtime crop parameters can be passed as overrides
-    agro_file_path=None,  # Runtime agro_file_path if any
-)
+<span class="c1"># Observations</span>
+<span class="n">obs</span> <span class="o">=</span> <span class="n">obs_df</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">obs</span><span class="p">[</span><span class="s2">"date"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="s2">"date"</span><span class="p">])</span>
 
-# Set day as index
-simulation_output = simulation_output.set_index("day")
-print(simulation_output.shape)
-simulation_output.head()</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=20">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="plot-the-simulation-output">Plot the simulation output<a class="anchor-link" href="#plot-the-simulation-output">¶</a></h2>
-</div>
-</div>
-</div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs">
-<div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=21">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div><div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
-<div class="CodeMirror cm-s-jupyter">
-<div class="zeroclipboard-container">
-<clipboard-copy ,="" aria-label="Copy to Clipboard" for="cell-12">
-<div>
-<span class="notice" hidden="">Copied!</span>
-<svg aria-hidden="true" class="clipboard-copy-icon" data-view-component="true" height="20" version="1.1" viewbox="0 0 16 16" width="20">
-<path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 010 1.5h-1.5a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-1.5a.75.75 0 011.5 0v1.5A1.75 1.75 0 019.25 16h-7.5A1.75 1.75 0 010 14.25v-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-<path d="M5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0114.25 11h-7.5A1.75 1.75 0 015 9.25v-7.5zm1.75-.25a.25.25 0 00-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 00.25-.25v-7.5a.25.25 0 00-.25-.25h-7.5z" fill="currentColor" fill-rule="evenodd"></path>
-</svg>
-</div>
-</clipboard-copy>
-</div>
-<div class="highlight-ipynb hl-python"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="n">state_vars</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"LAI"</span><span class="p">,</span> <span class="s2">"SM"</span><span class="p">,</span> <span class="s2">"TWST"</span><span class="p">,</span> <span class="s2">"TWSO"</span><span class="p">]</span>
 
-<span class="c1"># Variables</span>
-<span class="n">cols</span> <span class="o">=</span> <span class="mi">2</span>
-<span class="n">n_vars</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">simulation_output</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-<span class="n">rows</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">n_vars</span> <span class="o">/</span> <span class="n">cols</span><span class="p">)</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">axes</span> <span class="o">=</span> <span class="n">axes</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span>
 
-<span class="c1"># Use a categorical color palette large enough</span>
-<span class="n">palette</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s2">"tab20"</span><span class="p">,</span> <span class="n">n_vars</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">state_vars</span><span class="p">):</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">var</span><span class="p">,</span> <span class="s2">"mean"</span><span class="p">)]</span>
+    <span class="n">std</span> <span class="o">=</span> <span class="n">df</span><span class="p">[(</span><span class="n">var</span><span class="p">,</span> <span class="s2">"std"</span><span class="p">)]</span>
 
-<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">rows</span><span class="p">),</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">axes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">var</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">simulation_output</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">lineplot</span><span class="p">(</span>
-        <span class="n">x</span><span class="o">=</span><span class="n">simulation_output</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
-        <span class="n">y</span><span class="o">=</span><span class="n">simulation_output</span><span class="p">[</span><span class="n">var</span><span class="p">],</span>
-        <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
-        <span class="n">color</span><span class="o">=</span><span class="n">palette</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+    <span class="c1"># Ensemble mean ± std</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">mean</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Model </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2"> (mean)"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span>
+        <span class="n">df</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">mean</span> <span class="o">-</span> <span class="n">std</span><span class="p">,</span> <span class="n">mean</span> <span class="o">+</span> <span class="n">std</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Model </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2"> ± std"</span>
     <span class="p">)</span>
 
-<span class="c1"># Hide unused axes</span>
-<span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">axes</span><span class="p">)):</span>
-    <span class="n">axes</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">axis</span><span class="p">(</span><span class="s2">"off"</span><span class="p">)</span>
+    <span class="c1"># Observations (if available)</span>
+    <span class="k">if</span> <span class="n">var</span> <span class="ow">in</span> <span class="n">obs</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">errorbar</span><span class="p">(</span><span class="n">obs</span><span class="p">[</span><span class="s2">"date"</span><span class="p">],</span> <span class="n">obs</span><span class="p">[</span><span class="n">var</span><span class="p">],</span> <span class="n">fmt</span><span class="o">=</span><span class="s2">"o"</span><span class="p">,</span> <span class="n">capsize</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s2">"Observed </span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">var</span><span class="si">}</span><span class="s2"> assimilation (EnKF)"</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">var</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">8</span><span class="p">)</span>
+
+<span class="c1"># Common x-label</span>
+<span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">[</span><span class="mi">2</span><span class="p">:]:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">"Date"</span><span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
-<div class="clipboard-copy-txt" id="cell-12">import matplotlib.pyplot as plt
-import seaborn as sns
-import numpy as np
-import math
+<div class="clipboard-copy-txt" id="cell-9"># Simulation summary (your EnKF output)
+df = summary.copy()
+df.dropna(inplace=True)
+df.index = pd.to_datetime(df.index)
 
-# Variables
-cols = 2
-n_vars = len(simulation_output.columns)
-rows = math.ceil(n_vars / cols)
+# Observations
+obs = obs_df.copy()
+obs["date"] = pd.to_datetime(obs["date"])
 
-# Use a categorical color palette large enough
-palette = sns.color_palette("tab20", n_vars)
+state_vars = ["LAI", "SM", "TWST", "TWSO"]
 
-fig, axes = plt.subplots(rows, cols, figsize=(14, 2 * rows), sharex=True)
-axes = np.array(axes).reshape(-1)
+fig, axes = plt.subplots(2, 2, figsize=(14, 8), sharex=True)
+axes = axes.flatten()
 
-for i, var in enumerate(simulation_output.columns):
-    sns.lineplot(
-        x=simulation_output.index,
-        y=simulation_output[var],
-        ax=axes[i],
-        color=palette[i],
+for i, var in enumerate(state_vars):
+    mean = df[(var, "mean")]
+    std = df[(var, "std")]
+
+    ax = axes[i]
+
+    # Ensemble mean ± std
+    ax.plot(df.index, mean, label=f"Model {var} (mean)")
+    ax.fill_between(
+        df.index, mean - std, mean + std, alpha=0.3, label=f"Model {var} ± std"
     )
 
-# Hide unused axes
-for j in range(i + 1, len(axes)):
-    axes[j].axis("off")
+    # Observations (if available)
+    if var in obs.columns:
+        ax.errorbar(obs["date"], obs[var], fmt="o", capsize=4, label=f"Observed {var}")
+
+    ax.set_title(f"{var} assimilation (EnKF)")
+    ax.set_ylabel(var)
+    ax.grid(alpha=0.3)
+    ax.legend(fontsize=8)
+
+# Common x-label
+for ax in axes[2:]:
+    ax.set_xlabel("Date")
 
 plt.tight_layout()
 plt.show()</div>
@@ -2277,7 +2328,7 @@ plt.show()</div>
     <span class="md-icon" title="Last update">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21 13.1c-.1 0-.3.1-.4.2l-1 1 2.1 2.1 1-1c.2-.2.2-.6 0-.8l-1.3-1.3c-.1-.1-.2-.2-.4-.2m-1.9 1.8-6.1 6V23h2.1l6.1-6.1zM12.5 7v5.2l4 2.4-1 1L11 13V7zM11 21.9c-5.1-.5-9-4.8-9-9.9C2 6.5 6.5 2 12 2c5.3 0 9.6 4.1 10 9.3-.3-.1-.6-.2-1-.2s-.7.1-1 .2C19.6 7.2 16.2 4 12 4c-4.4 0-8 3.6-8 8 0 4.1 3.1 7.5 7.1 7.9l-.1.2z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="December 25, 2025 13:47:21 UTC"><span class="timeago" datetime="2025-12-25T13:47:21+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="December 25, 2025 13:47:21 UTC">2025-12-25</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="January 7, 2026 14:40:11 UTC"><span class="timeago" datetime="2026-01-07T14:40:11+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="January 7, 2026 14:40:11 UTC">2026-01-07</span>
   </span>
 
     
@@ -2287,7 +2338,7 @@ plt.show()</div>
     <span class="md-icon" title="Created">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M14.47 15.08 11 13V7h1.5v5.25l3.08 1.83c-.41.28-.79.62-1.11 1m-1.39 4.84c-.36.05-.71.08-1.08.08-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8c0 .37-.03.72-.08 1.08.69.1 1.33.32 1.92.64.1-.56.16-1.13.16-1.72 0-5.5-4.5-10-10-10S2 6.5 2 12s4.47 10 10 10c.59 0 1.16-.06 1.72-.16-.32-.59-.54-1.23-.64-1.92M18 15v3h-3v2h3v3h2v-3h3v-2h-3v-3z"/></svg>
     </span>
-    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="December 25, 2025 13:46:30 UTC"><span class="timeago" datetime="2025-12-25T13:46:30+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="December 25, 2025 13:46:30 UTC">2025-12-25</span>
+    <span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-timeago" title="December 23, 2025 10:08:08 UTC"><span class="timeago" datetime="2025-12-23T10:08:08+00:00" locale="en"></span></span><span class="git-revision-date-localized-plugin git-revision-date-localized-plugin-iso_date" title="December 23, 2025 10:08:08 UTC">2025-12-23</span>
   </span>
 
     
