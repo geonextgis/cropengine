@@ -2,7 +2,6 @@
 
 """Tests for `cropengine` package."""
 
-
 import unittest
 
 from cropengine import cropengine
